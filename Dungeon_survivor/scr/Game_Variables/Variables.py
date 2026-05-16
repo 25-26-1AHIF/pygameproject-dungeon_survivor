@@ -21,7 +21,7 @@ class GameVariables:
         GameVariables.FONT_BIG = (pygame.font.Font("assets/Ninja Adventure - Asset Pack/Ui/Font/NormalFont.ttf", 48))
         GameVariables.FONT_MIDDLE = pygame.font.Font("assets/Ninja Adventure - Asset Pack/Ui/Font/NormalFont.ttf", 32)
         GameVariables.FONT_SMALL = pygame.font.Font("assets/Ninja Adventure - Asset Pack/Ui/Font/NormalFont.ttf", 16)
-        # KI-Anfang
+        # KI-Ende
 
 
 class GameScreens:
@@ -29,6 +29,7 @@ class GameScreens:
     PLAY = "playscreen"
     INVENTAR = "inventarscreen"
     HIGHSCORE = "highscorescreen"
+    SHOP = "shop"
 
     Exit = "exit"
     GAMEOVER = "Gameover"

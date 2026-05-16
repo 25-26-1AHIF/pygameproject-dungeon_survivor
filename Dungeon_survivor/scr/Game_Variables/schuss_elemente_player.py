@@ -38,11 +38,15 @@ class Rockets:
         self.rockets.append(rocket)
 
     def update_and_draw(self):
-        for idx, missile in enumerate(reversed(self.rockets)):
+        #KI-Anfang
+        #KI: ChatGPT
+        #prompt: Fehler behebung wenn list index out of range
+        for missile in self.rockets.copy()[::-1]:
             missile.update_and_draw()
+        #KI-Ende
 
             if missile.y_pos <= 0 - missile.height or missile.y_pos >= gv.SCREEN_HEIGHT or missile.x_pos <= 0 - missile.height or missile.x_pos >= gv.SCREEN_WIDTH:
-                self.rockets.pop(len(self.rockets) - idx - 1)
+                self.rockets.remove(missile)
 
     def get_rockets(self):
         return self.rockets

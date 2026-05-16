@@ -7,19 +7,27 @@ from Game_Variables.schuss_elemente_player import Rockets
 
 def main_screen(screen, clock):
 
-    pygame.display.set_caption("Dungeon Survivor - Main screen")
+    font = pygame.font.SysFont(None, 45)
+    rocket_list = Rockets(screen=screen)
+    enemy = en(screen, rocket_list)
+    leben, welle, score_coin = enemy.get()
 
+    pygame.display.set_caption("Dungeon Survivor - Main screen")
+    background = pygame.image.load("assets/awesomeCavePixelArt.png")
     titel_text = GV.FONT_BIG.render("Dungeon Survivor", False, "darkred")
     starten_text = GV.FONT_MIDDLE.render("Spiel Starten", False, "yellow")
     inventar_text = GV.FONT_MIDDLE.render("Inventar", False, "gray")
     highscore_text = GV.FONT_MIDDLE.render("Highscores", False, "gray")
     beenden_text = GV.FONT_MIDDLE.render("Beenden", False, "red")
+    coins_text = GV.FONT_MIDDLE.render("Coins:",True, "gray")
 
     titel_text_rect = titel_text.get_rect(center=(GV.SCREEN_WIDTH / 2, 100))
     starten_text_rect = starten_text.get_rect(center=(GV.SCREEN_WIDTH / 2, 100 + 80))
     inventar_text_rect = inventar_text.get_rect(center=(GV.SCREEN_WIDTH / 2, 100 + 2* 80))
     highscore_text_rect = highscore_text.get_rect(center=(GV.SCREEN_WIDTH / 2, 100 + 3*80))
     beenden_text_rect = beenden_text.get_rect(center=(GV.SCREEN_WIDTH / 2, 100 + 4*80))
+    coins_text_rect = coins_text.get_rect(center=(GV.SCREEN_WIDTH-150, 35))
+    coin_int_rect = coins_text.get_rect(center=(GV.SCREEN_WIDTH - 20, 47))
 
     while True:
 
@@ -40,16 +48,21 @@ def main_screen(screen, clock):
                 if beenden_text_rect.collidepoint(event.pos):
                     return GameScreens.Exit
 
-        screen.fill("white") # ersetzen durch hintergrundbild
+        screen.blit(background, (0, 0))
+
         pygame.draw.rect(surface=screen, rect=starten_text_rect, color="black")
         pygame.draw.rect(surface=screen, rect=inventar_text_rect, color="black")
         pygame.draw.rect(surface=screen, rect=highscore_text_rect, color="black")
         pygame.draw.rect(surface=screen, rect=beenden_text_rect, color="black")
+        pygame.draw.rect(surface=screen, rect=coins_text_rect, color="black")
         screen.blit(source=titel_text, dest=titel_text_rect)
         screen.blit(source=starten_text, dest=starten_text_rect)
         screen.blit(source=inventar_text, dest=inventar_text_rect)
         screen.blit(source=highscore_text, dest=highscore_text_rect)
         screen.blit(source=beenden_text, dest=beenden_text_rect)
+        screen.blit(source=coins_text, dest=coins_text_rect)
+        screen.blit(font.render(f"{score_coin:.0f}", True, (255, 255, 255)), coin_int_rect)
+        leben, welle, score_coin = enemy.get()
         pygame.display.flip()
         clock.tick(GV.FPS)
 
@@ -60,17 +73,17 @@ def play_screen(screen, clock):
     player = pl(screen, rocket_list)
     leben, welle, score_coin = enemy.get()
 
-    font = pygame.font.SysFont(None, 40)
+    font = pygame.font.SysFont(None, 45)
 
     Leben = GV.FONT_MIDDLE.render("Leben: ", True, "white")
     Welle = GV.FONT_MIDDLE.render("Welle: ", True, "white")
     Coin = GV.FONT_MIDDLE.render("Coins: ", True, "white")
-    Leben_rect = Leben.get_rect(center=(50, 20))
-    Welle_rect = Leben.get_rect(center=(GV.SCREEN_WIDTH-70, 20))
-    Level_rect = Leben.get_rect(center=(140, 27))
-    welle_int_rect = Leben.get_rect(center=(GV.SCREEN_WIDTH, 27))
-    coin_int_rect = Leben.get_rect(center=(GV.SCREEN_WIDTH, 60))
-    Coin_rect = Coin.get_rect(center=(GV.SCREEN_WIDTH-75, 50))
+    Leben_rect = Leben.get_rect(center=(GV.SCREEN_WIDTH/18, GV.SCREEN_HEIGHT/36))
+    Welle_rect = Leben.get_rect(center=(GV.SCREEN_WIDTH-150, 20))
+    Level_rect = Leben.get_rect(center=(GV.SCREEN_WIDTH/6, GV.SCREEN_HEIGHT/21))
+    welle_int_rect = Leben.get_rect(center=(GV.SCREEN_WIDTH-20, 35))
+    coin_int_rect = Leben.get_rect(center=(GV.SCREEN_WIDTH-20, 65))
+    Coin_rect = Coin.get_rect(center=(GV.SCREEN_WIDTH-150, 50))
 
 
     while True:
@@ -104,9 +117,36 @@ def play_screen(screen, clock):
         clock.tick(GV.FPS)
 
 def inventar_screen(screen, clock):
-    pass
+    while True:
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return GameScreens.Exit
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    return GameScreens.MAIN
+
+        screen.fill("black")
+        pygame.display.flip()
+        clock.tick(GV.FPS)
 
 def highscore_screen(screen, clock):
+    while True:
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return GameScreens.Exit
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    return GameScreens.MAIN
+
+        screen.fill("black")
+        pygame.display.flip()
+        clock.tick(GV.FPS)
+
+def shop_screen(screen, clock):
     pass
 
 
@@ -152,6 +192,9 @@ def main():
 
         elif GameScreens.actual == GameScreens.HIGHSCORE:
             GameScreens.actual = highscore_screen(screen, clock)
+
+        elif GameScreens.actual == GameScreens.SHOP:
+            GameScreens.actual = highscore_screen((screen, clock))
 
     pygame.quit()
 

@@ -98,15 +98,19 @@ class Enemy:
                     break
 
     def coin_spawn(self, player_x_pos, player_y_pos):
-        #ki anfang chatgpt
-        coin_image = pygame.image.load("assets/Ninja Adventure - Asset Pack/Items/Treasure/GoldCoin.png").convert_alpha()
+        #KI-Anfang
+        #KI: chatgpt
+        #prompt: Wie füge ich ein pixel bild ein und verwende es
+        coin_image = pygame.image.load("assets/pixil-frame-0.png").convert_alpha()
         coin_image = pygame.transform.scale(coin_image, (120, 120))
-        #ki ende
+        #KI-Ende
 
         for coins in self.coin_list:
-            #ki anfang chatgpt
+            #KI_Anfang
+            #KI: chatgpt
+            #prompt: Wie füge ich ein pixel bild ein und verwende es
             self.screen.blit(coin_image, (coins[0], coins[1]))
-            #ki ende
+            #KI-Ende
 
             Spieler_rect = pygame.Rect(player_x_pos, player_y_pos, GV.SQUARE_SIZE, GV.SQUARE_SIZE)
             coin_rect = coin_image.get_rect(topleft=(coins[0], coins[1]))
