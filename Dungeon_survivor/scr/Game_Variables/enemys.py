@@ -99,7 +99,7 @@ class Enemy:
 
     def coin_spawn(self, player_x_pos, player_y_pos):
         #ki anfang chatgpt
-        coin_image = pygame.image.load("assets/pixil-frame-0.png").convert_alpha()
+        coin_image = pygame.image.load("assets/Ninja Adventure - Asset Pack/Items/Treasure/GoldCoin.png").convert_alpha()
         coin_image = pygame.transform.scale(coin_image, (120, 120))
         #ki ende
 

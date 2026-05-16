@@ -7,7 +7,19 @@ from Game_Variables.schuss_elemente_player import Rockets
 
 def main_screen(screen, clock):
 
+    pygame.display.set_caption("Dungeon Survivor - Main screen")
 
+    titel_text = GV.FONT_BIG.render("Dungeon Survivor", False, "darkred")
+    starten_text = GV.FONT_MIDDLE.render("Spiel Starten", False, "yellow")
+    inventar_text = GV.FONT_MIDDLE.render("Inventar", False, "gray")
+    highscore_text = GV.FONT_MIDDLE.render("Highscores", False, "gray")
+    beenden_text = GV.FONT_MIDDLE.render("Beenden", False, "red")
+
+    titel_text_rect = titel_text.get_rect(center=(GV.SCREEN_WIDTH / 2, 100))
+    starten_text_rect = starten_text.get_rect(center=(GV.SCREEN_WIDTH / 2, 100 + 80))
+    inventar_text_rect = inventar_text.get_rect(center=(GV.SCREEN_WIDTH / 2, 100 + 2* 80))
+    highscore_text_rect = highscore_text.get_rect(center=(GV.SCREEN_WIDTH / 2, 100 + 3*80))
+    beenden_text_rect = beenden_text.get_rect(center=(GV.SCREEN_WIDTH / 2, 100 + 4*80))
 
     while True:
 
@@ -17,9 +29,27 @@ def main_screen(screen, clock):
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    return GameScreens.MAIN
+                    return GameScreens.Exit
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if starten_text_rect.collidepoint(event.pos):
+                    return GameScreens.PLAY
+                if inventar_text_rect.collidepoint(event.pos):
+                    return GameScreens.INVENTAR
+                if highscore_text_rect.collidepoint(event.pos):
+                    return GameScreens.HIGHSCORE
+                if beenden_text_rect.collidepoint(event.pos):
+                    return GameScreens.Exit
 
-        screen.fill("black")
+        screen.fill("white") # ersetzen durch hintergrundbild
+        pygame.draw.rect(surface=screen, rect=starten_text_rect, color="black")
+        pygame.draw.rect(surface=screen, rect=inventar_text_rect, color="black")
+        pygame.draw.rect(surface=screen, rect=highscore_text_rect, color="black")
+        pygame.draw.rect(surface=screen, rect=beenden_text_rect, color="black")
+        screen.blit(source=titel_text, dest=titel_text_rect)
+        screen.blit(source=starten_text, dest=starten_text_rect)
+        screen.blit(source=inventar_text, dest=inventar_text_rect)
+        screen.blit(source=highscore_text, dest=highscore_text_rect)
+        screen.blit(source=beenden_text, dest=beenden_text_rect)
         pygame.display.flip()
         clock.tick(GV.FPS)
 
@@ -73,6 +103,12 @@ def play_screen(screen, clock):
         pygame.display.flip()
         clock.tick(GV.FPS)
 
+def inventar_screen(screen, clock):
+    pass
+
+def highscore_screen(screen, clock):
+    pass
+
 
 def Gameover(screen, clock):
 
@@ -95,7 +131,7 @@ def main():
     GV.init()
     screen = pygame.display.set_mode((GV.SCREEN_WIDTH, GV.SCREEN_HEIGHT))
     clock = pygame.time.Clock()
-    play_screen(screen, clock)    #hier muss dann am schluss main hin
+    #play_screen(screen, clock)    #hier muss dann am schluss main hin
 
     while True:
 
@@ -110,6 +146,12 @@ def main():
 
         elif GameScreens.actual == GameScreens.Exit:
             break
+
+        elif GameScreens.actual == GameScreens.INVENTAR:
+            GameScreens.actual = inventar_screen(screen, clock)
+
+        elif GameScreens.actual == GameScreens.HIGHSCORE:
+            GameScreens.actual = highscore_screen(screen, clock)
 
     pygame.quit()
 
