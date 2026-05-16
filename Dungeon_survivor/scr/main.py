@@ -28,16 +28,19 @@ def play_screen(screen, clock):
     rocket_list = Rockets(screen=screen)
     enemy = en(screen, rocket_list)
     player = pl(screen, rocket_list)
-    leben, welle = enemy.get()
+    leben, welle, score_coin = enemy.get()
 
     font = pygame.font.SysFont(None, 40)
 
     Leben = GV.FONT_MIDDLE.render("Leben: ", True, "white")
     Welle = GV.FONT_MIDDLE.render("Welle: ", True, "white")
+    Coin = GV.FONT_MIDDLE.render("Coins: ", True, "white")
     Leben_rect = Leben.get_rect(center=(50, 20))
     Welle_rect = Leben.get_rect(center=(GV.SCREEN_WIDTH-70, 20))
     Level_rect = Leben.get_rect(center=(140, 27))
     welle_int_rect = Leben.get_rect(center=(GV.SCREEN_WIDTH, 27))
+    coin_int_rect = Leben.get_rect(center=(GV.SCREEN_WIDTH, 60))
+    Coin_rect = Coin.get_rect(center=(GV.SCREEN_WIDTH-75, 50))
 
 
     while True:
@@ -59,12 +62,14 @@ def play_screen(screen, clock):
 
         screen.blit(source=Leben, dest=Leben_rect)
         screen.blit(source=Welle, dest=Welle_rect)
+        screen.blit(source=Coin, dest=Coin_rect)
 
         screen.blit(font.render(f"{leben:.0f}", True, (255, 255, 255)), Level_rect)
         screen.blit(font.render(f"{welle:.0f}", True, (255, 255, 255)), welle_int_rect)
+        screen.blit(font.render(f"{score_coin:.0f}", True, (255, 255, 255)), coin_int_rect)
 
 
-        leben, welle = enemy.get()
+        leben, welle, score_coin = enemy.get()
         pygame.display.flip()
         clock.tick(GV.FPS)
 

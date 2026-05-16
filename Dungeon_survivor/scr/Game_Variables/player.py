@@ -49,28 +49,30 @@ class Player:
                          width=0)
 
     def shoot(self):
-        mouse_x, mouse_y = pygame.mouse.get_pos()
-        player_center_x = self.x_pos_player + GV.SQUARE_SIZE / 2
-        player_center_y = self.y_pos_player + GV.SQUARE_SIZE / 2
+        pressed_key = pygame.mouse.get_pressed()
+        if pressed_key[0]:
+                mouse_x, mouse_y = pygame.mouse.get_pos()
+                player_center_x = self.x_pos_player + GV.SQUARE_SIZE / 2
+                player_center_y = self.y_pos_player + GV.SQUARE_SIZE / 2
 
-        dx = mouse_x - player_center_x
-        dy = mouse_y - player_center_y
+                dx = mouse_x - player_center_x
+                dy = mouse_y - player_center_y
 
-        length = (dx * dx + dy * dy) ** 0.5
-        if length == 0:
-            length = 0.0001
+                length = (dx * dx + dy * dy) ** 0.5
+                if length == 0:
+                    length = 0.0001
 
-        dx /= length
-        dy /= length
+                dx /= length
+                dy /= length
 
-        rocket = Rocket(
-            x_pos=player_center_x,
-            y_pos=player_center_y,
-            screen=self.screen,
-            dx=dx * 8,  # Geschwindigkeit
-            dy=dy * 8
-        )
-        self.rockets.add_rocket(rocket)
+                rocket = Rocket(
+                    x_pos=player_center_x,
+                    y_pos=player_center_y,
+                    screen=self.screen,
+                    dx=dx * 8,  # Geschwindigkeit
+                    dy=dy * 8
+                )
+                self.rockets.add_rocket(rocket)
 
     def get_pos(self):
         return self.x_pos_player, self.y_pos_player

@@ -23,7 +23,7 @@ class Rocket:
         self.y_pos += self.dy
         pygame.draw.circle(surface=self.screen,
                          center=(self.x_pos, self.y_pos),
-                         color="yellow",
+                         color="blue",
                          width=0, radius=8)
 
 
