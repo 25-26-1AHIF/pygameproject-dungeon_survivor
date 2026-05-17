@@ -48,7 +48,7 @@ class Player:
                          rect=(self.x_pos_player, self.y_pos_player, GV.SQUARE_SIZE, GV.SQUARE_SIZE), color="red",
                          width=0)
 
-    def shoot(self):
+    def shoot(self, ):
         pressed_key = pygame.mouse.get_pressed()
         if pressed_key[0]:
                 mouse_x, mouse_y = pygame.mouse.get_pos()
@@ -77,7 +77,7 @@ class Player:
     def get_pos(self):
         return self.x_pos_player, self.y_pos_player
 
-    def update_and_draw(self):
+    def update_and_draw(self, ):
         self.draw()
         self.move()
         self.shoot()

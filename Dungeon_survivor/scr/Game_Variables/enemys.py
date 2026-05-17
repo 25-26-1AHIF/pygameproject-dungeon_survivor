@@ -23,6 +23,7 @@ class Enemy:
         self.coin_list = []
         self.radius = 5
         self.score_coin = 0
+        self.image = None
 
     def move_and_spawn(self, player_x_pos, player_y_pos):
 
@@ -66,8 +67,16 @@ class Enemy:
             missile[0] += missile[2]
             missile[1] += missile[3]
 
+            #KI_Anfang
+            #KI: ChatGPT
+            #prompt: Wie bekomme ich ein bewegendes bild in eine png
+            self.image = pygame.image.load(
+                "assets/Ninja Adventure - Asset Pack/Actor/Monster/Racoon/Faceset.png"
+            ).convert_alpha()
+            enemy_rect = self.image.get_rect(center=(missile[0], missile[1]))
+            self.screen.blit(self.image, enemy_rect)
+            #KI_Ende
 
-            pygame.draw.circle(self.screen, "green", (missile[0], missile[1]), self.radius)
 
             Player_rect = pygame.Rect(player_x_pos, player_y_pos, GV.SQUARE_SIZE, GV.SQUARE_SIZE)
             missile_rect = pygame.Rect(missile[0], missile[1], 5, 5)
@@ -102,7 +111,7 @@ class Enemy:
         #KI: chatgpt
         #prompt: Wie füge ich ein pixel bild ein und verwende es
         coin_image = pygame.image.load("assets/pixil-frame-0.png").convert_alpha()
-        coin_image = pygame.transform.scale(coin_image, (120, 120))
+        coin_image = pygame.transform.scale(coin_image, (150, 150))
         #KI-Ende
 
         for coins in self.coin_list:

@@ -20,14 +20,16 @@ def main_screen(screen, clock):
     highscore_text = GV.FONT_MIDDLE.render("Highscores", False, "gray")
     beenden_text = GV.FONT_MIDDLE.render("Beenden", False, "red")
     coins_text = GV.FONT_MIDDLE.render("Coins:",True, "gray")
+    shop_text = GV.FONT_MIDDLE.render("Shop", False, "gray")
 
     titel_text_rect = titel_text.get_rect(center=(GV.SCREEN_WIDTH / 2, 100))
     starten_text_rect = starten_text.get_rect(center=(GV.SCREEN_WIDTH / 2, 100 + 80))
     inventar_text_rect = inventar_text.get_rect(center=(GV.SCREEN_WIDTH / 2, 100 + 2* 80))
     highscore_text_rect = highscore_text.get_rect(center=(GV.SCREEN_WIDTH / 2, 100 + 3*80))
-    beenden_text_rect = beenden_text.get_rect(center=(GV.SCREEN_WIDTH / 2, 100 + 4*80))
+    beenden_text_rect = beenden_text.get_rect(center=(GV.SCREEN_WIDTH / 2, 100 + 5*80))
     coins_text_rect = coins_text.get_rect(center=(GV.SCREEN_WIDTH-150, 35))
     coin_int_rect = coins_text.get_rect(center=(GV.SCREEN_WIDTH - 20, 47))
+    shop_text_rect = shop_text.get_rect(center=(GV.SCREEN_WIDTH / 2, 100 + 4 * 80))
 
     while True:
 
@@ -47,6 +49,9 @@ def main_screen(screen, clock):
                     return GameScreens.HIGHSCORE
                 if beenden_text_rect.collidepoint(event.pos):
                     return GameScreens.Exit
+                if shop_text_rect.collidepoint(event.pos):
+                    return GameScreens.SHOP
+
 
         screen.blit(background, (0, 0))
 
@@ -55,12 +60,14 @@ def main_screen(screen, clock):
         pygame.draw.rect(surface=screen, rect=highscore_text_rect, color="black")
         pygame.draw.rect(surface=screen, rect=beenden_text_rect, color="black")
         pygame.draw.rect(surface=screen, rect=coins_text_rect, color="black")
+        pygame.draw.rect(surface=screen, rect=shop_text_rect, color="black")
         screen.blit(source=titel_text, dest=titel_text_rect)
         screen.blit(source=starten_text, dest=starten_text_rect)
         screen.blit(source=inventar_text, dest=inventar_text_rect)
         screen.blit(source=highscore_text, dest=highscore_text_rect)
         screen.blit(source=beenden_text, dest=beenden_text_rect)
         screen.blit(source=coins_text, dest=coins_text_rect)
+        screen.blit(source=shop_text, dest=shop_text_rect)
         screen.blit(font.render(f"{score_coin:.0f}", True, (255, 255, 255)), coin_int_rect)
         leben, welle, score_coin = enemy.get()
         pygame.display.flip()
@@ -72,6 +79,12 @@ def play_screen(screen, clock):
     enemy = en(screen, rocket_list)
     player = pl(screen, rocket_list)
     leben, welle, score_coin = enemy.get()
+    #KI-anfang
+    #KI: ChatGPT
+    #prompt: Wie bekomme ich den hintergrund in ein laufendes bild hinein
+    background_play = pygame.image.load("assets/twosoulsnomark.png").convert()
+    #KI-Ende
+    background_play = pygame.transform.scale(background_play, (GV.SCREEN_WIDTH, GV.SCREEN_HEIGHT))
 
     font = pygame.font.SysFont(None, 45)
 
@@ -96,10 +109,12 @@ def play_screen(screen, clock):
                 if event.key == pygame.K_ESCAPE:
                     return GameScreens.MAIN
 
-        screen.fill("black")
+
+        screen.blit(background_play,(0, 0))
 
         x_pos, y_pos = player.get_pos()
         enemy.update_and_draw(x_pos, y_pos)
+
         player.update_and_draw()
         rocket_list.update_and_draw()
 
@@ -132,6 +147,12 @@ def inventar_screen(screen, clock):
         clock.tick(GV.FPS)
 
 def highscore_screen(screen, clock):
+    background = pygame.image.load("assets/Image.png")
+    background = pygame.transform.scale(background, (GV.SCREEN_WIDTH, GV.SCREEN_HEIGHT))
+
+    Highscore_text = GV.FONT_BIG.render("Highscores:", False, "gray")
+    Highscore_text_rect = Highscore_text.get_rect(center=(GV.SCREEN_WIDTH / 4, 50 ))
+
     while True:
 
         for event in pygame.event.get():
@@ -142,12 +163,30 @@ def highscore_screen(screen, clock):
                 if event.key == pygame.K_ESCAPE:
                     return GameScreens.MAIN
 
-        screen.fill("black")
+        screen.blit(background, (0, 0))
+
+        pygame.draw.rect(surface=screen, rect=Highscore_text_rect, color="black")
+        screen.blit(source=Highscore_text, dest=Highscore_text_rect)
+
         pygame.display.flip()
         clock.tick(GV.FPS)
 
 def shop_screen(screen, clock):
-    pass
+    while True:
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return GameScreens.Exit
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    return GameScreens.MAIN
+
+
+
+        screen.fill("black")
+        pygame.display.flip()
+        clock.tick(GV.FPS)
 
 
 def Gameover(screen, clock):
@@ -171,7 +210,7 @@ def main():
     GV.init()
     screen = pygame.display.set_mode((GV.SCREEN_WIDTH, GV.SCREEN_HEIGHT))
     clock = pygame.time.Clock()
-    #play_screen(screen, clock)    #hier muss dann am schluss main hin
+
 
     while True:
 
@@ -194,7 +233,7 @@ def main():
             GameScreens.actual = highscore_screen(screen, clock)
 
         elif GameScreens.actual == GameScreens.SHOP:
-            GameScreens.actual = highscore_screen((screen, clock))
+            GameScreens.actual = shop_screen(screen, clock)
 
     pygame.quit()
 
