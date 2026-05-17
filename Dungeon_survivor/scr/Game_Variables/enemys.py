@@ -27,7 +27,7 @@ class Enemy:
 
     def move_and_spawn(self, player_x_pos, player_y_pos):
 
-        if len(self.enemy_list) < self.max_enemy * self.welle / 3:
+        if len(self.enemy_list) < self.max_enemy * self.welle / 5:
 
             side = random.choice(["left", "right", "top", "bottom"])
 
@@ -44,7 +44,9 @@ class Enemy:
                 x = random.randint(0, GV.SCREEN_WIDTH)
                 y = GV.SCREEN_HEIGHT
 
+
             self.enemy_list.append([x, y, 0, 0])
+
 
         for missile in self.enemy_list:
 
@@ -70,21 +72,31 @@ class Enemy:
             #KI_Anfang
             #KI: ChatGPT
             #prompt: Wie bekomme ich ein bewegendes bild in eine png
-            self.image = pygame.image.load(
-                "assets/Ninja Adventure - Asset Pack/Actor/Monster/Racoon/Faceset.png"
-            ).convert_alpha()
-            enemy_rect = self.image.get_rect(center=(missile[0], missile[1]))
-            self.screen.blit(self.image, enemy_rect)
-            #KI_Ende
+            if self.welle <= 2:
+                self.image = pygame.image.load(
+                    "assets/Ninja Adventure - Asset Pack/Actor/Monster/Racoon/Faceset.png"
+                ).convert_alpha()
+                enemy_rect = self.image.get_rect(center=(missile[0], missile[1]))
+                self.screen.blit(self.image, enemy_rect)
+                #KI_Ende
+            else:
+                self.image = pygame.image.load(
+                    "assets/Ninja Adventure - Asset Pack/Actor/Monster/Bear/Faceset.png"
+                ).convert_alpha()
+                enemy_rect = self.image.get_rect(center=(missile[0], missile[1]))
+                self.screen.blit(self.image, enemy_rect)
 
 
             Player_rect = pygame.Rect(player_x_pos, player_y_pos, GV.SQUARE_SIZE, GV.SQUARE_SIZE)
             missile_rect = pygame.Rect(missile[0], missile[1], 5, 5)
 
+            if self.welle >= 2:
+                self.speed = 2
+
             if missile_rect.colliderect(Player_rect):
+                self.enemy_list.remove(missile)
                 self.Leben -= 10 * self.welle / 8
 
-                self.enemy_list.remove(missile)
                 if self.Leben <= 0:
                     GM.actual = GM.GAMEOVER
 
