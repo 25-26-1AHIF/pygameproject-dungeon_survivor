@@ -135,6 +135,8 @@ class Enemy:
 
             Spieler_rect = pygame.Rect(player_x_pos, player_y_pos, GV.SQUARE_SIZE, GV.SQUARE_SIZE)
             coin_rect = coin_image.get_rect(topleft=(coins[0], coins[1]))
+            with open("Coin_speicher.txt", "w") as fp:
+                fp.write(f"{self.score_coin}")
             if coin_rect.colliderect(Spieler_rect):
                 self.score_coin += 1
                 self.coin_list.remove(coins)

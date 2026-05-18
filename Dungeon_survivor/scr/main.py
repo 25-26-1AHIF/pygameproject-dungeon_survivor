@@ -10,7 +10,6 @@ def main_screen(screen, clock):
     font = pygame.font.SysFont(None, 45)
     rocket_list = Rockets(screen=screen)
     enemy = en(screen, rocket_list)
-    leben, welle, score_coin = enemy.get()
 
     pygame.display.set_caption("Dungeon Survivor - Main screen")
     background = pygame.image.load("assets/awesomeCavePixelArt.png")
@@ -30,6 +29,9 @@ def main_screen(screen, clock):
     coins_text_rect = coins_text.get_rect(center=(GV.SCREEN_WIDTH-150, 35))
     coin_int_rect = coins_text.get_rect(center=(GV.SCREEN_WIDTH - 20, 47))
     shop_text_rect = shop_text.get_rect(center=(GV.SCREEN_WIDTH / 2, 100 + 4 * 80))
+
+    with open("Coin_speicher.txt", "r") as fp:
+         Coins_inhalt = fp.read()
 
     while True:
 
@@ -68,8 +70,8 @@ def main_screen(screen, clock):
         screen.blit(source=beenden_text, dest=beenden_text_rect)
         screen.blit(source=coins_text, dest=coins_text_rect)
         screen.blit(source=shop_text, dest=shop_text_rect)
-        screen.blit(font.render(f"{score_coin:.0f}", True, (255, 255, 255)), coin_int_rect)
-        leben, welle, score_coin = enemy.get()
+        screen.blit(font.render(f"{Coins_inhalt}", True, (255, 255, 255)), coin_int_rect)
+
         pygame.display.flip()
         clock.tick(GV.FPS)
 
@@ -82,9 +84,9 @@ def play_screen(screen, clock):
     #KI-anfang
     #KI: ChatGPT
     #prompt: Wie bekomme ich den hintergrund in ein laufendes bild hinein
-    #background_play = pygame.image.load("assets/twosoulsnomark.png").convert()
+    background_play = pygame.image.load("assets/twosoulsnomark.png").convert()
     #KI-Ende
-    #background_play = pygame.transform.scale(background_play, (GV.SCREEN_WIDTH, GV.SCREEN_HEIGHT))
+    background_play = pygame.transform.scale(background_play, (GV.SCREEN_WIDTH, GV.SCREEN_HEIGHT))
 
     font = pygame.font.SysFont(None, 45)
 
@@ -110,7 +112,7 @@ def play_screen(screen, clock):
                     return GameScreens.MAIN
 
 
-        #screen.blit(background_play,(0, 0))
+        screen.blit(background_play,(0, 0))
         screen.fill("black")
 
         x_pos, y_pos = player.get_pos()
