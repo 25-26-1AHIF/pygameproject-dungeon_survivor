@@ -82,9 +82,9 @@ def play_screen(screen, clock):
     #KI-anfang
     #KI: ChatGPT
     #prompt: Wie bekomme ich den hintergrund in ein laufendes bild hinein
-    background_play = pygame.image.load("assets/twosoulsnomark.png").convert()
+    #background_play = pygame.image.load("assets/twosoulsnomark.png").convert()
     #KI-Ende
-    background_play = pygame.transform.scale(background_play, (GV.SCREEN_WIDTH, GV.SCREEN_HEIGHT))
+    #background_play = pygame.transform.scale(background_play, (GV.SCREEN_WIDTH, GV.SCREEN_HEIGHT))
 
     font = pygame.font.SysFont(None, 45)
 
@@ -110,7 +110,8 @@ def play_screen(screen, clock):
                     return GameScreens.MAIN
 
 
-        screen.blit(background_play,(0, 0))
+        #screen.blit(background_play,(0, 0))
+        screen.fill("black")
 
         x_pos, y_pos = player.get_pos()
         enemy.update_and_draw(x_pos, y_pos)
