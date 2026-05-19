@@ -5,6 +5,7 @@ from .Variables import GameVariables as GV
 from .Variables import GameScreens as GM
 from .schuss_elemente_player import Rocket
 from .schuss_elemente_player import Rockets
+from .Coin_spawner import Coin
 
 
 class Enemy:
@@ -30,8 +31,12 @@ class Enemy:
         self.bear_image = pygame.image.load(
             "assets/Ninja Adventure - Asset Pack/Actor/Monster/Bear/Faceset.png"
         ).convert()
-        self.coin_image = pygame.image.load("assets/pixil-frame-0.png").convert()
-        self.coin_image = pygame.transform.scale(self.coin_image, (150, 150))
+        self.Coin_sprite = Coin(filepath="assets/New Piskel (1).png", animation_speed=35,
+                             image_rect=pygame.Rect(0, 0, 22, 22), image_count=6)
+
+        self.Coin_sprite.load_spritesheet()
+        self.frame_counter = 0
+
 
 
     def move_and_spawn(self, player_x_pos, player_y_pos):
@@ -134,18 +139,19 @@ class Enemy:
 
     def coin_spawn(self, player_x_pos, player_y_pos):
         for coins in self.coin_list[:]:
-            #KI_Anfang
-            #KI: chatgpt
-            #prompt: Wie füge ich ein pixel bild ein und verwende es
-            self.screen.blit(self.coin_image, (coins[0], coins[1]))
-            #KI-Ende
+            self.Coin_sprite.draw(self.screen, coins[0], coins[1], self.frame_counter)
+
 
             Spieler_rect = pygame.Rect(player_x_pos, player_y_pos, GV.SQUARE_SIZE, GV.SQUARE_SIZE)
-            coin_rect = self.coin_image.get_rect(topleft=(coins[0], coins[1]))
+            coin_rect = self.Coin_sprite.images[0].get_rect(
+                topleft=(coins[0], coins[1])
+            )
 
             if coin_rect.colliderect(Spieler_rect):
                 self.score_coin += 1
                 self.coin_list.remove(coins)
+
+        self.frame_counter += 1
 
         with open("Coin_speicher.txt", "w") as fp:
             fp.write(f"{self.score_coin}")
