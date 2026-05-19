@@ -24,6 +24,15 @@ class Enemy:
         self.radius = 5
         self.score_coin = 0
         self.image = None
+        self.raccon_image = pygame.image.load(
+            "assets/Ninja Adventure - Asset Pack/Actor/Monster/Racoon/Faceset.png"
+        ).convert()
+        self.bear_image = pygame.image.load(
+            "assets/Ninja Adventure - Asset Pack/Actor/Monster/Bear/Faceset.png"
+        ).convert()
+        self.coin_image = pygame.image.load("assets/pixil-frame-0.png").convert()
+        self.coin_image = pygame.transform.scale(self.coin_image, (150, 150))
+
 
     def move_and_spawn(self, player_x_pos, player_y_pos):
 
@@ -47,12 +56,18 @@ class Enemy:
 
             self.enemy_list.append([x, y, 0, 0])
 
+        if self.welle >= 2:
+            self.speed = 2
 
-        for missile in self.enemy_list:
+        player_center_x = player_x_pos + GV.SQUARE_SIZE / 2
+        player_center_y = player_y_pos + GV.SQUARE_SIZE / 2
+        Player_rect = pygame.Rect(player_x_pos, player_y_pos, GV.SQUARE_SIZE, GV.SQUARE_SIZE)
 
-            player_center_x = player_x_pos + GV.SQUARE_SIZE / 2
-            player_center_y = player_y_pos + GV.SQUARE_SIZE / 2
-
+        #KI-Anfang
+        #KI Chat GPT
+        #Antwort: mache[:] für einen sicheren Durchlauf.[:] erstellt eine kopie der liste
+        for missile in self.enemy_list[:]:
+        #KI-Ende
             dx = player_center_x - missile[0]
             dy = player_center_y - missile[1]
 
@@ -69,25 +84,18 @@ class Enemy:
             missile[0] += missile[2]
             missile[1] += missile[3]
 
-            #KI_Anfang
-            #KI: ChatGPT
-            #prompt: Wie bekomme ich ein bewegendes bild in eine png
+
             if self.welle <= 2:
-                self.image = pygame.image.load(
-                    "assets/Ninja Adventure - Asset Pack/Actor/Monster/Racoon/Faceset.png"
-                ).convert_alpha()
-                enemy_rect = self.image.get_rect(center=(missile[0], missile[1]))
-                self.screen.blit(self.image, enemy_rect)
-                #KI_Ende
+                self.image = self.raccon_image
             else:
-                self.image = pygame.image.load(
-                    "assets/Ninja Adventure - Asset Pack/Actor/Monster/Bear/Faceset.png"
-                ).convert_alpha()
-                enemy_rect = self.image.get_rect(center=(missile[0], missile[1]))
-                self.screen.blit(self.image, enemy_rect)
+                self.image = self.bear_image
 
 
-            Player_rect = pygame.Rect(player_x_pos, player_y_pos, GV.SQUARE_SIZE, GV.SQUARE_SIZE)
+            enemy_rect = self.image.get_rect(center=(missile[0], missile[1]))
+            self.screen.blit(self.image, enemy_rect)
+
+
+
             missile_rect = pygame.Rect(missile[0], missile[1], 5, 5)
 
             if self.welle >= 2:
@@ -103,43 +111,45 @@ class Enemy:
     def death(self):
         rockets_list = self.rocket_list.get_rockets()
 
-        for enemy in self.enemy_list:
+        for enemy in self.enemy_list[:]:
 
             enemy_rect = pygame.Rect(enemy[0], enemy[1], 20, 20)
 
-            for missile in rockets_list:
+            for missile in rockets_list[:]:
 
                 missile_rect = pygame.Rect(missile.x_pos, missile.y_pos, GV.MISSILE_SIZE, GV.MISSILE_SIZE)
 
                 if missile_rect.colliderect(enemy_rect):
                     self.coin_list.append([enemy[0], enemy[1]])
-                    rockets_list.remove(missile)
-                    self.enemy_list.remove(enemy)
+
+                    if missile in rockets_list:
+                        rockets_list.remove(missile)
+
+                    if enemy in self.enemy_list:
+                        self.enemy_list.remove((enemy))
+
+
                     self.welle += 0.005
                     break
 
     def coin_spawn(self, player_x_pos, player_y_pos):
-        #KI-Anfang
-        #KI: chatgpt
-        #prompt: Wie füge ich ein pixel bild ein und verwende es
-        coin_image = pygame.image.load("assets/pixil-frame-0.png").convert_alpha()
-        coin_image = pygame.transform.scale(coin_image, (150, 150))
-        #KI-Ende
-
-        for coins in self.coin_list:
+        for coins in self.coin_list[:]:
             #KI_Anfang
             #KI: chatgpt
             #prompt: Wie füge ich ein pixel bild ein und verwende es
-            self.screen.blit(coin_image, (coins[0], coins[1]))
+            self.screen.blit(self.coin_image, (coins[0], coins[1]))
             #KI-Ende
 
             Spieler_rect = pygame.Rect(player_x_pos, player_y_pos, GV.SQUARE_SIZE, GV.SQUARE_SIZE)
-            coin_rect = coin_image.get_rect(topleft=(coins[0], coins[1]))
-            with open("Coin_speicher.txt", "w") as fp:
-                fp.write(f"{self.score_coin}")
+            coin_rect = self.coin_image.get_rect(topleft=(coins[0], coins[1]))
+
             if coin_rect.colliderect(Spieler_rect):
                 self.score_coin += 1
                 self.coin_list.remove(coins)
+
+        with open("Coin_speicher.txt", "w") as fp:
+            fp.write(f"{self.score_coin}")
+
 
 
     def update_and_draw(self, player_x_pos, player_y_pos):

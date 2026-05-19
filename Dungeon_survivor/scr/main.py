@@ -135,7 +135,7 @@ def play_screen(screen, clock):
         clock.tick(GV.FPS)
 
 def pause_screen(screen, clock):
-    pass
+
     # 1. Fortsetzen
     # 2. Beenden
     fortsetzen_text = GV.FONT_MIDDLE.render("Fortsetzen", False, "green")
