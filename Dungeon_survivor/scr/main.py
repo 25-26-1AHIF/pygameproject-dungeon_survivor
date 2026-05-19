@@ -109,7 +109,7 @@ def play_screen(screen, clock):
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    return GameScreens.MAIN
+                    return GameScreens.PAUSE
 
 
         screen.blit(background_play,(0, 0))
@@ -133,6 +133,41 @@ def play_screen(screen, clock):
         leben, welle, score_coin = enemy.get()
         pygame.display.flip()
         clock.tick(GV.FPS)
+
+def pause_screen(screen, clock):
+    pass
+    # 1. Fortsetzen
+    # 2. Beenden
+    fortsetzen_text = GV.FONT_MIDDLE.render("Fortsetzen", False, "green")
+    beenden_text = GV.FONT_MIDDLE.render("Beenden", False, "darkred")
+    fortsetzen_text_rect = fortsetzen_text.get_rect(center=(GV.SCREEN_WIDTH / 2, 100))
+    beenden_text_rect = beenden_text.get_rect(center=(GV.SCREEN_WIDTH / 2, GV.SCREEN_HEIGHT - 100))
+
+    pygame.draw.rect(surface=screen, rect=fortsetzen_text_rect, color="black")
+    pygame.draw.rect(surface=screen, rect=beenden_text_rect, color="black")
+
+    pygame.display.flip()
+    clock.tick(GV.FPS)
+
+    while True:
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return GameScreens.Exit
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    return GameScreens.PLAY
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if fortsetzen_text_rect.collidepoint(event.pos):
+                    return GameScreens.PLAY
+                elif beenden_text_rect.collidepoint(event.pos):
+                    return GameScreens.MAIN
+
+
+
+
 
 def inventar_screen(screen, clock):
     while True:

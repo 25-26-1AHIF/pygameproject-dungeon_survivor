@@ -30,6 +30,7 @@ class GameScreens:
     INVENTAR = "inventarscreen"
     HIGHSCORE = "highscorescreen"
     SHOP = "shop"
+    PAUSE = "pausescreen"
 
     Exit = "exit"
     GAMEOVER = "Gameover"
