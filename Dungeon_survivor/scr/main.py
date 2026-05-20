@@ -111,15 +111,20 @@ def play_screen(screen, clock):
 
 
 
-
     while True:
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                leben_speichern, welle_speichern, score_coin_speichern = enemy.get()
+                with open("Highscores.txx", "a") as fp:
+                    fp.write(f"{leben_speichern, welle_speichern, score_coin_speichern}")
                 return GameScreens.Exit
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
+                    leben_speichern, welle_speichern, score_coin_speichern = enemy.get()
+                    with open("Highscores.txx", "a") as fp:
+                        fp.write(f"{leben_speichern, welle_speichern, score_coin_speichern}")
                     return GameScreens.PAUSE
 
 
