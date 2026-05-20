@@ -6,10 +6,13 @@ from Game_Variables.player import Player as pl
 from Game_Variables.schuss_elemente_player import Rockets
 
 def main_screen(screen, clock):
+    with open("Coin_speicher.txt", "r") as fp:
+        inhalt = fp.read()
+    Coin_inhalt = int(inhalt)
 
     font = pygame.font.SysFont(None, 45)
     rocket_list = Rockets(screen=screen)
-    enemy = en(screen, rocket_list)
+    enemy = en(screen, rocket_list, Coin_inhalt)
     leben, welle, score_coin = enemy.get()
 
     pygame.display.set_caption("Dungeon Survivor - Main screen")
@@ -30,6 +33,8 @@ def main_screen(screen, clock):
     coins_text_rect = coins_text.get_rect(center=(GV.SCREEN_WIDTH-150, 35))
     coin_int_rect = coins_text.get_rect(center=(GV.SCREEN_WIDTH - 20, 47))
     shop_text_rect = shop_text.get_rect(center=(GV.SCREEN_WIDTH / 2, 100 + 4 * 80))
+
+
 
     while True:
 
@@ -68,15 +73,20 @@ def main_screen(screen, clock):
         screen.blit(source=beenden_text, dest=beenden_text_rect)
         screen.blit(source=coins_text, dest=coins_text_rect)
         screen.blit(source=shop_text, dest=shop_text_rect)
-        screen.blit(font.render(f"{score_coin:.0f}", True, (255, 255, 255)), coin_int_rect)
+        screen.blit(font.render(f"{score_coin}", True, (255, 255, 255)), coin_int_rect)
         leben, welle, score_coin = enemy.get()
+
         pygame.display.flip()
         clock.tick(GV.FPS)
 
 def play_screen(screen, clock):
 
+    with open("Coin_speicher.txt", "r") as fp:
+        inhalt = fp.read()
+    Coin_inhalt = int(inhalt)
+
     rocket_list = Rockets(screen=screen)
-    enemy = en(screen, rocket_list)
+    enemy = en(screen, rocket_list, Coin_inhalt)
     player = pl(screen, rocket_list)
     leben, welle, score_coin = enemy.get()
     #KI-anfang
@@ -97,6 +107,9 @@ def play_screen(screen, clock):
     welle_int_rect = Leben.get_rect(center=(GV.SCREEN_WIDTH-20, 35))
     coin_int_rect = Leben.get_rect(center=(GV.SCREEN_WIDTH-20, 65))
     Coin_rect = Coin.get_rect(center=(GV.SCREEN_WIDTH-150, 50))
+
+
+
 
 
     while True:
@@ -124,7 +137,7 @@ def play_screen(screen, clock):
 
         screen.blit(font.render(f"{leben:.0f}", True, (255, 255, 255)), Level_rect)
         screen.blit(font.render(f"{welle:.0f}", True, (255, 255, 255)), welle_int_rect)
-        screen.blit(font.render(f"{score_coin:.0f}", True, (255, 255, 255)), coin_int_rect)
+        screen.blit(font.render(f"{score_coin}", True, (255, 255, 255)), coin_int_rect)
 
 
         leben, welle, score_coin = enemy.get()

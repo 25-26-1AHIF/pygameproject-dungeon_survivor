@@ -9,7 +9,7 @@ from .Coin_spawner import Coin
 
 
 class Enemy:
-    def __init__(self, screen, rocket_list):
+    def __init__(self, screen, rocket_list, coin_score):
         self.screen = screen
         self.x_pos_enemy = 0
         self.y_pos_enemy = 0
@@ -23,7 +23,7 @@ class Enemy:
         self.rocket_list = rocket_list
         self.coin_list = []
         self.radius = 5
-        self.score_coin = 0
+        self.score_coin = coin_score
         self.image = None
         self.raccon_image = pygame.image.load(
             "assets/Ninja Adventure - Asset Pack/Actor/Monster/Racoon/Faceset.png"
@@ -31,8 +31,8 @@ class Enemy:
         self.bear_image = pygame.image.load(
             "assets/Ninja Adventure - Asset Pack/Actor/Monster/Bear/Faceset.png"
         ).convert()
-        self.Coin_sprite = Coin(filepath="assets/New Piskel (1).png", animation_speed=35,
-                             image_rect=pygame.Rect(0, 0, 22, 22), image_count=6)
+        self.Coin_sprite = Coin(filepath="assets/New Piskel (2).png", animation_speed=10,
+                             image_rect=pygame.Rect(0, 0, 20, 20), image_count=6)
 
         self.Coin_sprite.load_spritesheet()
         self.frame_counter = 0
