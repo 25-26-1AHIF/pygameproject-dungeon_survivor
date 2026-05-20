@@ -150,7 +150,7 @@ def play_screen(screen, clock):
         clock.tick(GV.FPS)
 
 def pause_screen(screen, clock):
-    pass
+
     # 1. Fortsetzen
     # 2. Beenden
     fortsetzen_text = GV.FONT_MIDDLE.render("Fortsetzen", False, "green")
@@ -180,8 +180,12 @@ def pause_screen(screen, clock):
                 elif beenden_text_rect.collidepoint(event.pos):
                     return GameScreens.MAIN
 
+        screen.blit(source=fortsetzen_text, dest=fortsetzen_text_rect)
+        screen.blit(source=beenden_text, dest=beenden_text_rect)
 
 
+        pygame.display.flip()
+        clock.tick(GV.FPS)
 
 
 def inventar_screen(screen, clock):
@@ -287,6 +291,9 @@ def main():
 
         elif GameScreens.actual == GameScreens.SHOP:
             GameScreens.actual = shop_screen(screen, clock)
+
+        elif GameScreens.actual == GameScreens.PAUSE:
+            GameScreens.actual = pause_screen(screen, clock)
 
     pygame.quit()
 
