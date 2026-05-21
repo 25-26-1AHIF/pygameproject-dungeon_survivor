@@ -13,7 +13,8 @@ def main_screen(screen, clock):
     leben, welle, score_coin = enemy.get()
 
     pygame.display.set_caption("Dungeon Survivor - Main screen")
-    background = pygame.image.load("assets/awesomeCavePixelArt.png")
+    background = pygame.image.load("assets/HR_Fantasy_Landscape.png")
+    resized_background = pygame.transform.scale(background, (GV.SCREEN_WIDTH, GV.SCREEN_HEIGHT))
     titel_text = GV.FONT_BIG.render("Dungeon Survivor", False, "darkred")
     starten_text = GV.FONT_MIDDLE.render("Spiel Starten", False, "yellow")
     inventar_text = GV.FONT_MIDDLE.render("Inventar", False, "gray")
@@ -53,7 +54,7 @@ def main_screen(screen, clock):
                     return GameScreens.SHOP
 
 
-        screen.blit(background, (0, 0))
+        screen.blit(resized_background, (0, 0))
 
         pygame.draw.rect(surface=screen, rect=starten_text_rect, color="black")
         pygame.draw.rect(surface=screen, rect=inventar_text_rect, color="black")
@@ -170,7 +171,8 @@ def pause_screen(screen, clock):
 def shop_screen(screen, clock):
 
     pygame.display.set_caption("Dungeon Survivor - Shop")
-    background = pygame.image.load("assets/awesomeCavePixelArt.png")
+    background = pygame.image.load("assets/StockCake-Gemütliche_Pixel-Taverne-3432555-medium.png")
+    resized_background = pygame.transform.scale(background, (GV.SCREEN_WIDTH, GV.SCREEN_HEIGHT))
     waffen_text = GV.FONT_BIG.render("Waffen", False, "yellow")
     skins_text = GV.FONT_BIG.render("Skins", False, "gray")
 
@@ -196,7 +198,7 @@ def shop_screen(screen, clock):
                     pass
 
 
-        screen.blit(background, (0, 0))
+        screen.blit(resized_background, (0, 0))
 
         pygame.draw.rect(surface=screen, rect=waffen_text_rect, color="black")
         pygame.draw.rect(surface=screen, rect=skins_text_rect, color="black")
