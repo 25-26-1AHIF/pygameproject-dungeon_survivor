@@ -4,6 +4,7 @@ from Game_Variables.Variables import GameScreens
 from Game_Variables.enemys import Enemy as en
 from Game_Variables.player import Player as pl
 from Game_Variables.schuss_elemente_player import Rockets
+from Game_Variables.Highscore_speichern import highscores as hgs
 
 def main_screen(screen, clock):
     with open("Coin_speicher.txt", "r") as fp:
@@ -89,6 +90,7 @@ def play_screen(screen, clock):
     enemy = en(screen, rocket_list, Coin_inhalt)
     player = pl(screen, rocket_list)
     leben, welle, score_coin = enemy.get()
+    highscore = hgs()
     #KI-anfang
     #KI: ChatGPT
     #prompt: Wie bekomme ich den hintergrund in ein laufendes bild hinein
@@ -116,15 +118,13 @@ def play_screen(screen, clock):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 leben_speichern, welle_speichern, score_coin_speichern = enemy.get()
-                with open("Highscores.txx", "a") as fp:
-                    fp.write(f"{leben_speichern, welle_speichern, score_coin_speichern}")
+                highscore.update_and_save(leben_speichern, welle_speichern, score_coin_speichern)
                 return GameScreens.Exit
 
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
+                if event.key == pygame.K_SPACE:
                     leben_speichern, welle_speichern, score_coin_speichern = enemy.get()
-                    with open("Highscores.txx", "a") as fp:
-                        fp.write(f"{leben_speichern, welle_speichern, score_coin_speichern}")
+                    highscore.update_and_save(leben_speichern, welle_speichern, score_coin_speichern)
                     return GameScreens.PAUSE
 
 
@@ -171,8 +171,10 @@ def pause_screen(screen, clock):
                 return GameScreens.Exit
 
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
+                if event.key == pygame.K_SPACE:
                     return GameScreens.PLAY
+                if event.key == pygame.K_ESCAPE:
+                    return GameScreens.MAIN
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if fortsetzen_text_rect.collidepoint(event.pos):
