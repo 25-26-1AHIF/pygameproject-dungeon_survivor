@@ -167,7 +167,17 @@ def pause_screen(screen, clock):
 
 
 
-def inventar_screen(screen, clock):
+def shop_screen(screen, clock):
+
+    pygame.display.set_caption("Dungeon Survivor - Shop")
+    background = pygame.image.load("assets/awesomeCavePixelArt.png")
+    waffen_text = GV.FONT_BIG.render("Waffen", False, "yellow")
+    skins_text = GV.FONT_BIG.render("Skins", False, "gray")
+
+
+    waffen_text_rect = waffen_text.get_rect(topleft=(20, 100))
+    skins_text_rect = skins_text.get_rect(topleft=(20, 100 + 80))
+
     while True:
 
         for event in pygame.event.get():
@@ -178,7 +188,22 @@ def inventar_screen(screen, clock):
                 if event.key == pygame.K_ESCAPE:
                     return GameScreens.MAIN
 
-        screen.fill("black")
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if waffen_text_rect.collidepoint(event.pos):
+                    pass
+                elif skins_text_rect.collidepoint(event.pos):
+                    pass
+
+
+        screen.blit(background, (0, 0))
+
+        pygame.draw.rect(surface=screen, rect=waffen_text_rect, color="black")
+        pygame.draw.rect(surface=screen, rect=skins_text_rect, color="black")
+        screen.blit(source=waffen_text, dest=waffen_text_rect)
+        screen.blit(source=skins_text, dest=skins_text_rect)
+
+
         pygame.display.flip()
         clock.tick(GV.FPS)
 
@@ -207,7 +232,7 @@ def highscore_screen(screen, clock):
         pygame.display.flip()
         clock.tick(GV.FPS)
 
-def shop_screen(screen, clock):
+def inventar_screen(screen, clock):
     while True:
 
         for event in pygame.event.get():
