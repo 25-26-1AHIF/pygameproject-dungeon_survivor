@@ -1,14 +1,15 @@
 import pygame
 import random
 
-from .Variables import GameVariables as GV
+from .Variables import GameVariables as GV, GameScreens
 from .Variables import GameScreens as GM
 from .schuss_elemente_player import Rocket
 from .schuss_elemente_player import Rockets
+from .Coin_spawner import Coin
 
 
 class Enemy:
-    def __init__(self, screen, rocket_list):
+    def __init__(self, screen, rocket_list, coin_score):
         self.screen = screen
         self.x_pos_enemy = 0
         self.y_pos_enemy = 0
@@ -22,8 +23,21 @@ class Enemy:
         self.rocket_list = rocket_list
         self.coin_list = []
         self.radius = 5
-        self.score_coin = 0
+        self.score_coin = coin_score
         self.image = None
+        self.coin_gesammelt = 0
+        self.player_death = 0
+        self.raccon_image = pygame.image.load(
+            "assets/Ninja Adventure - Asset Pack/Actor/Monster/Racoon/Faceset.png"
+        ).convert()
+        self.bear_image = pygame.image.load(
+            "assets/Ninja Adventure - Asset Pack/Actor/Monster/Bear/Faceset.png"
+        ).convert()
+        self.Coin_sprite = Coin(filepath="assets/New Piskel (2).png", animation_speed=5,
+                                image_rect=pygame.Rect(0, 0, 20, 20), image_count=8)
+
+        self.Coin_sprite.load_spritesheet()
+        self.frame_counter = 0
 
     def move_and_spawn(self, player_x_pos, player_y_pos):
 
@@ -44,15 +58,22 @@ class Enemy:
                 x = random.randint(0, GV.SCREEN_WIDTH)
                 y = GV.SCREEN_HEIGHT
 
-
             self.enemy_list.append([x, y, 0, 0])
 
+        if self.welle >= 5:
+            self.speed = 0.75
+        elif self.welle >= 10:
+            self.speed = 1
 
-        for missile in self.enemy_list:
+        player_center_x = player_x_pos + GV.SQUARE_SIZE / 2
+        player_center_y = player_y_pos + GV.SQUARE_SIZE / 2
+        Player_rect = pygame.Rect(player_x_pos, player_y_pos, GV.SQUARE_SIZE, GV.SQUARE_SIZE)
 
-            player_center_x = player_x_pos + GV.SQUARE_SIZE / 2
-            player_center_y = player_y_pos + GV.SQUARE_SIZE / 2
-
+        # KI-Anfang
+        # KI Chat GPT
+        # Antwort: mache[:] für einen sicheren Durchlauf.[:] erstellt eine kopie der liste
+        for missile in self.enemy_list[:]:
+            # KI-Ende
             dx = player_center_x - missile[0]
             dy = player_center_y - missile[1]
 
@@ -69,82 +90,68 @@ class Enemy:
             missile[0] += missile[2]
             missile[1] += missile[3]
 
-            #KI_Anfang
-            #KI: ChatGPT
-            #prompt: Wie bekomme ich ein bewegendes bild in eine png
             if self.welle <= 2:
-                self.image = pygame.image.load(
-                    "assets/Ninja Adventure - Asset Pack/Actor/Monster/Racoon/Faceset.png"
-                ).convert_alpha()
-                enemy_rect = self.image.get_rect(center=(missile[0], missile[1]))
-                self.screen.blit(self.image, enemy_rect)
-                #KI_Ende
+                self.image = self.raccon_image
             else:
-                self.image = pygame.image.load(
-                    "assets/Ninja Adventure - Asset Pack/Actor/Monster/Bear/Faceset.png"
-                ).convert_alpha()
-                enemy_rect = self.image.get_rect(center=(missile[0], missile[1]))
-                self.screen.blit(self.image, enemy_rect)
+                self.image = self.bear_image
 
+            enemy_rect = self.image.get_rect(center=(missile[0], missile[1]))
+            self.screen.blit(self.image, enemy_rect)
 
-            Player_rect = pygame.Rect(player_x_pos, player_y_pos, GV.SQUARE_SIZE, GV.SQUARE_SIZE)
             missile_rect = pygame.Rect(missile[0], missile[1], 5, 5)
-
-            if self.welle >= 2:
-                self.speed = 2
 
             if missile_rect.colliderect(Player_rect):
                 self.enemy_list.remove(missile)
-                self.Leben -= 10 * self.welle / 8
+                self.Leben -= int(10 * self.welle / 8)
 
-                if self.Leben <= 0:
-                    GM.actual = GM.GAMEOVER
+            if self.Leben <= 0:
+                GameScreens.actual = GameScreens.GAMEOVER
 
     def death(self):
         rockets_list = self.rocket_list.get_rockets()
 
-        for enemy in self.enemy_list:
+        for enemy in self.enemy_list[:]:
 
             enemy_rect = pygame.Rect(enemy[0], enemy[1], 20, 20)
 
-            for missile in rockets_list:
+            for missile in rockets_list[:]:
 
                 missile_rect = pygame.Rect(missile.x_pos, missile.y_pos, GV.MISSILE_SIZE, GV.MISSILE_SIZE)
 
                 if missile_rect.colliderect(enemy_rect):
                     self.coin_list.append([enemy[0], enemy[1]])
-                    rockets_list.remove(missile)
-                    self.enemy_list.remove(enemy)
+
+                    if missile in rockets_list:
+                        rockets_list.remove(missile)
+
+                    if enemy in self.enemy_list:
+                        self.enemy_list.remove((enemy))
+
                     self.welle += 0.005
-                    break
 
     def coin_spawn(self, player_x_pos, player_y_pos):
-        #KI-Anfang
-        #KI: chatgpt
-        #prompt: Wie füge ich ein pixel bild ein und verwende es
-        coin_image = pygame.image.load("assets/pixil-frame-0.png").convert_alpha()
-        coin_image = pygame.transform.scale(coin_image, (150, 150))
-        #KI-Ende
-
-        for coins in self.coin_list:
-            #KI_Anfang
-            #KI: chatgpt
-            #prompt: Wie füge ich ein pixel bild ein und verwende es
-            self.screen.blit(coin_image, (coins[0], coins[1]))
-            #KI-Ende
+        for coins in self.coin_list[:]:
+            self.Coin_sprite.draw(self.screen, coins[0], coins[1], self.frame_counter)
 
             Spieler_rect = pygame.Rect(player_x_pos, player_y_pos, GV.SQUARE_SIZE, GV.SQUARE_SIZE)
-            coin_rect = coin_image.get_rect(topleft=(coins[0], coins[1]))
-            if coin_rect.colliderect(Spieler_rect):
-                self.score_coin += 1
-                self.coin_list.remove(coins)
+            coin_rect = self.Coin_sprite.images[0].get_rect(
+                topleft=(coins[0], coins[1])
+            )
 
+            if coin_rect.colliderect(Spieler_rect):
+                self.coin_gesammelt += 1
+                self.coin_list.remove(coins)
+                self.score_coin += 1
+                self.frame_counter += 1
+
+        with open("Coin_speicher.txt", "w") as fp:
+            fp.write(f"{self.score_coin}")
 
     def update_and_draw(self, player_x_pos, player_y_pos):
         self.move_and_spawn(player_x_pos, player_y_pos)
         self.death()
         self.coin_spawn(player_x_pos, player_y_pos)
 
-
     def get(self):
-        return self.Leben, self.welle, self.score_coin
+        return self.Leben, self.welle, self.score_coin, self.coin_gesammelt, self.player_death
+

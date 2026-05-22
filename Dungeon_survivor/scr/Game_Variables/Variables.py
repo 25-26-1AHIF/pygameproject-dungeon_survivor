@@ -1,15 +1,18 @@
 import pygame
+
+
 class GameVariables:
     SCREEN_WIDTH = 1080
     SCREEN_HEIGHT = 720
     SQUARE_SIZE = 32
-    FPS = 144
+    FPS = 60
     MISSILE_SIZE = 16
     BUTTON_WIDTH = 300
     BUTTON_HEIGHT = 60
+    actual_WAEPON = 2
 
     FONT_BIG: pygame.font.Font = None
-    FONT_MIDDLE: pygame.font.Font= None
+    FONT_MIDDLE: pygame.font.Font = None
     FONT_SMALL: pygame.font.Font = None
 
     @staticmethod

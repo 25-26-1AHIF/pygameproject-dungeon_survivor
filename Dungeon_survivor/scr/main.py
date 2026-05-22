@@ -6,11 +6,17 @@ from Game_Variables.player import Player as pl
 from Game_Variables.schuss_elemente_player import Rockets
 
 def main_screen(screen, clock):
-
+    coin_score = 0
     font = pygame.font.SysFont(None, 45)
     rocket_list = Rockets(screen=screen)
-    enemy = en(screen, rocket_list)
-    leben, welle, score_coin = enemy.get()
+    with open("Coin_speicher.txt", "r") as fp:
+        inhalt = fp.read()
+    if len(inhalt) == 0:
+        pass
+    else:
+        coin_score = int(inhalt)
+    enemy = en(screen, rocket_list, coin_score)
+    leben, welle, score_coin, coin_gesammelt, player_death = enemy.get()
 
     pygame.display.set_caption("Dungeon Survivor - Main screen")
     background = pygame.image.load("assets/HR_Fantasy_Landscape.png")
@@ -69,17 +75,23 @@ def main_screen(screen, clock):
         screen.blit(source=beenden_text, dest=beenden_text_rect)
         screen.blit(source=coins_text, dest=coins_text_rect)
         screen.blit(source=shop_text, dest=shop_text_rect)
-        screen.blit(font.render(f"{score_coin:.0f}", True, (255, 255, 255)), coin_int_rect)
-        leben, welle, score_coin = enemy.get()
+        screen.blit(font.render(f"{score_coin}", True, (0, 0, 0)), coin_int_rect)
+        leben, welle, score_coin, coin_gesammelt, player_death = enemy.get()
         pygame.display.flip()
         clock.tick(GV.FPS)
 
 def play_screen(screen, clock):
-
+    coin_score = 0
     rocket_list = Rockets(screen=screen)
-    enemy = en(screen, rocket_list)
+    with open("Coin_speicher.txt", "r") as fp:
+        inhalt = fp.read()
+    if len(inhalt) == 0:
+        pass
+    else:
+        coin_score = int(inhalt)
+    enemy = en(screen, rocket_list, coin_score)
     player = pl(screen, rocket_list)
-    leben, welle, score_coin = enemy.get()
+    leben, welle, score_coin, coin_gesammelt, player_death = enemy.get()
     #KI-anfang
     #KI: ChatGPT
     #prompt: Wie bekomme ich den hintergrund in ein laufendes bild hinein
@@ -107,16 +119,20 @@ def play_screen(screen, clock):
                 return GameScreens.Exit
 
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
+                if event.key == pygame.K_SPACE:
                     return GameScreens.PAUSE
+                elif player_death == 1:
+                    return GameScreens.GAMEOVER
+
+            player.update_and_shoot(event)
 
 
         screen.blit(background_play,(0, 0))
-
+        player.update_and_draw()
         x_pos, y_pos = player.get_pos()
         enemy.update_and_draw(x_pos, y_pos)
 
-        player.update_and_draw()
+
         rocket_list.update_and_draw()
 
         screen.blit(source=Leben, dest=Leben_rect)
@@ -125,10 +141,9 @@ def play_screen(screen, clock):
 
         screen.blit(font.render(f"{leben:.0f}", True, (255, 255, 255)), Level_rect)
         screen.blit(font.render(f"{welle:.0f}", True, (255, 255, 255)), welle_int_rect)
-        screen.blit(font.render(f"{score_coin:.0f}", True, (255, 255, 255)), coin_int_rect)
+        screen.blit(font.render(f"{coin_gesammelt}", True, (255, 255, 255)), coin_int_rect)
 
-
-        leben, welle, score_coin = enemy.get()
+        leben, welle, score_coin, coin_gesammelt, player_death = enemy.get()
         pygame.display.flip()
         clock.tick(GV.FPS)
 
@@ -139,7 +154,10 @@ def pause_screen(screen, clock):
     beenden_text = GV.FONT_MIDDLE.render("Beenden", False, "darkred")
     fortsetzen_text_rect = fortsetzen_text.get_rect(center=(GV.SCREEN_WIDTH / 2, 100))
     beenden_text_rect = beenden_text.get_rect(center=(GV.SCREEN_WIDTH / 2, GV.SCREEN_HEIGHT - 100))
-
+    leertaste_text = GV.FONT_SMALL.render("leertaste", False, "white")
+    leertaste_text_rect = leertaste_text.get_rect(center=(GV.SCREEN_WIDTH / 2, 70))
+    esc_text = GV.FONT_SMALL.render("ESC", False, "white")
+    esc_text_rect = esc_text.get_rect(center=(GV.SCREEN_WIDTH / 2, GV.SCREEN_HEIGHT- 130))
 
 
     while True:
@@ -149,8 +167,10 @@ def pause_screen(screen, clock):
                 return GameScreens.Exit
 
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
+                if event.key == pygame.K_SPACE:
                     return GameScreens.PLAY
+                elif event.key == pygame.K_ESCAPE:
+                    return GameScreens.MAIN
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if fortsetzen_text_rect.collidepoint(event.pos):
@@ -160,6 +180,14 @@ def pause_screen(screen, clock):
 
         pygame.draw.rect(surface=screen, rect=fortsetzen_text_rect, color="black")
         pygame.draw.rect(surface=screen, rect=beenden_text_rect, color="black")
+        pygame.draw.rect(surface=screen, rect=leertaste_text_rect, color="black")
+        pygame.draw.rect(surface=screen, rect=esc_text_rect, color="black")
+
+
+        screen.blit(source=fortsetzen_text, dest=fortsetzen_text_rect)
+        screen.blit(source=beenden_text, dest=beenden_text_rect)
+        screen.blit(source=leertaste_text, dest=leertaste_text_rect)
+        screen.blit(source=esc_text, dest=esc_text_rect)
 
         pygame.display.flip()
         clock.tick(GV.FPS)
@@ -189,6 +217,7 @@ def shop_screen(screen, clock):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     return GameScreens.MAIN
+
 
 
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -253,6 +282,11 @@ def inventar_screen(screen, clock):
 
 
 def Gameover(screen, clock):
+    background = pygame.image.load("assets/Background 300x128.png")
+    resized_background = pygame.transform.scale(background, (GV.SCREEN_WIDTH, GV.SCREEN_HEIGHT))
+
+    Gameover_text = GV.FONT_BIG.render("GameOver", False, "darkred")
+    Gameover_text_rect = Gameover_text.get_rect(center=(GV.SCREEN_WIDTH / 2 - 30, GV.SCREEN_HEIGHT/3))
 
     while True:
 
@@ -264,7 +298,8 @@ def Gameover(screen, clock):
                 if event.key == pygame.K_ESCAPE:
                     return GameScreens.MAIN
 
-        screen.fill("black")
+        screen.blit(resized_background, (0, 0))
+        screen.blit(source=Gameover_text, dest=Gameover_text_rect)
         pygame.display.flip()
         clock.tick(GV.FPS)
 
@@ -273,6 +308,8 @@ def main():
     GV.init()
     screen = pygame.display.set_mode((GV.SCREEN_WIDTH, GV.SCREEN_HEIGHT))
     clock = pygame.time.Clock()
+
+
 
 
     while True:
@@ -297,6 +334,9 @@ def main():
 
         elif GameScreens.actual == GameScreens.SHOP:
             GameScreens.actual = shop_screen(screen, clock)
+
+        elif GameScreens.actual == GameScreens.PAUSE:
+            GameScreens.actual = pause_screen(screen, clock)
 
     pygame.quit()
 
