@@ -12,7 +12,7 @@ class Player:
         self.rockets = rockets
         self.actual_weapon = GV.actual_WAEPON
         self.speed = 2
-
+        
     def draw(self):
 
 

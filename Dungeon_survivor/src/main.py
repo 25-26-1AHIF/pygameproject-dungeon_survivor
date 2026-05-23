@@ -1,3 +1,5 @@
+from xml.etree.ElementTree import indent
+
 import pygame
 import json
 from Game_Variables.Variables import GameVariables as GV
@@ -5,6 +7,7 @@ from Game_Variables.Variables import GameScreens
 from Game_Variables.enemys import Enemy as en
 from Game_Variables.player import Player as pl
 from Game_Variables.schuss_elemente_player import Rockets
+from Game_Variables.Inventar_system import Inventar as IV
 
 def main_screen(screen, clock):
     coin_score = 0
@@ -265,20 +268,19 @@ def highscore_screen(screen, clock):
         clock.tick(GV.FPS)
 
 def inventar_screen(screen, clock):
-    fortsetzen_text = GV.FONT_MIDDLE.render("Fortsetzen", False, "green")
-    fortsetzen_text_rect = fortsetzen_text.get_rect(center=(GV.SCREEN_WIDTH / 2, 100))
-    player = [{"Sniper":
-                   {"verfügbarkeit": False,
-                    "coins": 300,
-                    "weapon": 1}},
-              {"bogen":
-                   {"verfügbarkeit": False,
-                    "coins": 300,
-                    "weapon": 1}}]
 
-    with open("speichern_spielstand.json", "w") as fp:
-        json.dump(f"{player}", fp ,indent= 2)
+    background = pygame.image.load("assets/redcometnomark.png")
+    Skin_text = GV.FONT_BIG.render("Waffe", False, "yellow")
+    Waffe_text = GV.FONT_BIG.render("Skin ", False, "yellow")
 
+    waffen_text_rect = Waffe_text.get_rect(topleft=(GV.SCREEN_WIDTH - GV.SCREEN_WIDTH/4, 50))
+    skins_text_rect = Skin_text.get_rect(topleft=(GV.SCREEN_WIDTH - GV.SCREEN_WIDTH/1.2, 50))
+
+
+    with open("speichern_spielstand.json", "r") as fp:
+        inhalt = fp.read()
+
+    inventar = IV(inhalt, screen)
 
     while True:
 
@@ -290,10 +292,17 @@ def inventar_screen(screen, clock):
                 if event.key == pygame.K_ESCAPE:
                     return GameScreens.MAIN
 
-        #pygame.draw.rect(surface=screen, rect=_text_rect, color="black")
-        #screen.blit(source=fortsetzen_text, dest=fortsetzen_text_rect)
 
-        screen.fill("black")
+
+        screen.blit(background, (0, 0))
+        inventar.update_and_draw()
+
+        pygame.draw.rect(surface=screen, rect=waffen_text_rect, color="black")
+        screen.blit(source=Waffe_text, dest=waffen_text_rect)
+        pygame.draw.rect(surface=screen, rect=skins_text_rect, color="black")
+        screen.blit(source=Skin_text, dest=skins_text_rect)
+
+
         pygame.display.flip()
         clock.tick(GV.FPS)
 

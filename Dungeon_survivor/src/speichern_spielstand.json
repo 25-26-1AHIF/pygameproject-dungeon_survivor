@@ -1,0 +1,30 @@
+[
+  {
+    "Schwert": {
+      "Verfügbarkeit":  "True",
+      "Coins": 300,
+      "upgrade": 1
+    }
+  },
+  {
+    "Axt": {
+      "Verfügbarkeit": "False",
+      "Coins": 1000,
+      "upgrade": 1
+    }
+  },
+  {
+    "Bogen": {
+      "Verfügbarkeit": "False",
+      "Coins": 700,
+      "upgrade": 1
+    }
+  },
+  {
+    "Armbrust": {
+      "Verfügbarkeit": "False",
+      "Coins": 5000,
+      "upgrade": 1
+    }
+  }
+]
