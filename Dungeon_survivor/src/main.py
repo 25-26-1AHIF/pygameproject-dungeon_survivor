@@ -219,6 +219,28 @@ def shop_screen(screen, clock):
 
     waffen_text_rect = waffen_text.get_rect(topleft=(20, 100))
     skins_text_rect = skins_text.get_rect(topleft=(20, 100 + 80))
+    # KI-Anfang
+    # KI: ChatGPT
+    # prompt: warum ist das letzte rechteck nicht ganz zu sehen: schwert_rect = pygame.Rect(40 + waffen_text_rect.width, 60, GV.SCREEN_WIDTH / 2, (GV.SCREEN_HEIGHT - 3 * 10) / 4) axt_rect = pygame.Rect(40 + waffen_text_rect.width, 60 + schwert_rect.height +10, GV.SCREEN_WIDTH / 2, (GV.SCREEN_HEIGHT - 2 * 10) / 4) bogen_rect = pygame.Rect(40 + waffen_text_rect.width, 60 + 2*(schwert_rect.height + 10), GV.SCREEN_WIDTH / 2, (GV.SCREEN_HEIGHT - 2 * 10) / 4) armbrust_rect = pygame.Rect(40 + waffen_text_rect.width, 60 + 3*(schwert_rect.height + 10), GV.SCREEN_WIDTH / 2, (GV.SCREEN_HEIGHT - 2 * 10) / 4)
+    margin = 60
+    abstand = 10
+    anzahl = 4
+
+    hoehe = (GV.SCREEN_HEIGHT - 2 * margin - (anzahl - 1) * abstand) / anzahl
+
+    x = 40 + waffen_text_rect.width
+    y_start = margin
+
+    schwert_rect = pygame.Rect(x, y_start, GV.SCREEN_WIDTH / 2, hoehe)
+    axt_rect = pygame.Rect(x, y_start + 1 * (hoehe + abstand), GV.SCREEN_WIDTH / 2, hoehe)
+    bogen_rect = pygame.Rect(x, y_start + 2 * (hoehe + abstand), GV.SCREEN_WIDTH / 2, hoehe)
+    armbrust_rect = pygame.Rect(x, y_start + 3 * (hoehe + abstand), GV.SCREEN_WIDTH / 2, hoehe)
+    # KI-Ende
+
+    schwert_image = pygame.image.load("/assets/Ninja Adventure - Asset Pack/Items/Weapons/Sword2/Sprite.png")
+    axt_image = pygame.image.load("/assets/Ninja Adventure - Asset Pack/Items/Weapons/AxeTool/Sprite.png")
+    bogen_image = pygame.image.load("/assets/Ninja Adventure - Asset Pack/Items/Weapons/Bow2/Sprite.png")
+    armbrust_image = pygame.image.load("/assets/Ninja Adventure - Asset Pack/Items/Weapons/Crossbow/Sprite.png")
 
     while True:
 
@@ -243,6 +265,12 @@ def shop_screen(screen, clock):
 
         pygame.draw.rect(surface=screen, rect=waffen_text_rect, color="black")
         pygame.draw.rect(surface=screen, rect=skins_text_rect, color="black")
+
+        pygame.draw.rect(surface=screen, rect= schwert_rect, color="lightgray")
+        pygame.draw.rect(surface=screen, rect= axt_rect, color="lightgray")
+        pygame.draw.rect(surface=screen, rect= bogen_rect, color="lightgray")
+        pygame.draw.rect(surface=screen, rect= armbrust_rect, color="lightgray")
+
         screen.blit(source=waffen_text, dest=waffen_text_rect)
         screen.blit(source=skins_text, dest=skins_text_rect)
 
