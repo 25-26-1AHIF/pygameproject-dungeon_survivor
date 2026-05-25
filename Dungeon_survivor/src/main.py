@@ -42,6 +42,13 @@ def main_screen(screen, clock):
     coin_int_rect = coins_text.get_rect(center=(GV.SCREEN_WIDTH - 20, 47))
     shop_text_rect = shop_text.get_rect(center=(GV.SCREEN_WIDTH / 2, 100 + 4 * 80))
 
+    image = pygame.image.load("assets/Ninja Adventure - Asset Pack/Ui/Theme/Wip/ThemeDark/nine_path_panel.png").convert_alpha()
+    # KI-Anfang
+    # KI: ChatGPT
+    # prompt: Wie kann ich von diesem rechteck     starten_text_rect = starten_text.get_rect(center=(GV.SCREEN_WIDTH / 2, 100 + 80)) den länge und die breite bekommen
+    res_image = pygame.transform.scale(image, (starten_text_rect.width, starten_text_rect.height))
+
+
     while True:
 
         for event in pygame.event.get():
@@ -65,6 +72,7 @@ def main_screen(screen, clock):
 
 
         screen.blit(resized_background, (0, 0))
+        #screen.blit(res_image , starten_text_rect)
 
         pygame.draw.rect(surface=screen, rect=starten_text_rect, color="black")
         pygame.draw.rect(surface=screen, rect=inventar_text_rect, color="black")
