@@ -159,6 +159,19 @@ def play_screen(screen, clock):
         pygame.display.flip()
         clock.tick(GV.FPS)
 
+def spielstand_auslesen(filepath: int) -> dict:
+    with open(filepath, "r") as fp:
+        spielstand = json.load(fp)
+    return spielstand
+
+def spielstand_speichern(filepath: str, source: dict) -> None:
+    with open(filepath, "w") as fp:
+        json.dump(source, fp, indent=4)
+
+def muenzen_speichern(filepath: str, source: int) -> None:
+    with open(filepath, "w") as fp:
+        fp.write(f"{source}")
+
 def pause_screen(screen, clock):
     # 1. Fortsetzen
     # 2. Beenden
@@ -205,20 +218,18 @@ def pause_screen(screen, clock):
         clock.tick(GV.FPS)
 
 
-
-
-
 def shop_screen(screen, clock):
-
     pygame.display.set_caption("Dungeon Survivor - Shop")
     background = pygame.image.load("assets/StockCake-Gemütliche_Pixel-Taverne-3432555-medium.png")
     resized_background = pygame.transform.scale(background, (GV.SCREEN_WIDTH, GV.SCREEN_HEIGHT))
     waffen_text = GV.FONT_BIG.render("Waffen", False, "yellow")
     skins_text = GV.FONT_BIG.render("Skins ", False, "gray")
 
+    spielstand = spielstand_auslesen("speichern_spielstand.json")
 
     waffen_text_rect = waffen_text.get_rect(topleft=(20, 100))
     skins_text_rect = skins_text.get_rect(topleft=(20, 100 + 80))
+
     # KI-Anfang
     # KI: ChatGPT
     # prompt: warum ist das letzte rechteck nicht ganz zu sehen: schwert_rect = pygame.Rect(40 + waffen_text_rect.width, 60, GV.SCREEN_WIDTH / 2, (GV.SCREEN_HEIGHT - 3 * 10) / 4) axt_rect = pygame.Rect(40 + waffen_text_rect.width, 60 + schwert_rect.height +10, GV.SCREEN_WIDTH / 2, (GV.SCREEN_HEIGHT - 2 * 10) / 4) bogen_rect = pygame.Rect(40 + waffen_text_rect.width, 60 + 2*(schwert_rect.height + 10), GV.SCREEN_WIDTH / 2, (GV.SCREEN_HEIGHT - 2 * 10) / 4) armbrust_rect = pygame.Rect(40 + waffen_text_rect.width, 60 + 3*(schwert_rect.height + 10), GV.SCREEN_WIDTH / 2, (GV.SCREEN_HEIGHT - 2 * 10) / 4)
@@ -227,24 +238,101 @@ def shop_screen(screen, clock):
     anzahl = 4
 
     hoehe = (GV.SCREEN_HEIGHT - 2 * margin - (anzahl - 1) * abstand) / anzahl
+    hoehe_bild = hoehe - 4 * abstand
 
     x = 40 + waffen_text_rect.width
     y_start = margin
+
+    schwert_headline = GV.FONT_MIDDLE.render("Schwert", False, "darkred")
+    axt_headline = GV.FONT_MIDDLE.render("Axt", False, "darkred")
+    bogen_headline = GV.FONT_MIDDLE.render("Bogen", False, "darkred")
+    armbrust_headline = GV.FONT_MIDDLE.render("Armbrust", False, "darkred")
+
+    schwert_text = GV.FONT_SMALL.render("Der Klassiker", False, "black")
+    axt_text = GV.FONT_SMALL.render("Zwar langsam, zerhäckselt aber Gegner", False, "black")
+    bogen_text = GV.FONT_SMALL.render("Ausgewogene Fernkampfwaffe", False, "black")
+    armbrust_text = GV.FONT_SMALL.render("Töte Mehrere mit einem Schuss", False, "black")
+
+    schwert_preis = GV.FONT_SMALL.render(f"Preis: {spielstand[0]['Schwert']['Coins']}", False, "gold3")
+    axt_preis = GV.FONT_SMALL.render(f"Preis: {spielstand[1]['Axt']['Coins']}", False, "gold3")
+    bogen_preis = GV.FONT_SMALL.render(f"Preis: {spielstand[2]['Bogen']['Coins']}", False, "gold3")
+    armbrust_preis = GV.FONT_SMALL.render(f"Preis: {spielstand[3]['Armbrust']['Coins']}", False, "gold3")
+
+    if spielstand[0]['Schwert']['Verfuegbarkeit'] == "True":
+        schwert_kaufen = GV.FONT_MIDDLE.render("Kaufen", False, "green2")
+        schwert_kaufen_rect = schwert_kaufen.get_rect(topleft=(x + 260 + hoehe_bild, y_start + 90))
+    else:
+        schwert_kaufen = GV.FONT_MIDDLE.render("Im Besitz", False, "red2")
+        schwert_kaufen_rect = schwert_kaufen.get_rect(topleft=(x + 260 + hoehe_bild, y_start + 90))
+
+    if spielstand[1]['Axt']['Verfuegbarkeit'] == "True":
+        axt_kaufen = GV.FONT_MIDDLE.render("Kaufen", False, "green2")
+        axt_kaufen_rect = axt_kaufen.get_rect(topleft=(x + 260 + hoehe_bild, y_start + 90 + 1 * (hoehe + abstand)))
+    else:
+        axt_kaufen = GV.FONT_MIDDLE.render("Im Besitz", False, "red2")
+        axt_kaufen_rect = axt_kaufen.get_rect(topleft=(x + 260 + hoehe_bild, y_start + 90 + 1 * (hoehe + abstand)))
+
+    if spielstand[2]['Bogen']['Verfuegbarkeit'] == "True":
+        bogen_kaufen = GV.FONT_MIDDLE.render("Kaufen", False, "green2")
+        bogen_kaufen_rect = bogen_kaufen.get_rect(topleft=(x + 260 + hoehe_bild, y_start + 90 + 2 * (hoehe + abstand)))
+    else:
+        bogen_kaufen = GV.FONT_MIDDLE.render("Im Besitz", False, "red2")
+        bogen_kaufen_rect = bogen_kaufen.get_rect(topleft=(x + 260 + hoehe_bild, y_start + 90 + 2 * (hoehe + abstand)))
+
+    if spielstand[3]['Armbrust']['Verfuegbarkeit'] == "True":
+        armbrust_kaufen = GV.FONT_MIDDLE.render("Kaufen", False, "green2")
+        armbrust_kaufen_rect = armbrust_kaufen.get_rect(
+            topleft=(x + 260 + hoehe_bild, y_start + 90 + 3 * (hoehe + abstand)))
+    else:
+        armbrust_kaufen = GV.FONT_MIDDLE.render("Im Besitz", False, "red2")
+        armbrust_kaufen_rect = armbrust_kaufen.get_rect(
+            topleft=(x + 260 + hoehe_bild, y_start + 90 + 3 * (hoehe + abstand)))
+
+    with open("Coin_speicher.txt", "r") as fp:
+        coins = fp.read()
+
+    coins = int(coins)
+
+    coins_text = GV.FONT_MIDDLE.render(f"Coins: {coins}", False, "yellow")
+    coin_int_rect = coins_text.get_rect(center=(GV.SCREEN_WIDTH - 100, 47))
 
     schwert_rect = pygame.Rect(x, y_start, GV.SCREEN_WIDTH / 2, hoehe)
     axt_rect = pygame.Rect(x, y_start + 1 * (hoehe + abstand), GV.SCREEN_WIDTH / 2, hoehe)
     bogen_rect = pygame.Rect(x, y_start + 2 * (hoehe + abstand), GV.SCREEN_WIDTH / 2, hoehe)
     armbrust_rect = pygame.Rect(x, y_start + 3 * (hoehe + abstand), GV.SCREEN_WIDTH / 2, hoehe)
+
     # KI-Ende
 
-    schwert_image = pygame.image.load("/assets/Ninja Adventure - Asset Pack/Items/Weapons/Sword2/Sprite.png")
-    axt_image = pygame.image.load("/assets/Ninja Adventure - Asset Pack/Items/Weapons/AxeTool/Sprite.png")
-    bogen_image = pygame.image.load("/assets/Ninja Adventure - Asset Pack/Items/Weapons/Bow2/Sprite.png")
-    armbrust_image = pygame.image.load("/assets/Ninja Adventure - Asset Pack/Items/Weapons/Crossbow/Sprite.png")
+    schwert_image_rect = pygame.Rect(x + 10, y_start + 10, hoehe_bild, hoehe_bild)
+    axt_image_rect = pygame.Rect(x + 10, y_start + 10 + 1 * (hoehe + abstand), hoehe_bild, hoehe_bild)
+    bogen_image_rect = pygame.Rect(x + 10, y_start + 10 + 2 * (hoehe + abstand), hoehe_bild, hoehe_bild)
+    armbrust_image_rect = pygame.Rect(x + 10, y_start + 10 + 3 * (hoehe + abstand), hoehe_bild, hoehe_bild)
+
+    schwert_image = pygame.image.load("assets/Ninja Adventure - Asset Pack/Items/Weapons/Sword2/Sprite.png")
+    axt_image = pygame.image.load("assets/Ninja Adventure - Asset Pack/Items/Weapons/AxeTool/Sprite.png")
+    bogen_image = pygame.image.load("assets/Ninja Adventure - Asset Pack/Items/Weapons/Bow2/Sprite.png")
+    armbrust_image = pygame.image.load("assets/Ninja Adventure - Asset Pack/Items/Weapons/Crossbow/Sprite.png")
+
+    res_schwert_image = pygame.transform.scale(schwert_image,
+                                               (6 * schwert_image.get_width(), 6 * schwert_image.get_height()))
+    res_axt_image = pygame.transform.scale(axt_image, (6 * axt_image.get_width(), 6 * axt_image.get_height()))
+    res_bogen_image = pygame.transform.scale(bogen_image, (6 * bogen_image.get_width(), 6 * bogen_image.get_height()))
+    res_armbrust_image = pygame.transform.scale(armbrust_image,
+                                                (6 * armbrust_image.get_width(), 6 * armbrust_image.get_height()))
+
+    tab = "waffen"
 
     while True:
 
         for event in pygame.event.get():
+            if tab == "waffen":
+                waffen_text = GV.FONT_BIG.render("Waffen", False, "yellow")
+                skins_text = GV.FONT_BIG.render("Skins", False, "gray")
+            else:
+                waffen_text = GV.FONT_BIG.render("Waffen", False, "gray")
+                skins_text = GV.FONT_BIG.render("Skins", False, "yellow")
+
+            coins_text = GV.FONT_MIDDLE.render(f"Coins: {coins}", False, "yellow")
             if event.type == pygame.QUIT:
                 return GameScreens.Exit
 
@@ -252,31 +340,112 @@ def shop_screen(screen, clock):
                 if event.key == pygame.K_ESCAPE:
                     return GameScreens.MAIN
 
-
-
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if waffen_text_rect.collidepoint(event.pos):
-                    pass
-                elif skins_text_rect.collidepoint(event.pos):
-                    pass
 
+                if waffen_text_rect.collidepoint(event.pos):
+                    aktueller_tab = "waffen"
+
+                elif skins_text_rect.collidepoint(event.pos):
+                    aktueller_tab = "skins"
+
+                elif schwert_kaufen_rect.collidepoint(event.pos) and spielstand[0]['Schwert'][
+                    'Verfuegbarkeit'] == "True":
+                    if coins >= spielstand[0]['Schwert']['Coins']:
+                        coins -= spielstand[0]['Schwert']['Coins']
+                        spielstand[0]['Schwert']['Verfuegbarkeit'] = "False"
+                        muenzen_speichern("Coin_speicher.txt", coins)
+                        spielstand_speichern("speichern_spielstand.json", spielstand)
+                        schwert_kaufen = GV.FONT_MIDDLE.render("Im Besitz", False, "red2")
+                        schwert_kaufen_rect = schwert_kaufen.get_rect(topleft=(x + 260 + hoehe_bild, y_start + 90))
+
+                elif axt_kaufen_rect.collidepoint(event.pos) and spielstand[1]['Axt']['Verfuegbarkeit'] == "True":
+                    if coins >= spielstand[1]['Axt']['Coins']:
+                        coins -= spielstand[1]['Axt']['Coins']
+                        spielstand[1]['Axt']['Verfuegbarkeit'] = "False"
+                        muenzen_speichern("Coin_speicher.txt", coins)
+                        spielstand_speichern("speichern_spielstand.json", spielstand)
+                        axt_kaufen = GV.FONT_MIDDLE.render("Im Besitz", False, "red2")
+                        axt_kaufen_rect = axt_kaufen.get_rect(
+                            topleft=(x + 260 + hoehe_bild, y_start + 90 + 1 * (hoehe + abstand)))
+
+                elif bogen_kaufen_rect.collidepoint(event.pos) and spielstand[2]['Bogen']['Verfuegbarkeit'] == "True":
+                    if coins >= spielstand[2]['Bogen']['Coins']:
+                        coins -= spielstand[2]['Bogen']['Coins']
+                        spielstand[2]['Bogen']['Verfuegbarkeit'] = "False"
+                        muenzen_speichern("Coin_speicher.txt", coins)
+                        spielstand_speichern("speichern_spielstand.json", spielstand)
+                        bogen_kaufen = GV.FONT_MIDDLE.render("Im Besitz", False, "red2")
+                        bogen_kaufen_rect = bogen_kaufen.get_rect(
+                            topleft=(x + 260 + hoehe_bild, y_start + 90 + 2 * (hoehe + abstand)))
+
+                elif armbrust_kaufen_rect.collidepoint(event.pos) and spielstand[3]['Armbrust'][
+                    'Verfuegbarkeit'] == "True":
+                    if coins >= spielstand[3]['Armbrust']['Coins']:
+                        coins -= spielstand[3]['Armbrust']['Coins']
+                        spielstand[3]['Armbrust']['Verfuegbarkeit'] = "False"
+                        muenzen_speichern("Coin_speicher.txt", coins)
+                        spielstand_speichern("speichern_spielstand.json", spielstand)
+                        armbrust_kaufen = GV.FONT_MIDDLE.render("Im Besitz", False, "red2")
+                        armbrust_kaufen_rect = armbrust_kaufen.get_rect(
+                            topleft=(x + 260 + hoehe_bild, y_start + 90 + 3 * (hoehe + abstand)))
 
         screen.blit(resized_background, (0, 0))
 
         pygame.draw.rect(surface=screen, rect=waffen_text_rect, color="black")
         pygame.draw.rect(surface=screen, rect=skins_text_rect, color="black")
 
-        pygame.draw.rect(surface=screen, rect= schwert_rect, color="lightgray")
-        pygame.draw.rect(surface=screen, rect= axt_rect, color="lightgray")
-        pygame.draw.rect(surface=screen, rect= bogen_rect, color="lightgray")
-        pygame.draw.rect(surface=screen, rect= armbrust_rect, color="lightgray")
+        pygame.draw.rect(surface=screen, rect=schwert_rect, color="lightgray")
+        pygame.draw.rect(surface=screen, rect=axt_rect, color="lightgray")
+        pygame.draw.rect(surface=screen, rect=bogen_rect, color="lightgray")
+        pygame.draw.rect(surface=screen, rect=armbrust_rect, color="lightgray")
+
+        pygame.draw.rect(surface=screen, rect=schwert_image_rect, color="black")
+        pygame.draw.rect(surface=screen, rect=axt_image_rect, color="black")
+        pygame.draw.rect(surface=screen, rect=bogen_image_rect, color="black")
+        pygame.draw.rect(surface=screen, rect=armbrust_image_rect, color="black")
 
         screen.blit(source=waffen_text, dest=waffen_text_rect)
         screen.blit(source=skins_text, dest=skins_text_rect)
 
+        screen.blit(source=schwert_headline, dest=(x + 20 + hoehe_bild, y_start + 10))
+        screen.blit(source=axt_headline, dest=(x + 20 + hoehe_bild, y_start + 10 + 1 * (hoehe + abstand)))
+        screen.blit(source=bogen_headline, dest=(x + 20 + hoehe_bild, y_start + 10 + 2 * (hoehe + abstand)))
+        screen.blit(source=armbrust_headline, dest=(x + 20 + hoehe_bild, y_start + 10 + 3 * (hoehe + abstand)))
+
+        screen.blit(source=schwert_text, dest=(x + 20 + hoehe_bild, y_start + 50))
+        screen.blit(source=axt_text, dest=(x + 20 + hoehe_bild, y_start + 50 + 1 * (hoehe + abstand)))
+        screen.blit(source=bogen_text, dest=(x + 20 + hoehe_bild, y_start + 50 + 2 * (hoehe + abstand)))
+        screen.blit(source=armbrust_text, dest=(x + 20 + hoehe_bild, y_start + 50 + 3 * (hoehe + abstand)))
+
+        screen.blit(source=coins_text, dest=coin_int_rect)
+
+        screen.blit(source=schwert_preis, dest=(x + 20 + hoehe_bild, y_start + 90))
+        screen.blit(source=axt_preis, dest=(x + 20 + hoehe_bild, y_start + 90 + 1 * (hoehe + abstand)))
+        screen.blit(source=bogen_preis, dest=(x + 20 + hoehe_bild, y_start + 90 + 2 * (hoehe + abstand)))
+        screen.blit(source=armbrust_preis, dest=(x + 20 + hoehe_bild, y_start + 90 + 3 * (hoehe + abstand)))
+
+        screen.blit(source=schwert_kaufen, dest=(x + 260 + hoehe_bild, y_start + 90))
+        screen.blit(source=axt_kaufen, dest=(x + 260 + hoehe_bild, y_start + 90 + 1 * (hoehe + abstand)))
+        screen.blit(source=bogen_kaufen, dest=(x + 260 + hoehe_bild, y_start + 90 + 2 * (hoehe + abstand)))
+        screen.blit(source=armbrust_kaufen, dest=(x + 260 + hoehe_bild, y_start + 90 + 3 * (hoehe + abstand)))
+
+        # KI-Anfang
+        # KI: ChatGPT
+        # prompt: wie du auf dem bild siehst ist das noch nicht genau zentriert wie kann man das machen
+        schwert_pos = res_schwert_image.get_rect(center=schwert_image_rect.center)
+        # KI-Ende
+        axt_pos = res_axt_image.get_rect(center=axt_image_rect.center)
+        bogen_pos = res_bogen_image.get_rect(center=bogen_image_rect.center)
+        armbrust_pos = res_armbrust_image.get_rect(center=armbrust_image_rect.center)
+
+        screen.blit(res_schwert_image, schwert_pos)
+        screen.blit(res_axt_image, axt_pos)
+        screen.blit(res_bogen_image, bogen_pos)
+        screen.blit(res_armbrust_image, armbrust_pos)
 
         pygame.display.flip()
         clock.tick(GV.FPS)
+
 
 def highscore_screen(screen, clock):
     background = pygame.image.load("assets/Image.png")

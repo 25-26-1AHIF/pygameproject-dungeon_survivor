@@ -8,14 +8,14 @@
     },
     {
         "Axt": {
-            "Verfuegbarkeit": "True",
+            "Verfuegbarkeit": "False",
             "Coins": 1000,
             "upgrade": 1
         }
     },
     {
         "Bogen": {
-            "Verfuegbarkeit": "True",
+            "Verfuegbarkeit": "False",
             "Coins": 700,
             "upgrade": 1
         }
