@@ -8,25 +8,30 @@ class Rocket:
     y_pos: float # y_position vom rocket
 
 
-    def __init__(self, screen, x_pos, y_pos, dx, dy):
+    def __init__(self, screen, x_pos, y_pos, dx, dy, player_x_pos, player_y_pos):
         self.x_pos = x_pos
         self.y_pos = y_pos
         self.dx = dx
         self.dy = dy
+        self.player_x_pos = player_x_pos
+        self.player_y_pos = player_y_pos
         self.screen = screen
         self.width = gv.MISSILE_SIZE
         self.height = gv.MISSILE_SIZE
 
 
 
+
     def update_and_draw(self):
+        if gv.actual_WAEPON == 0:
+            pass
         if gv.actual_WAEPON == 2:
             self.x_pos += self.dx
             self.y_pos += self.dy
             pygame.draw.circle(surface=self.screen,
                              center=(self.x_pos, self.y_pos),
                              color="blue",
-                             width=0, radius=12)
+                             width=0, radius=6)
         else:
             self.x_pos += self.dx
             self.y_pos += self.dy

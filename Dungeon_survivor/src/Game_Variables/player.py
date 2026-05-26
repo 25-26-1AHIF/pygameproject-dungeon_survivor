@@ -1,5 +1,6 @@
 import pygame
 import random
+from .Player_sprite import Sprite
 
 from .Variables import GameVariables as GV
 from .schuss_elemente_player import Rocket
@@ -12,11 +13,22 @@ class Player:
         self.rockets = rockets
         self.actual_weapon = GV.actual_WAEPON
         self.speed = 2
-        
+        self.sprite = Sprite(
+            filepath="assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png",
+            animation_speed=10,
+            image_rect=pygame.Rect(0, 32*9, 32, 32),
+            image_count=15)
+
+        self.sprite.load_spritesheet()
+        self.frame_counter = 0
+        self.sword = pygame.image.load("assets/Ninja Adventure - Asset Pack/Items/Weapons/Sword2/Sprite.png")
+
     def draw(self):
-
-
-        pygame.draw.rect(surface=self.screen, rect = (self.x_pos_player, self.y_pos_player, GV.SQUARE_SIZE, GV.SQUARE_SIZE), color="red", width=0)
+        self.sprite.draw(
+            self.screen,
+            self.x_pos_player,
+            self.y_pos_player,
+            self.frame_counter)
 
 
     def move(self):
@@ -26,12 +38,31 @@ class Player:
                 pass
             else:
                 self.x_pos_player -= self.speed
+                self.sprite = Sprite(
+                    filepath="assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png",
+                    animation_speed=10,
+                    image_rect=pygame.Rect(32*2, 0, 32, 32),
+                    image_count=15)
+                self.sprite.load_spritesheet()
+            if GV.actual_WAEPON == 0:
+                sword = pygame.transform.scale(self.sword, (30, 30))
+                self.screen.blit(sword, (self.x_pos_player + 20, self.y_pos_player+50))
 
         if pressed_keys[pygame.K_d]:
             if self.x_pos_player >= GV.SCREEN_WIDTH - GV.SQUARE_SIZE:
                 pass
             else:
                 self.x_pos_player += self.speed
+                self.sprite = Sprite(
+                    filepath="assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png",
+                    animation_speed=10,
+                    image_rect=pygame.Rect(32 * 3, 0, 32, 32),
+                    image_count=15)
+                self.sprite.load_spritesheet()
+
+            if GV.actual_WAEPON == 0:
+                sword = pygame.transform.scale(self.sword, (30, 30))
+                self.screen.blit(sword, (self.x_pos_player + 20, self.y_pos_player + 50))
 
         pressed_keys = pygame.key.get_pressed()
         if pressed_keys[pygame.K_w]:
@@ -39,19 +70,44 @@ class Player:
                 pass
             else:
                 self.y_pos_player -= self.speed
+                self.sprite = Sprite(
+                    filepath="assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png",
+                    animation_speed=10,
+                    image_rect=pygame.Rect(32, 0, 32, 32),
+                    image_count=15)
+                self.sprite.load_spritesheet()
+            if GV.actual_WAEPON == 0:
+                sword = pygame.transform.scale(self.sword, (30, 30))
+                self.screen.blit(sword, (self.x_pos_player + 20, self.y_pos_player + 50))
 
         if pressed_keys[pygame.K_s]:
             if self.y_pos_player >= GV.SCREEN_HEIGHT - GV.SQUARE_SIZE:
                 pass
             else:
                 self.y_pos_player += self.speed
+                self.sprite = Sprite(
+                    filepath="assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png",
+                    animation_speed=10,
+                    image_rect=pygame.Rect(0, 32*2, 32, 32),
+                    image_count=15)
+                self.sprite.load_spritesheet()
+            if GV.actual_WAEPON == 0:
+                sword = pygame.transform.scale(self.sword, (30, 30))
+                self.screen.blit(sword, (self.x_pos_player + 20, self.y_pos_player + 50))
 
-        pygame.draw.rect(surface=self.screen,
-                         rect=(self.x_pos_player, self.y_pos_player, GV.SQUARE_SIZE, GV.SQUARE_SIZE), color="red",
-                         width=0)
+        if GV.actual_WAEPON == 0:
+            sword = pygame.transform.scale(self.sword, (30, 30))
+            self.screen.blit(sword, (self.x_pos_player + 20, self.y_pos_player + 50))
+
+
+
+
+
+
 
     def shoot(self, event):
         if self.actual_weapon == 0:
+
             #KI Anfang
             #KI: Chat gpt
             #prompt: Wie bekomme ich das event hier her mit einem mausklick
@@ -72,12 +128,15 @@ class Player:
                     dx /= length
                     dy /= length
 
+
                     rocket = Rocket(
                         x_pos=player_center_x,
                         y_pos=player_center_y,
                         screen=self.screen,
                         dx=dx * 8,  # Geschwindigkeit
-                        dy=dy * 8
+                        dy=dy * 8,
+                        player_x_pos=self.x_pos_player,
+                        player_y_pos= self.y_pos_player
                     )
                     self.rockets.add_rocket(rocket)
 
@@ -166,8 +225,10 @@ class Player:
         return self.x_pos_player, self.y_pos_player
 
     def update_and_draw(self):
-        self.draw()
         self.move()
+        self.draw()
+        self.frame_counter +=1
+
 
     def update_and_shoot(self, event):
         self.shoot(event)
