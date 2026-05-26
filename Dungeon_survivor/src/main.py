@@ -237,10 +237,10 @@ def shop_screen(screen, clock):
     armbrust_rect = pygame.Rect(x, y_start + 3 * (hoehe + abstand), GV.SCREEN_WIDTH / 2, hoehe)
     # KI-Ende
 
-    #schwert_image = pygame.image.load("/assets/Ninja Adventure - Asset Pack/Items/Weapons/Sword2/Sprite.png")
-    #axt_image = pygame.image.load("/assets/Ninja Adventure - Asset Pack/Items/Weapons/AxeTool/Sprite.png")
-    #bogen_image = pygame.image.load("/assets/Ninja Adventure - Asset Pack/Items/Weapons/Bow2/Sprite.png")
-    #armbrust_image = pygame.image.load("/assets/Ninja Adventure - Asset Pack/Items/Weapons/Crossbow/Sprite.png")
+    schwert_image = pygame.image.load("/assets/Ninja Adventure - Asset Pack/Items/Weapons/Sword2/Sprite.png")
+    axt_image = pygame.image.load("/assets/Ninja Adventure - Asset Pack/Items/Weapons/AxeTool/Sprite.png")
+    bogen_image = pygame.image.load("/assets/Ninja Adventure - Asset Pack/Items/Weapons/Bow2/Sprite.png")
+    armbrust_image = pygame.image.load("/assets/Ninja Adventure - Asset Pack/Items/Weapons/Crossbow/Sprite.png")
 
     while True:
 
@@ -311,7 +311,6 @@ def inventar_screen(screen, clock):
 
     waffen_text_rect = Waffe_text.get_rect(topleft=(GV.SCREEN_WIDTH - GV.SCREEN_WIDTH/4, 50))
     skins_text_rect = Skin_text.get_rect(topleft=(GV.SCREEN_WIDTH - GV.SCREEN_WIDTH/1.2, 50))
-
 
 
     with open("speichern_spielstand.json", "r") as fp:
