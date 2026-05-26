@@ -22,6 +22,9 @@ class Player:
         self.sprite.load_spritesheet()
         self.frame_counter = 0
         self.sword = pygame.image.load("assets/Ninja Adventure - Asset Pack/Items/Weapons/Sword2/Sprite.png")
+        self.x_pos = 0
+        self.y_pos = 0
+
 
     def draw(self):
         self.sprite.draw(
@@ -32,6 +35,7 @@ class Player:
 
 
     def move(self):
+
         pressed_keys = pygame.key.get_pressed()
         if pressed_keys[pygame.K_a]:
             if self.x_pos_player <= 0:
@@ -45,8 +49,10 @@ class Player:
                     image_count=15)
                 self.sprite.load_spritesheet()
             if GV.actual_WAEPON == 0:
+                self.x_pos = self.x_pos_player + 5
+                self.y_pos = self.y_pos_player + 45
                 sword = pygame.transform.scale(self.sword, (30, 30))
-                self.screen.blit(sword, (self.x_pos_player + 20, self.y_pos_player+50))
+                self.screen.blit(sword, (self.x_pos, self.y_pos))
 
         if pressed_keys[pygame.K_d]:
             if self.x_pos_player >= GV.SCREEN_WIDTH - GV.SQUARE_SIZE:
@@ -61,8 +67,10 @@ class Player:
                 self.sprite.load_spritesheet()
 
             if GV.actual_WAEPON == 0:
+                self.x_pos = self.x_pos_player + 60
+                self.y_pos = self.y_pos_player + 50
                 sword = pygame.transform.scale(self.sword, (30, 30))
-                self.screen.blit(sword, (self.x_pos_player + 20, self.y_pos_player + 50))
+                self.screen.blit(sword, (self.x_pos, self.y_pos))
 
         pressed_keys = pygame.key.get_pressed()
         if pressed_keys[pygame.K_w]:
@@ -77,8 +85,10 @@ class Player:
                     image_count=15)
                 self.sprite.load_spritesheet()
             if GV.actual_WAEPON == 0:
+                self.x_pos = self.x_pos_player + 60
+                self.y_pos = self.y_pos_player + 45
                 sword = pygame.transform.scale(self.sword, (30, 30))
-                self.screen.blit(sword, (self.x_pos_player + 20, self.y_pos_player + 50))
+                self.screen.blit(sword, (self.x_pos, self.y_pos))
 
         if pressed_keys[pygame.K_s]:
             if self.y_pos_player >= GV.SCREEN_HEIGHT - GV.SQUARE_SIZE:
@@ -92,12 +102,14 @@ class Player:
                     image_count=15)
                 self.sprite.load_spritesheet()
             if GV.actual_WAEPON == 0:
+                self.x_pos = self.x_pos_player+5
+                self.y_pos = self.y_pos_player+45
                 sword = pygame.transform.scale(self.sword, (30, 30))
-                self.screen.blit(sword, (self.x_pos_player + 20, self.y_pos_player + 50))
+                self.screen.blit(sword, (self.x_pos, self.y_pos))
 
         if GV.actual_WAEPON == 0:
             sword = pygame.transform.scale(self.sword, (30, 30))
-            self.screen.blit(sword, (self.x_pos_player + 20, self.y_pos_player + 50))
+            self.screen.blit(sword, (self.x_pos, self.y_pos))
 
 
 
