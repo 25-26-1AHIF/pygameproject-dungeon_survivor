@@ -473,17 +473,60 @@ def highscore_screen(screen, clock):
         clock.tick(GV.FPS)
 
 def inventar_screen(screen, clock):
+    with open("speichern_spielstand.json", "r") as fp:
+        inhalt = json.load(fp)
+
+
 
     background = pygame.image.load("assets/redcometnomark.png")
     Skin_text = GV.FONT_BIG.render("Waffe", False, "yellow")
     Waffe_text = GV.FONT_BIG.render("Skin ", False, "yellow")
 
-    waffen_text_rect = Waffe_text.get_rect(topleft=(GV.SCREEN_WIDTH - GV.SCREEN_WIDTH/4, 50))
-    skins_text_rect = Skin_text.get_rect(topleft=(GV.SCREEN_WIDTH - GV.SCREEN_WIDTH/1.2, 50))
+    schwert_ausrüsten_text = GV.FONT_MIDDLE.render("Ausrüsten", False, "black")
+    axt_ausrüsten_text = GV.FONT_MIDDLE.render("Ausrüsten", False, "black")
+    Bogen_ausrüsten_text = GV.FONT_MIDDLE.render("Ausrüsten", False, "black")
+    Armbrust_ausrüsten_text = GV.FONT_MIDDLE.render("Ausrüsten", False, "black")
+
+    margin = 60
+    abstand = 10
+    anzahl = 4
+
+    hoehe = (GV.SCREEN_HEIGHT - 2 * margin - (anzahl - 1) * abstand) / anzahl
+    hoehe_bild = hoehe - 4 * abstand
+
+    skins_text_rect = Skin_text.get_rect(topleft=(GV.SCREEN_WIDTH - GV.SCREEN_WIDTH / 4, 50))
+    waffen_text_rect = Waffe_text.get_rect(topleft=(GV.SCREEN_WIDTH - GV.SCREEN_WIDTH / 1.2, 50))
+
+    schwert_ausrüsten_text_rect = schwert_ausrüsten_text.get_rect(topleft=(GV.SCREEN_WIDTH-GV.SCREEN_WIDTH/3+50, 220))
+    axt_ausrüsten_text_rect = axt_ausrüsten_text.get_rect(topleft=(GV.SCREEN_WIDTH-GV.SCREEN_WIDTH/3+50, 340))
+    Bogen_ausrüsten_text_rect = Bogen_ausrüsten_text.get_rect(topleft=(GV.SCREEN_WIDTH-GV.SCREEN_WIDTH/3+50, 450))
+    Armbrust_ausrüsten_text_rect = Armbrust_ausrüsten_text.get_rect(topleft=(GV.SCREEN_WIDTH-GV.SCREEN_WIDTH/3+50, 550))
 
 
-    with open("speichern_spielstand.json", "r") as fp:
-        inhalt = fp.read()
+    x = 40 + waffen_text_rect.width
+    y_start = margin
+
+    schwert_image = pygame.image.load("assets/Ninja Adventure - Asset Pack/Items/Weapons/Sword2/Sprite.png")
+    axt_image = pygame.image.load("assets/Ninja Adventure - Asset Pack/Items/Weapons/AxeTool/Sprite.png")
+    bogen_image = pygame.image.load("assets/Ninja Adventure - Asset Pack/Items/Weapons/Bow2/Sprite.png")
+    armbrust_image = pygame.image.load("assets/Ninja Adventure - Asset Pack/Items/Weapons/Crossbow/Sprite.png")
+
+
+
+    schwert_image_rect = pygame.Rect(GV.SCREEN_WIDTH-GV.SCREEN_WIDTH/2.5-10, 200-10, hoehe_bild, hoehe_bild)
+    axt_image_rect = pygame.Rect(GV.SCREEN_WIDTH-GV.SCREEN_WIDTH/2.5, 305, hoehe_bild, hoehe_bild)
+    bogen_image_rect = pygame.Rect(GV.SCREEN_WIDTH-GV.SCREEN_WIDTH/2.5, 425, hoehe_bild, hoehe_bild)
+    armbrust_image_rect = pygame.Rect(GV.SCREEN_WIDTH-GV.SCREEN_WIDTH/2.5, 535, hoehe_bild, hoehe_bild)
+
+
+    res_schwert_image = pygame.transform.scale(schwert_image,
+                                               (6 * schwert_image.get_width(), 6 * schwert_image.get_height()))
+    res_axt_image = pygame.transform.scale(axt_image, (6 * axt_image.get_width(), 6 * axt_image.get_height()))
+    res_bogen_image = pygame.transform.scale(bogen_image, (6 * bogen_image.get_width(), 6 * bogen_image.get_height()))
+    res_armbrust_image = pygame.transform.scale(armbrust_image,
+                                                (6 * armbrust_image.get_width(), 6 * armbrust_image.get_height()))
+
+
 
     inventar = IV(inhalt, screen)
 
@@ -497,6 +540,10 @@ def inventar_screen(screen, clock):
                 if event.key == pygame.K_ESCAPE:
                     return GameScreens.MAIN
 
+                if event.type == pygame.MOUSEBUTTONDOWN:
+
+                    pass
+
 
 
         screen.blit(background, (0, 0))
@@ -506,6 +553,50 @@ def inventar_screen(screen, clock):
         screen.blit(source=Waffe_text, dest=waffen_text_rect)
         pygame.draw.rect(surface=screen, rect=skins_text_rect, color="black")
         screen.blit(source=Skin_text, dest=skins_text_rect)
+
+
+
+        pygame.draw.rect(surface=screen, rect=(GV.SCREEN_WIDTH-GV.SCREEN_WIDTH/2.3, 170, 400, 500), color="white")
+
+
+        if inhalt[0]['Schwert']['Verfuegbarkeit'] == "False":
+            pygame.draw.rect(surface=screen, rect=(GV.SCREEN_WIDTH-GV.SCREEN_WIDTH/2.5-10, 200-10, 110, 100), color="green")
+        else:
+            pygame.draw.rect(surface=screen, rect=(GV.SCREEN_WIDTH-GV.SCREEN_WIDTH/2.5-10, 200-10, 110, 100), color="red")
+
+        if inhalt[1]['Axt']['Verfuegbarkeit'] == "False":
+            pygame.draw.rect(surface=screen, rect=(GV.SCREEN_WIDTH-GV.SCREEN_WIDTH/2.5 -10 , 310, 110, 100), color="green")
+        else:
+            pygame.draw.rect(surface=screen, rect=(GV.SCREEN_WIDTH-GV.SCREEN_WIDTH/2.5 -10 , 310, 110, 100), color="red")
+
+        if inhalt[2]['Bogen']['Verfuegbarkeit'] == "False":
+            pygame.draw.rect(surface=screen, rect=(GV.SCREEN_WIDTH-GV.SCREEN_WIDTH/2.5 -10, 420, 110, 100 ), color="green")
+        else:
+            pygame.draw.rect(surface=screen, rect=(GV.SCREEN_WIDTH-GV.SCREEN_WIDTH/2.5 -10, 420, 110, 100 ), color="red")
+
+        if inhalt[3]['Armbrust']['Verfuegbarkeit'] == "False":
+            pygame.draw.rect(surface=screen, rect=(GV.SCREEN_WIDTH-GV.SCREEN_WIDTH/2.5 - 10 , 530, 110, 100 ), color="green")
+        else:
+            pygame.draw.rect(surface=screen, rect=(GV.SCREEN_WIDTH-GV.SCREEN_WIDTH/2.5 - 10 , 530, 110, 100 ), color="red")
+
+
+
+
+        schwert_pos = res_schwert_image.get_rect(center=schwert_image_rect.center)
+        # KI-Ende
+        axt_pos = res_axt_image.get_rect(center=axt_image_rect.center)
+        bogen_pos = res_bogen_image.get_rect(center=bogen_image_rect.center)
+        armbrust_pos = res_armbrust_image.get_rect(center=armbrust_image_rect.center)
+
+        screen.blit(res_schwert_image, schwert_pos)
+        screen.blit(res_axt_image, axt_pos)
+        screen.blit(res_bogen_image, bogen_pos)
+        screen.blit(res_armbrust_image, armbrust_pos)
+
+        screen.blit(source=schwert_ausrüsten_text, dest=schwert_ausrüsten_text_rect)
+        screen.blit(source=axt_ausrüsten_text, dest=axt_ausrüsten_text_rect)
+        screen.blit(source=Bogen_ausrüsten_text, dest=Bogen_ausrüsten_text_rect)
+        screen.blit(source=Armbrust_ausrüsten_text, dest=Armbrust_ausrüsten_text_rect)
 
 
         pygame.display.flip()

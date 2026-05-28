@@ -142,8 +142,7 @@ class Enemy:
                 GameScreens.actual = GameScreens.GAMEOVER
                 self.player_death = 1
 
-    def death(self):
-
+    def death(self, player_x_pos, player_y_pos):
         rockets_list = self.rocket_list.get_rockets()
 
         for enemy in self.enemy_list[:]:
@@ -168,7 +167,9 @@ class Enemy:
 
                     self.coin_list.append([enemy[0], enemy[1]])
 
-                    if missile in rockets_list:
+                    if GV.actual_WAEPON == 2:
+                        pass
+                    elif missile in rockets_list:
                         rockets_list.remove(missile)
 
                     if enemy in self.enemy_list:
@@ -211,7 +212,7 @@ class Enemy:
 
         self.move_and_spawn(player_x_pos, player_y_pos)
 
-        self.death()
+        self.death(player_x_pos, player_y_pos)
 
         self.coin_spawn(player_x_pos, player_y_pos)
 
