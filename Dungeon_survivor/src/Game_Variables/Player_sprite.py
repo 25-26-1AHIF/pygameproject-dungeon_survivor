@@ -1,5 +1,5 @@
 import pygame
-from PIL.ImageChops import screen
+
 
 
 class Sprite:

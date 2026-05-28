@@ -26,11 +26,11 @@ def main_screen(screen, clock):
     background = pygame.image.load("assets/HR_Fantasy_Landscape.png")
     resized_background = pygame.transform.scale(background, (GV.SCREEN_WIDTH, GV.SCREEN_HEIGHT))
     titel_text = GV.FONT_BIG.render("Dungeon Survivor", False, "darkred")
-    starten_text = GV.FONT_MIDDLE.render("Spiel Starten", False, "yellow")
+    starten_text = GV.FONT_MIDDLE.render("Spiel Starten", False, "gold")
     inventar_text = GV.FONT_MIDDLE.render("Inventar", False, "gray")
     highscore_text = GV.FONT_MIDDLE.render("Highscores", False, "gray")
     beenden_text = GV.FONT_MIDDLE.render("Beenden", False, "red")
-    coins_text = GV.FONT_MIDDLE.render("Coins:",True, "gray")
+    coins_text = GV.FONT_MIDDLE.render(f"Coins: {score_coin}",True, "gold1")
     shop_text = GV.FONT_MIDDLE.render("Shop", False, "gray")
 
     titel_text_rect = titel_text.get_rect(center=(GV.SCREEN_WIDTH / 2, 100))
@@ -47,6 +47,7 @@ def main_screen(screen, clock):
     # KI: ChatGPT
     # prompt: Wie kann ich von diesem rechteck     starten_text_rect = starten_text.get_rect(center=(GV.SCREEN_WIDTH / 2, 100 + 80)) den länge und die breite bekommen
     res_image = pygame.transform.scale(image, (starten_text_rect.width, starten_text_rect.height))
+    # KI-Ende
 
 
     while True:
@@ -87,7 +88,7 @@ def main_screen(screen, clock):
         screen.blit(source=beenden_text, dest=beenden_text_rect)
         screen.blit(source=coins_text, dest=coins_text_rect)
         screen.blit(source=shop_text, dest=shop_text_rect)
-        screen.blit(font.render(f"{score_coin}", True, (0, 0, 0)), coin_int_rect)
+        #screen.blit(font.render(f"{score_coin}", True, (0, 0, 0)), coin_int_rect)
         leben, welle, score_coin, coin_gesammelt, player_death = enemy.get()
         pygame.display.flip()
         clock.tick(GV.FPS)
@@ -113,16 +114,14 @@ def play_screen(screen, clock):
 
     font = pygame.font.SysFont(None, 45)
 
-    Leben = GV.FONT_MIDDLE.render("Leben: ", True, "white")
-    Welle = GV.FONT_MIDDLE.render("Welle: ", True, "white")
-    Coin = GV.FONT_MIDDLE.render("Coins: ", True, "white")
-    Leben_rect = Leben.get_rect(center=(GV.SCREEN_WIDTH/18, GV.SCREEN_HEIGHT/36))
-    Welle_rect = Leben.get_rect(center=(GV.SCREEN_WIDTH-150, 20))
-    Level_rect = Leben.get_rect(center=(GV.SCREEN_WIDTH/6, GV.SCREEN_HEIGHT/21))
+    Leben = GV.FONT_MIDDLE.render(f"Leben: {leben:.0f}", True, "red3")
+    Welle = GV.FONT_MIDDLE.render(f"Welle: {welle:.0f}", True, "white")
+    Coin = GV.FONT_MIDDLE.render(f"Coins: {coin_gesammelt}", True, "gold1")
+    Leben_rect = Leben.get_rect(topleft=(10, 10))
+    Welle_rect = Welle.get_rect(topright=(GV.SCREEN_WIDTH - 10, 10))
+    Coin_rect = Coin.get_rect(topright=(GV.SCREEN_WIDTH - 10, 50))
     welle_int_rect = Leben.get_rect(center=(GV.SCREEN_WIDTH-20, 35))
     coin_int_rect = Leben.get_rect(center=(GV.SCREEN_WIDTH-20, 65))
-    Coin_rect = Coin.get_rect(center=(GV.SCREEN_WIDTH-150, 50))
-
 
     while True:
 
@@ -151,9 +150,9 @@ def play_screen(screen, clock):
         screen.blit(source=Welle, dest=Welle_rect)
         screen.blit(source=Coin, dest=Coin_rect)
 
-        screen.blit(font.render(f"{leben:.0f}", True, (255, 255, 255)), Level_rect)
-        screen.blit(font.render(f"{welle:.0f}", True, (255, 255, 255)), welle_int_rect)
-        screen.blit(font.render(f"{coin_gesammelt}", True, (255, 255, 255)), coin_int_rect)
+        #screen.blit(font.render(f"{leben:.0f}", True, (255, 255, 255)), Level_rect)
+        #screen.blit(font.render(f"{welle:.0f}", True, (255, 255, 255)), welle_int_rect)
+        #screen.blit(font.render(f"{coin_gesammelt}", True, (255, 255, 255)), coin_int_rect)
 
         leben, welle, score_coin, coin_gesammelt, player_death = enemy.get()
         pygame.display.flip()
@@ -448,7 +447,7 @@ def shop_screen(screen, clock):
 
 
 def highscore_screen(screen, clock):
-    background = pygame.image.load("assets/Image.png")
+    background = pygame.image.load("assets/HR_CastleOnTheMountains-Valrok.png")
     background = pygame.transform.scale(background, (GV.SCREEN_WIDTH, GV.SCREEN_HEIGHT))
 
     Highscore_text = GV.FONT_BIG.render("Highscores:", False, "gray")
