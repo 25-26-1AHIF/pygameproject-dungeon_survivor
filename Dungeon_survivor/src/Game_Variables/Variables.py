@@ -13,6 +13,7 @@ class GameVariables:
     FONT_MIDDLE: pygame.font.Font= None
     FONT_SMALL: pygame.font.Font = None
 
+
     @staticmethod
     def init():
         pygame.init()

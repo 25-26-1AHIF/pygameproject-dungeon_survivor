@@ -3,28 +3,36 @@
         "Schwert": {
             "Verfuegbarkeit": "False",
             "Coins": 300,
-            "upgrade": 1
+            "upgrade": 1,
+            "ausgewaehlt": "Ja",
+            "upgrade_kosten": 300
         }
     },
     {
         "Axt": {
             "Verfuegbarkeit": "False",
             "Coins": 1000,
-            "upgrade": 1
+            "upgrade": 1,
+            "ausgewaehlt": "Nein",
+            "upgrade_kosten": 500
         }
     },
     {
         "Bogen": {
             "Verfuegbarkeit": "False",
             "Coins": 700,
-            "upgrade": 1
+            "upgrade": 1,
+            "ausgewaehlt": "Nein",
+            "upgrade_kosten": 400
         }
     },
     {
         "Armbrust": {
-            "Verfuegbarkeit": "True",
+            "Verfuegbarkeit": "False",
             "Coins": 5000,
-            "upgrade": 1
+            "upgrade": 1,
+            "ausgewaehlt": "Nein",
+            "upgrade_kosten": 600
         }
     }
 ]
