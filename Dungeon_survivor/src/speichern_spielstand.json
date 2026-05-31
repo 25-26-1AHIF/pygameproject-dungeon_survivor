@@ -2,10 +2,10 @@
     {
         "Schwert": {
             "Verfuegbarkeit": "False",
-            "Coins": 300,
+            "Coins": 0,
             "upgrade": 1,
-            "ausgewaehlt": "Ja",
-            "upgrade_kosten": 300
+            "upgrade_kosten": 500,
+            "ausgewaehlt": "Ja"
         }
     },
     {
@@ -13,8 +13,8 @@
             "Verfuegbarkeit": "False",
             "Coins": 1000,
             "upgrade": 1,
-            "ausgewaehlt": "Nein",
-            "upgrade_kosten": 500
+            "upgrade_kosten": 500,
+            "ausgewaehlt": "Nein"
         }
     },
     {
@@ -22,8 +22,8 @@
             "Verfuegbarkeit": "False",
             "Coins": 700,
             "upgrade": 1,
-            "ausgewaehlt": "Nein",
-            "upgrade_kosten": 400
+            "upgrade_kosten": 500,
+            "ausgewaehlt": "Nein"
         }
     },
     {
@@ -31,8 +31,44 @@
             "Verfuegbarkeit": "False",
             "Coins": 5000,
             "upgrade": 1,
-            "ausgewaehlt": "Nein",
-            "upgrade_kosten": 600
+            "upgrade_kosten": 500,
+            "ausgewaehlt": "Nein"
+        }
+    },
+    {
+        "Ninja": {
+            "Verfuegbarkeit": "False",
+            "Coins": 0,
+            "upgrade": 1,
+            "upgrade_kosten": 500,
+            "ausgewaehlt": "Ja"
+        }
+    },
+    {
+        "Monk": {
+            "Verfuegbarkeit": "False",
+            "Coins": 2500,
+            "upgrade": 1,
+            "upgrade_kosten": 500,
+            "ausgewaehlt": "Nein"
+        }
+    },
+    {
+        "Lion": {
+            "Verfuegbarkeit": "True",
+            "Coins": 1250,
+            "upgrade": 1,
+            "upgrade_kosten": 500,
+            "ausgewaehlt": "Nein"
+        }
+    },
+    {
+        "Vampire": {
+            "Verfuegbarkeit": "True",
+            "Coins": 5000,
+            "upgrade": 1,
+            "upgrade_kosten": 500,
+            "ausgewaehlt": "Nein"
         }
     }
 ]
