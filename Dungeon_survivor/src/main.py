@@ -7,7 +7,7 @@ from Game_Variables.Variables import GameScreens
 from Game_Variables.enemys import Enemy as en
 from Game_Variables.player import Player as pl
 from Game_Variables.schuss_elemente_player import Rockets
-from Game_Variables.Inventar_system import Inventar as IV
+
 from Game_Variables.shop_screen import SkinShop, WaffenShop
 
 def main_screen(screen, clock):
@@ -436,7 +436,7 @@ def inventar_screen(screen, clock):
 
 
 
-    inventar = IV(inhalt, screen)
+
 
     while True:
 
@@ -489,7 +489,7 @@ def inventar_screen(screen, clock):
 
 
         screen.blit(background, (0, 0))
-        inventar.update_and_draw()
+
 
         pygame.draw.rect(surface=screen, rect=waffen_text_rect, color="black")
         screen.blit(source=Waffe_text, dest=waffen_text_rect)
@@ -537,6 +537,7 @@ def inventar_screen(screen, clock):
                 axt_ausrüsten_text = GV.FONT_MIDDLE.render("Ausgerüstet", False, "green")
             else:
                 axt_ausrüsten_text = GV.FONT_MIDDLE.render("Ausrüsten", False, "black")
+
         else:
             axt_ausrüsten_text = GV.FONT_SMALL.render("Nicht Verfügbar", False, "red")
         if inhalt[2]['Bogen']['Verfuegbarkeit'] == "False":
@@ -586,6 +587,8 @@ def inventar_screen(screen, clock):
             screen.blit(source=upgrade_text_Armbrust_blau, dest=upgrade_text_rect_Armbrust)
             screen.blit(source=upgrade_text_Armbrust, dest=Lvl_text_rect_Armbrust)
 
+        with open("speichern_spielstand.json", "w") as fp:
+            json.dump(inhalt, fp, indent=4)
 
         pygame.display.flip()
         clock.tick(GV.FPS)
