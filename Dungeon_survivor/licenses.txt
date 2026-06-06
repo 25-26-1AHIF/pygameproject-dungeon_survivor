@@ -1,0 +1,52 @@
+Dungeon Survivor – licenses.txt
+
+Verwendete Software:
+- Python
+  https://www.python.org/
+
+- Pygame
+  https://www.pygame.org/
+
+Verwendete Assets:
+
+- Ninja Adventure - Assets Pack
+  Ersteller: [pixel-boy]
+  Download: https://pixel-boy.itch.io/ninja-adventure-asset-pack
+
+- Cozy Pixel-Tavern
+  Ersteller: Anonym
+  Download: https://stockcake.com/de/i/cozy-pixel-tavern_3432555_1570026
+
+- Valrok
+  Ersteller: Pixel 1992
+  Download: https://pixel-1992.itch.io/free-pixel-art-castle-background-valrok
+
+- Fantasy Landscape
+  Ersteller: Pixel 1992
+  Download: https://pixel-1992.itch.io/pixel-art-fantasy-side-scroller-background
+
+
+- Cave Background
+  Ersteller: Slash Dash Games Studio
+  Download: https://slashdashgamesstudio.itch.io/cave-background-pixel-art
+
+- Cemetry Background
+  Ersteller: Neo PixelBoy Co
+  Download: https://neopixelboyco.itch.io/background-cementery-pixel-art
+
+- Forest Background
+  Ersteller: saukgp
+  Download: https://saurabhkgp.itch.io/pixel-art-forest-background-simple-seamless-parallax-ready-for-2d-platformer-s
+
+- Weapons Asset 16x16
+  Ersteller: Dante Pixels
+  Download: https://dantepixels.itch.io/weapons-asset-16x16
+
+Eigene Inhalte:
+- Programmcode
+- Dokumentation
+- Assets (Crossbow, Coins)
+
+Autoren:
+Alexander Österle
+Eliah Bolter
