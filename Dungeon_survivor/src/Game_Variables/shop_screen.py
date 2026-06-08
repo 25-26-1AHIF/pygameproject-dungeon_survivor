@@ -241,10 +241,10 @@ class SkinShop:
         self.lion_headline = GV.FONT_MIDDLE.render("Lion", False, "darkred")
         self.vampire_headline = GV.FONT_MIDDLE.render("Vampir", False, "darkred")
 
-        self.ninja_text = GV.FONT_SMALL.render("Der Mainy", False, "black")
+        self.ninja_text = GV.FONT_SMALL.render("Lautlos", False, "black")
         self.monk_text = GV.FONT_SMALL.render("Der Opa", False, "black")
-        self.lion_text = GV.FONT_SMALL.render("2-3 Jahre Dagestan", False, "black")
-        self.vampire_text = GV.FONT_SMALL.render("Ostblock MVP", False, "black")
+        self.lion_text = GV.FONT_SMALL.render("Pure Dominanz", False, "black")
+        self.vampire_text = GV.FONT_SMALL.render("Jagt die Macht", False, "black")
 
         self.ninja_preis = GV.FONT_SMALL.render(f"Preis: {spielstand[4]['Ninja']['Coins']}", False, "gold3")
         self.monk_preis = GV.FONT_SMALL.render(f"Preis: {spielstand[5]['Monk']['Coins']}", False, "gold3")
