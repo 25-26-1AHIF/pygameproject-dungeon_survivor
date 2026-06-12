@@ -218,13 +218,20 @@ class Enemy:
 
         self.frame_counter += 1
 
-    def get(self):
+    def get_informationen(self):
         return (
             self.Leben,
             self.welle,
             self.score_coin,
             self.coin_gesammelt,
             self.player_death
+
         )
     def get_coins(self):
         return self.coin_gesammelt
+
+    def get_enemy_list(self):
+        return self.enemy_list
+
+    def get_coin_list(self):
+        return self.coin_list

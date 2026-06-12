@@ -23,7 +23,7 @@ def main_screen(screen, clock):
     else:
         coin_score = int(inhalt)
     enemy = en(screen, rocket_list, coin_score)
-    leben, welle, score_coin, coin_gesammelt, player_death = enemy.get()
+    leben, welle, score_coin, coin_gesammelt, player_death = enemy.get_informationen()
 
     pygame.display.set_caption("Dungeon Survivor - Main screen")
     background = pygame.image.load("assets/HR_Fantasy_Landscape.png")
@@ -92,7 +92,7 @@ def main_screen(screen, clock):
         screen.blit(source=coins_text, dest=coins_text_rect)
         screen.blit(source=shop_text, dest=shop_text_rect)
         #screen.blit(font.render(f"{score_coin}", True, (0, 0, 0)), coin_int_rect)
-        leben, welle, score_coin, coin_gesammelt, player_death = enemy.get()
+        leben, welle, score_coin, coin_gesammelt, player_death = enemy.get_informationen()
         pygame.display.flip()
         clock.tick(GV.FPS)
 
@@ -107,8 +107,9 @@ def play_screen(screen, clock):
     else:
         coin_score = int(inhalt)
     enemy = en(screen, rocket_list, coin_score)
-    player = pl(screen, rocket_list)
-    leben, welle, score_coin, coin_gesammelt, player_death = enemy.get()
+    leben, welle, score_coin, coin_gesammelt, player_death = enemy.get_informationen()
+    coin_list = enemy.get_coin_list()
+    player = pl(screen, rocket_list, enemy, coin_list)
     #KI-anfang
     #KI: ChatGPT
     #prompt: Wie bekomme ich den hintergrund in ein laufendes bild hinein
@@ -135,7 +136,10 @@ def play_screen(screen, clock):
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    return GameScreens.PAUSE
+                    next = pause_screen(screen, clock)
+
+                    if next == "beenden":
+                        return GameScreens.MAIN
                 elif player_death == 1:
                     with open("last_coins.txt", "w") as fp:
                         json.dump({
@@ -167,7 +171,7 @@ def play_screen(screen, clock):
         #screen.blit(font.render(f"{welle:.0f}", True, (255, 255, 255)), welle_int_rect)
         #screen.blit(font.render(f"{coin_gesammelt}", True, (255, 255, 255)), coin_int_rect)
 
-        leben, welle, score_coin, coin_gesammelt, player_death = enemy.get()
+        leben, welle, score_coin, coin_gesammelt, player_death = enemy.get_informationen()
         pygame.display.flip()
         clock.tick(GV.FPS)
 
@@ -208,7 +212,7 @@ def pause_screen(screen, clock):
                 if event.key == pygame.K_SPACE:
                     return GameScreens.PLAY
                 elif event.key == pygame.K_ESCAPE:
-                    return GameScreens.MAIN
+                    return "beenden"
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if fortsetzen_text_rect.collidepoint(event.pos):
@@ -513,6 +517,7 @@ def inventar_screen(screen, clock):
 
             if inhalt[0]['Schwert']['ausgewaehlt'] == "Ja":
                 schwert_ausrüsten_text = GV.FONT_MIDDLE.render("Augesrüstet", False, "green")
+                GV.actual_WAEPON = 0
             else:
                 schwert_ausrüsten_text = GV.FONT_MIDDLE.render("Ausrüsten", False, "black")
         else:
@@ -520,6 +525,7 @@ def inventar_screen(screen, clock):
         if inhalt[1]['Axt']['Verfuegbarkeit'] == "False":
             if inhalt[1]['Axt']['ausgewaehlt'] == "Ja":
                 axt_ausrüsten_text = GV.FONT_MIDDLE.render("Ausgerüstet", False, "green")
+                GV.actual_WAEPON = 1
             else:
                 axt_ausrüsten_text = GV.FONT_MIDDLE.render("Ausrüsten", False, "black")
 
@@ -528,6 +534,7 @@ def inventar_screen(screen, clock):
         if inhalt[2]['Bogen']['Verfuegbarkeit'] == "False":
             if inhalt[2]['Bogen']['ausgewaehlt'] == "Ja":
                 Bogen_ausrüsten_text = GV.FONT_MIDDLE.render("Ausgerüstet", False, "green")
+                GV.actual_WAEPON = 2
             else:
                 Bogen_ausrüsten_text = GV.FONT_MIDDLE.render("Ausrüsten", False, "black")
         else:
@@ -535,6 +542,7 @@ def inventar_screen(screen, clock):
         if inhalt[3]['Armbrust']['Verfuegbarkeit'] == "False":
             if inhalt[3]['Armbrust']['ausgewaehlt'] == "Ja":
                 Armbrust_ausrüsten_text = GV.FONT_MIDDLE.render("Ausgerüstet", False, "green")
+                GV.actual_WAEPON = 3
             else:
                 Armbrust_ausrüsten_text = GV.FONT_MIDDLE.render("Ausrüsten", False, "black")
         else:

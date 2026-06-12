@@ -5,7 +5,7 @@
             "Coins": 0,
             "upgrade": 1,
             "upgrade_kosten": 500,
-            "ausgewaehlt": "Nein"
+            "ausgewaehlt": "Ja"
         }
     },
     {
@@ -14,12 +14,12 @@
             "Coins": 1000,
             "upgrade": 1,
             "upgrade_kosten": 500,
-            "ausgewaehlt": "Ja"
+            "ausgewaehlt": "Nein"
         }
     },
     {
         "Bogen": {
-            "Verfuegbarkeit": "True",
+            "Verfuegbarkeit": "False",
             "Coins": 700,
             "upgrade": 1,
             "upgrade_kosten": 500,
@@ -28,7 +28,7 @@
     },
     {
         "Armbrust": {
-            "Verfuegbarkeit": "True",
+            "Verfuegbarkeit": "False",
             "Coins": 5000,
             "upgrade": 1,
             "upgrade_kosten": 500,

@@ -28,7 +28,7 @@ class Sprite:
                 (0, 0),
                 pygame.Rect(
                     self.image_rect.x,
-                    image_index * self.image_rect.height,
+                    self.image_rect.y + image_index * self.image_rect.height,
                     self.image_rect.width,
                     self.image_rect.height
                 )
