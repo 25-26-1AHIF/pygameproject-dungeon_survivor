@@ -19,7 +19,7 @@ class Highscores:
         highscores.append({
             "Name": name,
             "Coins": coins,
-            "Welle": welle
+            "Welle": f"{welle:.2f}"
         })
 
         with open(self.datei, "w") as fp:

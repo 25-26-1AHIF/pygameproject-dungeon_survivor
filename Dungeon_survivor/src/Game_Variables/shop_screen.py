@@ -84,7 +84,7 @@ class WaffenShop:
 
 
         self.coins_text = GV.FONT_MIDDLE.render(f"Coins: {coins}", False, "yellow")
-        self.coin_int_rect = self.coins_text.get_rect(center=(GV.SCREEN_WIDTH - 100, 47))
+        self.coin_int_rect = self.coins_text.get_rect(center=(GV.SCREEN_WIDTH - 150, 30))
 
         # KI-Anfang
         # KI: ChatGPT
@@ -101,6 +101,7 @@ class WaffenShop:
         self.axt_image_rect = pygame.Rect(self.x + 10, self.y_start + 10 + 1 * (self.hoehe + self.abstand), self.hoehe_bild, self.hoehe_bild)
         self.bogen_image_rect = pygame.Rect(self.x + 10, self.y_start + 10 + 2 * (self.hoehe + self.abstand), self.hoehe_bild, self.hoehe_bild)
         self.armbrust_image_rect = pygame.Rect(self.x + 10, self.y_start + 10 + 3 * (self.hoehe + self.abstand), self.hoehe_bild, self.hoehe_bild)
+
 
         self.schwert_image = pygame.image.load("assets/Ninja Adventure - Asset Pack/Items/Weapons/Sword2/Sprite.png")
         self.axt_image = pygame.image.load("assets/Ninja Adventure - Asset Pack/Items/Weapons/AxeTool/Sprite.png")
@@ -141,6 +142,7 @@ class WaffenShop:
         screen.blit(source=self.bogen_text, dest=(self.x + 20 + self.hoehe_bild, self.y_start + 50 + 2 * (self.hoehe + self.abstand)))
         screen.blit(source=self.armbrust_text, dest=(self.x + 20 + self.hoehe_bild, self.y_start + 50 + 3 * (self.hoehe + self.abstand)))
 
+        pygame.draw.rect(surface=screen, rect=self.coin_int_rect, color="black")
         screen.blit(source=self.coins_text, dest=self.coin_int_rect)
 
         screen.blit(source=self.schwert_preis, dest=(self.x + 20 + self.hoehe_bild, self.y_start + 90))
@@ -289,7 +291,7 @@ class SkinShop:
             self.vampire_kaufen_rect = self.vampire_kaufen.get_rect(topleft=(self.x + 260 + self.hoehe_bild, self.y_start + 90 + 3 * (self.hoehe + self.abstand)))
 
         self.coins_text = GV.FONT_MIDDLE.render(f"Coins: {coins}", False, "yellow")
-        self.coin_int_rect = self.coins_text.get_rect(center=(GV.SCREEN_WIDTH - 100, 47))
+        self.coin_int_rect = self.coins_text.get_rect(center=(GV.SCREEN_WIDTH-150, 30))
 
         self.ninja_image = pygame.image.load("assets/Ninja Adventure - Asset Pack/Actor/Character/NinjaGreen/Faceset.png")
         self.monk_image = pygame.image.load("assets/Ninja Adventure - Asset Pack/Actor/Character/Monk2/Faceset.png")
@@ -326,6 +328,7 @@ class SkinShop:
         screen.blit(source=self.lion_text, dest=(self.x + 20 + self.hoehe_bild, self.y_start + 50 + 2 * (self.hoehe + self.abstand)))
         screen.blit(source=self.vampire_text, dest=(self.x + 20 + self.hoehe_bild, self.y_start + 50 + 3 * (self.hoehe + self.abstand)))
 
+        pygame.draw.rect(surface=screen, rect=self.coin_int_rect, color="black")
         screen.blit(source=self.coins_text, dest=self.coin_int_rect)
 
         screen.blit(source=self.ninja_preis, dest=(self.x + 20 + self.hoehe_bild, self.y_start + 90))

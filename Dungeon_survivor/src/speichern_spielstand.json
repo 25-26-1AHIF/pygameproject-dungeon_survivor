@@ -5,7 +5,7 @@
             "Coins": 0,
             "upgrade": 1,
             "upgrade_kosten": 500,
-            "ausgewaehlt": "Ja"
+            "ausgewaehlt": "Nein"
         }
     },
     {
@@ -21,16 +21,16 @@
         "Bogen": {
             "Verfuegbarkeit": "False",
             "Coins": 700,
-            "upgrade": 1,
+            "upgrade": 3,
             "upgrade_kosten": 500,
-            "ausgewaehlt": "Nein"
+            "ausgewaehlt": "Ja"
         }
     },
     {
         "Armbrust": {
             "Verfuegbarkeit": "False",
             "Coins": 5000,
-            "upgrade": 1,
+            "upgrade": 3,
             "upgrade_kosten": 500,
             "ausgewaehlt": "Nein"
         }
@@ -55,7 +55,7 @@
     },
     {
         "Lion": {
-            "Verfuegbarkeit": "True",
+            "Verfuegbarkeit": "False",
             "Coins": 1250,
             "upgrade": 1,
             "upgrade_kosten": 500,
@@ -64,7 +64,7 @@
     },
     {
         "Vampire": {
-            "Verfuegbarkeit": "True",
+            "Verfuegbarkeit": "False",
             "Coins": 5000,
             "upgrade": 1,
             "upgrade_kosten": 500,

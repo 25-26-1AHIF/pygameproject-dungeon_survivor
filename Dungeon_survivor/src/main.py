@@ -123,8 +123,8 @@ def play_screen(screen, clock):
     Welle = GV.FONT_MIDDLE.render(f"Welle: {welle:.0f}", True, "white")
     Coin = GV.FONT_MIDDLE.render(f"Coins: {coin_gesammelt}", True, "gold1")
     Leben_rect = Leben.get_rect(topleft=(10, 10))
-    Welle_rect = Welle.get_rect(topright=(GV.SCREEN_WIDTH - 10, 10))
-    Coin_rect = Coin.get_rect(topright=(GV.SCREEN_WIDTH - 10, 50))
+    Welle_rect = Welle.get_rect(topright=(GV.SCREEN_WIDTH - 70, 10))
+    Coin_rect = Coin.get_rect(topright=(GV.SCREEN_WIDTH - 70, 50))
     welle_int_rect = Leben.get_rect(center=(GV.SCREEN_WIDTH-20, 35))
     coin_int_rect = Leben.get_rect(center=(GV.SCREEN_WIDTH-20, 65))
 
@@ -310,15 +310,16 @@ def inventar_screen(screen, clock):
     Skin_text = GV.FONT_BIG.render("Waffe", False, "yellow")
     Waffe_text = GV.FONT_BIG.render("Skin ", False, "yellow")
 
-    upgrade_text_Schwert = None
-    upgrade_text_Schwert_blau = None
-    Lvl_text_rect_Schwert = None
-    upgrade_text_rect_Schwert = None
-
-    upgrade_text_Axt = None
-    upgrade_text_Axt_blau = None
-    Lvl_text_rect_Axt = None
-    upgrade_text_rect_Axt = None
+    coin_score = 0
+    rocket_list = Rockets(screen=screen)
+    with open("Coin_speicher.txt", "r") as fp:
+        inhalt_coin = fp.read()
+    if len(inhalt_coin) == 0:
+        pass
+    else:
+        coin_score = int(inhalt_coin)
+    enemy = en(screen, rocket_list, coin_score)
+    leben, welle, score_coin, coin_gesammelt, player_death = enemy.get_informationen()
 
     upgrade_text_Bogen = None
     upgrade_text_Bogen_blau = None
@@ -331,12 +332,12 @@ def inventar_screen(screen, clock):
     upgrade_text_rect_Armbrust = None
 
     if inhalt[0]['Schwert']['Verfuegbarkeit'] == "False":
-        upgrade_text_Schwert = GV.FONT_SMALL.render(f"Lvl: {inhalt[0]['Schwert']['upgrade']}", True, "black")
-        upgrade_text_Schwert_blau = GV.FONT_SMALL.render(f"Upgrade {inhalt[0]['Schwert']['upgrade_kosten']}", True,
-                           "blue")
-        Lvl_text_rect_Schwert = upgrade_text_Schwert.get_rect(topleft=(GV.SCREEN_WIDTH - GV.SCREEN_WIDTH / 3 + 40, 260))
-        upgrade_text_rect_Schwert = upgrade_text_Schwert_blau.get_rect(
-            topleft=(GV.SCREEN_WIDTH - GV.SCREEN_WIDTH / 4 + 40, 260))
+        #upgrade_text_Schwert = GV.FONT_SMALL.render(f"Lvl: {inhalt[0]['Schwert']['upgrade']}", True, "black")
+        #upgrade_text_Schwert_blau = GV.FONT_SMALL.render(f"Upgrade {inhalt[0]['Schwert']['upgrade_kosten']}", True,
+                           #"blue")
+        #Lvl_text_rect_Schwert = upgrade_text_Schwert.get_rect(topleft=(GV.SCREEN_WIDTH - GV.SCREEN_WIDTH / 3 + 40, 260))
+        #upgrade_text_rect_Schwert = upgrade_text_Schwert_blau.get_rect(
+            #topleft=(GV.SCREEN_WIDTH - GV.SCREEN_WIDTH / 4 + 40, 260))
 
         if inhalt[0]['Schwert']['ausgewaehlt'] == "Ja":
             schwert_ausrüsten_text = GV.FONT_MIDDLE.render("Augesrüstet", False, "green")
@@ -345,11 +346,11 @@ def inventar_screen(screen, clock):
     else:
         schwert_ausrüsten_text = GV.FONT_SMALL.render("Nicht Verfügbar", False, "red")
     if inhalt[1]['Axt']['Verfuegbarkeit'] == "False":
-        upgrade_text_Axt = GV.FONT_SMALL.render(f"Lvl: {inhalt[1]['Axt']['upgrade']}", True, "black")
-        upgrade_text_Axt_blau = GV.FONT_SMALL.render(f"Upgrade {inhalt[1]['Axt']['upgrade_kosten']}", True, "blue")
-        Lvl_text_rect_Axt = upgrade_text_Axt.get_rect(topleft=(GV.SCREEN_WIDTH - GV.SCREEN_WIDTH / 3 + 40, 370))
-        upgrade_text_rect_Axt = upgrade_text_Axt_blau.get_rect(
-            topleft=(GV.SCREEN_WIDTH - GV.SCREEN_WIDTH / 4 + 40, 370))
+        #upgrade_text_Axt = GV.FONT_SMALL.render(f"Lvl: {inhalt[1]['Axt']['upgrade']}", True, "black")
+        #upgrade_text_Axt_blau = GV.FONT_SMALL.render(f"Upgrade {inhalt[1]['Axt']['upgrade_kosten']}", True, "blue")
+        #Lvl_text_rect_Axt = upgrade_text_Axt.get_rect(topleft=(GV.SCREEN_WIDTH - GV.SCREEN_WIDTH / 3 + 40, 370))
+        #upgrade_text_rect_Axt = upgrade_text_Axt_blau.get_rect(
+            #topleft=(GV.SCREEN_WIDTH - GV.SCREEN_WIDTH / 4 + 40, 370))
 
         if inhalt[1]['Axt']['ausgewaehlt'] == "Ja":
             axt_ausrüsten_text = GV.FONT_MIDDLE.render("Ausgerüstet", False, "green")
@@ -390,6 +391,11 @@ def inventar_screen(screen, clock):
     abstand = 10
     anzahl = 4
 
+    bogen_upgrade_text_rect = None
+    armbrust_upgrade_text_rect = None
+
+    coin_text = GV.FONT_MIDDLE.render(f"Coin: {coin_score}", True, "gold1")
+
     hoehe = (GV.SCREEN_HEIGHT - 2 * margin - (anzahl - 1) * abstand) / anzahl
     hoehe_bild = hoehe - 4 * abstand
 
@@ -402,6 +408,11 @@ def inventar_screen(screen, clock):
     Bogen_ausrüsten_text_rect = Bogen_ausrüsten_text.get_rect(topleft=(GV.SCREEN_WIDTH-GV.SCREEN_WIDTH/3+50, 420))
     Armbrust_ausrüsten_text_rect = Armbrust_ausrüsten_text.get_rect(topleft=(GV.SCREEN_WIDTH-GV.SCREEN_WIDTH/3+50, 530))
 
+    if inhalt[2]['Bogen']['Verfuegbarkeit'] == "False":
+        bogen_upgrade_text_rect = upgrade_text_Bogen.get_rect(topleft=(GV.SCREEN_WIDTH - GV.SCREEN_WIDTH / 4 + 60, 480))
+    if inhalt[3]['Armbrust']['Verfuegbarkeit'] == "False":
+        armbrust_upgrade_text_rect = upgrade_text_Armbrust.get_rect(topleft=(GV.SCREEN_WIDTH - GV.SCREEN_WIDTH / 4 + 60, 590))
+    coin_text_rect = coin_text.get_rect(center=(GV.SCREEN_WIDTH-150, 30))
 
     schwert_image = pygame.image.load("assets/Ninja Adventure - Asset Pack/Items/Weapons/Sword2/Sprite.png")
     axt_image = pygame.image.load("assets/Ninja Adventure - Asset Pack/Items/Weapons/AxeTool/Sprite.png")
@@ -444,7 +455,7 @@ def inventar_screen(screen, clock):
                 if schwert_ausrüsten_text_rect.collidepoint(event.pos):
                     if inhalt[0]['Schwert']['Verfuegbarkeit'] == "False":
                         inhalt[0]['Schwert']['ausgewaehlt'] = "Ja"
-
+                        GV.actual_WAEPON = 0
                         inhalt[1]['Axt']['ausgewaehlt'] = "Nein"
                         inhalt[2]['Bogen']['ausgewaehlt'] = "Nein"
                         inhalt[3]['Armbrust']['ausgewaehlt'] = "Nein"
@@ -452,7 +463,7 @@ def inventar_screen(screen, clock):
                 if axt_ausrüsten_text_rect.collidepoint(event.pos):
                     if inhalt[1]['Axt']['Verfuegbarkeit'] == "False":
                         inhalt[1]['Axt']['ausgewaehlt'] = "Ja"
-
+                        GV.actual_WAEPON = 1
                         inhalt[0]['Schwert']['ausgewaehlt'] = "Nein"
                         inhalt[2]['Bogen']['ausgewaehlt'] = "Nein"
                         inhalt[3]['Armbrust']['ausgewaehlt'] = "Nein"
@@ -460,7 +471,7 @@ def inventar_screen(screen, clock):
                 if Bogen_ausrüsten_text_rect.collidepoint(event.pos):
                     if inhalt[2]['Bogen']['Verfuegbarkeit'] == "False":
                         inhalt[2]['Bogen']['ausgewaehlt'] = "Ja"
-
+                        GV.actual_WAEPON = 2
                         inhalt[0]['Schwert']['ausgewaehlt'] = "Nein"
                         inhalt[1]['Axt']['ausgewaehlt'] = "Nein"
                         inhalt[3]['Armbrust']['ausgewaehlt'] = "Nein"
@@ -468,10 +479,23 @@ def inventar_screen(screen, clock):
                 if Armbrust_ausrüsten_text_rect.collidepoint(event.pos):
                     if inhalt[3]['Armbrust']['Verfuegbarkeit'] == "False":
                         inhalt[3]['Armbrust']['ausgewaehlt'] = "Ja"
-
+                        GV.actual_WAEPON = 3
                         inhalt[0]['Schwert']['ausgewaehlt'] = "Nein"
                         inhalt[1]['Axt']['ausgewaehlt'] = "Nein"
                         inhalt[2]['Bogen']['ausgewaehlt'] = "Nein"
+
+                if bogen_upgrade_text_rect.collidepoint(event.pos):
+                    if inhalt[2]['Bogen']['Verfuegbarkeit'] == "False":
+                        if inhalt[2]['Bogen']['upgrade'] >= 3:
+                            pass
+                        else:
+                            inhalt[2]['Bogen']['upgrade'] += 1
+                if armbrust_upgrade_text_rect.collidepoint(event.pos):
+                    if inhalt[3]['Armbrust']['Verfuegbarkeit'] == "False":
+                        if inhalt[3]['Armbrust']['upgrade'] >= 6:
+                            pass
+                        else:
+                            inhalt[3]['Armbrust']['upgrade'] += 1
 
 
 
@@ -484,7 +508,8 @@ def inventar_screen(screen, clock):
         screen.blit(source=Waffe_text, dest=waffen_text_rect)
         pygame.draw.rect(surface=screen, rect=skins_text_rect, color="black")
         screen.blit(source=Skin_text, dest=skins_text_rect)
-
+        pygame.draw.rect(surface=screen, rect=coin_text_rect, color="black")
+        screen.blit(source=coin_text, dest=coin_text_rect)
 
 
 
@@ -564,21 +589,65 @@ def inventar_screen(screen, clock):
         screen.blit(source=Bogen_ausrüsten_text, dest=Bogen_ausrüsten_text_rect)
         screen.blit(source=Armbrust_ausrüsten_text, dest=Armbrust_ausrüsten_text_rect)
 
-        if inhalt[0]['Schwert']['Verfuegbarkeit'] == "False":
-            screen.blit(source=upgrade_text_Schwert_blau, dest=upgrade_text_rect_Schwert)
-            screen.blit(source=upgrade_text_Schwert, dest=Lvl_text_rect_Schwert)
+        #if inhalt[0]['Schwert']['Verfuegbarkeit'] == "False":
+            #screen.blit(source=upgrade_text_Schwert_blau, dest=upgrade_text_rect_Schwert)
+            #screen.blit(source=upgrade_text_Schwert, dest=Lvl_text_rect_Schwert)
 
-        if inhalt[1]['Axt']['Verfuegbarkeit'] == "False":
-            screen.blit(source=upgrade_text_Axt_blau, dest=upgrade_text_rect_Axt)
-            screen.blit(source=upgrade_text_Axt, dest=Lvl_text_rect_Axt)
+        #if inhalt[1]['Axt']['Verfuegbarkeit'] == "False":
+            #screen.blit(source=upgrade_text_Axt_blau, dest=upgrade_text_rect_Axt)
+            #screen.blit(source=upgrade_text_Axt, dest=Lvl_text_rect_Axt)
+
+
 
         if inhalt[2]['Bogen']['Verfuegbarkeit'] == "False":
-            screen.blit(source=upgrade_text_Bogen_blau, dest=upgrade_text_rect_Bogen)
-            screen.blit(source=upgrade_text_Bogen, dest=Lvl_text_rect_Bogen)
+            if inhalt[2]['Bogen']['upgrade'] == 3:
+                upgrade_text_Bogen = GV.FONT_SMALL.render(f"Lvl: {inhalt[2]['Bogen']['upgrade']}", True, "black")
+                Lvl_text_rect_Bogen = upgrade_text_Bogen.get_rect(
+                    topleft=(GV.SCREEN_WIDTH - GV.SCREEN_WIDTH / 3 + 40, 480))
+                max_out_text = GV.FONT_SMALL.render("Max. Level", True,
+                                                               "gold1")
+                max_out_text_rect = max_out_text.get_rect(
+                    topleft=(GV.SCREEN_WIDTH - GV.SCREEN_WIDTH / 4+20, 480))
+                screen.blit(source=max_out_text, dest=max_out_text_rect)
+                screen.blit(source=upgrade_text_Bogen, dest=Lvl_text_rect_Bogen)
+            else:
+                upgrade_text_Bogen = GV.FONT_SMALL.render(f"Lvl: {inhalt[2]['Bogen']['upgrade']}", True, "black")
+                upgrade_text_Bogen_blau = GV.FONT_SMALL.render(f"Upgrade {inhalt[2]['Bogen']['upgrade_kosten']}", True,
+                                                               "blue")
+                Lvl_text_rect_Bogen = upgrade_text_Bogen.get_rect(topleft=(GV.SCREEN_WIDTH - GV.SCREEN_WIDTH / 3 + 40, 480))
+                upgrade_text_rect_Bogen = upgrade_text_Bogen_blau.get_rect(
+                    topleft=(GV.SCREEN_WIDTH - GV.SCREEN_WIDTH / 4 + 40, 480))
+
+                screen.blit(source=upgrade_text_Bogen_blau, dest=upgrade_text_rect_Bogen)
+                screen.blit(source=upgrade_text_Bogen, dest=Lvl_text_rect_Bogen)
+
+
 
         if inhalt[3]['Armbrust']['Verfuegbarkeit'] == "False":
-            screen.blit(source=upgrade_text_Armbrust_blau, dest=upgrade_text_rect_Armbrust)
-            screen.blit(source=upgrade_text_Armbrust, dest=Lvl_text_rect_Armbrust)
+            if inhalt[3]['Armbrust']['upgrade'] == 6:
+                upgrade_text_Armbrust = GV.FONT_SMALL.render(f"Lvl: {inhalt[3]['Armbrust']['upgrade']}", True, "black")
+                Lvl_text_rect_Armbrust = upgrade_text_Armbrust.get_rect(
+                    topleft=(GV.SCREEN_WIDTH - GV.SCREEN_WIDTH / 3 + 40, 590))
+                max_out_text = GV.FONT_SMALL.render("Max. Level", True,
+                                                    "gold1")
+                max_out_text_rect = max_out_text.get_rect(
+                    topleft=(GV.SCREEN_WIDTH - GV.SCREEN_WIDTH / 4 + 20, 590))
+                screen.blit(source=max_out_text, dest=max_out_text_rect)
+                screen.blit(source=upgrade_text_Armbrust, dest=Lvl_text_rect_Armbrust)
+            else:
+                upgrade_text_Armbrust = GV.FONT_SMALL.render(f"Lvl: {inhalt[3]['Armbrust']['upgrade']}", True, "black")
+                upgrade_text_Armbrust_blau = GV.FONT_SMALL.render(f"Upgrade {inhalt[3]['Armbrust']['upgrade_kosten']}",
+                                                                  True,
+                                                                  "blue")
+                Lvl_text_rect_Armbrust = upgrade_text_Armbrust.get_rect(
+                    topleft=(GV.SCREEN_WIDTH - GV.SCREEN_WIDTH / 3 + 40, 590))
+                upgrade_text_rect_Armbrust = upgrade_text_Armbrust_blau.get_rect(
+                    topleft=(GV.SCREEN_WIDTH - GV.SCREEN_WIDTH / 4 + 40, 590))
+
+                screen.blit(source=upgrade_text_Armbrust_blau, dest=upgrade_text_rect_Armbrust)
+                screen.blit(source=upgrade_text_Armbrust, dest=Lvl_text_rect_Armbrust)
+
+
 
         with open("speichern_spielstand.json", "w") as fp:
             json.dump(inhalt, fp, indent=4)

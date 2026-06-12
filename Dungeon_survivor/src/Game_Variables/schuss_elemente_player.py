@@ -1,5 +1,6 @@
 import pygame
 from .Variables import GameVariables as gv
+import json
 
 class Rocket:
     dx: float    # x_geschwindigkeit
@@ -23,22 +24,35 @@ class Rocket:
 
 
     def update_and_draw(self):
-        if gv.actual_WAEPON == 0:
-            pass
         if gv.actual_WAEPON == 2:
+            with open("speichern_spielstand.json", "r") as fp:
+                inhalt = json.load(fp)
+            if inhalt[2]['Bogen']['upgrade'] >= 2:
+                radius = 5 * inhalt[2]['Bogen']['upgrade'] / 2
+            else:
+                radius = 5
             self.x_pos += self.dx
             self.y_pos += self.dy
             pygame.draw.circle(surface=self.screen,
                              center=(self.x_pos, self.y_pos),
                              color="blue",
-                             width=0, radius=6)
-        else:
+                             width=0, radius=radius)
+        elif gv.actual_WAEPON == 3:
+            with open("speichern_spielstand.json", "r") as fp:
+                inhalt = json.load(fp)
+            if inhalt[3]['Armbrust']['upgrade'] == 6:
+                radius = 12.5
+            elif inhalt[3]['Armbrust']['upgrade'] >= 3:
+                radius = 5 * inhalt[3]['Armbrust']['upgrade'] / 2
+            elif inhalt[3]['Armbrust']['upgrade'] <=2:
+                radius = 5
+
             self.x_pos += self.dx
             self.y_pos += self.dy
             pygame.draw.circle(surface=self.screen,
                                center=(self.x_pos, self.y_pos),
                                color="blue",
-                               width=0, radius=8)
+                               width=0, radius=radius)
 
 
 

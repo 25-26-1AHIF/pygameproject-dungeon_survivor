@@ -2,6 +2,7 @@ import pygame
 import random
 from .Player_sprite import Sprite
 import math
+import json
 
 from .Variables import GameVariables as GV
 from .schuss_elemente_player import Rocket
@@ -22,6 +23,8 @@ class Player:
             image_count=4)
 
         self.sprite.load_spritesheet()
+        self.last_shot = 0
+        self.shoot_cooldown = 100
         self.frame_counter = 0
         self.sword = pygame.image.load("assets/Ninja Adventure - Asset Pack/Items/Weapons/Sword2/Sprite.png")
         self.axt = pygame.image.load("assets/Ninja Adventure - Asset Pack/Items/Weapons/Axe/Sprite.png")
@@ -40,6 +43,57 @@ class Player:
             animation_speed=10,
             image_rect=pygame.Rect(32 * 2, 32 * 4, 32, 32),
             image_count=4)
+        self.sprite_right = Sprite(
+            filepath="assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png",
+            animation_speed=10,
+            image_rect=pygame.Rect(32 * 3, 32 * 4, 32, 32),
+            image_count=4)
+        self.sprite_up = Sprite(
+            filepath="assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png",
+            animation_speed=10,
+            image_rect=pygame.Rect(32, 32 * 4, 32, 32),
+            image_count=4)
+        self.sprite_down = Sprite(
+            filepath="assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png",
+            animation_speed=10,
+            image_rect=pygame.Rect(0, 32 * 4, 32, 32),
+            image_count=4)
+
+
+        self.sprite_left_stand = Sprite(
+            filepath="assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png",
+            animation_speed=10,
+            image_rect=pygame.Rect(32 * 2, 0, 32, 32),
+            image_count=4)
+
+        self.sprite_right_stand = Sprite(
+            filepath="assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png",
+            animation_speed=10,
+            image_rect=pygame.Rect(32 * 3, 0, 32, 32),
+            image_count=4)
+
+        self.sprite_up_stand = Sprite(
+            filepath="assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png",
+            animation_speed=10,
+            image_rect=pygame.Rect(32, 0, 32, 32),
+            image_count=4)
+        self.sprite_down_stand = Sprite(
+            filepath="assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png",
+            animation_speed=10,
+            image_rect=pygame.Rect(0, 0, 32, 32),
+            image_count=4)
+
+        self.sprite_left.load_spritesheet()
+        self.sprite_right.load_spritesheet()
+        self.sprite_up.load_spritesheet()
+        self.sprite_down.load_spritesheet()
+
+        self.sprite_left_stand.load_spritesheet()
+        self.sprite_right_stand.load_spritesheet()
+        self.sprite_up_stand.load_spritesheet()
+        self.sprite_down_stand.load_spritesheet()
+
+
 
     def draw(self):
         self.sprite.draw(
@@ -66,36 +120,23 @@ class Player:
                 self.x_pos_player += self.speed
                 moving = True
                 self.facing = "right"
-                self.sprite = Sprite(
-                    filepath="assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png",
-                    animation_speed=10,
-                    image_rect=pygame.Rect(32 * 3, 32 *4, 32, 32),
-                    image_count=4)
+                self.sprite = self.sprite_right
 
         if pressed_keys[pygame.K_w]:
             if self.y_pos_player > 0:
                 self.y_pos_player -= self.speed
                 moving = True
                 self.facing = "up"
-                self.sprite = Sprite(
-                    filepath="assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png",
-                    animation_speed=10,
-                    image_rect=pygame.Rect(32, 32*4, 32, 32),
-                    image_count=4)
+                self.sprite = self.sprite_up
 
         if pressed_keys[pygame.K_s]:
             if self.y_pos_player < GV.SCREEN_HEIGHT - GV.SQUARE_SIZE:
                 self.y_pos_player += self.speed
                 moving = True
                 self.facing = "down"
-                self.sprite = Sprite(
-                    filepath="assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png",
-                    animation_speed=10,
-                    image_rect=pygame.Rect(0, 32*4, 32, 32),
-                    image_count=4)
+                self.sprite = self.sprite_down
 
-        if moving:
-            self.sprite.load_spritesheet()
+
 
         self.sprite.draw(self.screen, self.x_pos_player, self.y_pos_player, self.frame_counter)
 
@@ -111,6 +152,20 @@ class Player:
         elif self.facing == "down":
             self.x_pos = self.x_pos_player + 20
             self.y_pos = self.y_pos_player + 48
+
+        if not moving:
+
+            if self.facing == "right":
+                self.sprite = self.sprite_right_stand
+
+            elif self.facing == "left":
+                self.sprite = self.sprite_left_stand
+
+            elif self.facing == "up":
+                self.sprite = self.sprite_up_stand
+
+            elif self.facing == "down":
+                self.sprite = self.sprite_down_stand
 
         weapon = None
 
@@ -134,6 +189,8 @@ class Player:
 
 
     def shoot(self, event):
+        with open("speichern_spielstand.json", "r") as fp:
+            inhalt = json.load(fp)
         if self.actual_weapon == 0:
             self.enemys_list = self.enemies.get_enemy_list()
             #KI Anfang
@@ -144,50 +201,23 @@ class Player:
                     #KI Ende
 
                     self.sword_attack()
-                    print(self.enemys_list)
-
-
-
-
-
 
         if self.actual_weapon == 1:
+            self.enemys_list = self.enemies.get_enemy_list()
+            # KI Anfang
+            # KI: Chat gpt
+            # prompt: Wie bekomme ich das event hier her mit einem mausklick
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-
                     # KI Ende
-                    mouse_x, mouse_y = pygame.mouse.get_pos()
-                    player_center_x = self.x_pos_player + GV.SQUARE_SIZE / 2
-                    player_center_y = self.y_pos_player + GV.SQUARE_SIZE / 2
 
-                    dx = mouse_x - player_center_x
-                    dy = mouse_y - player_center_y
-
-                    length = (dx * dx + dy * dy) ** 0.5
-                    if length == 0:
-                        length = 0.0001
-
-                    dx /= length
-                    dy /= length
-
-
-                    rocket = Rocket(
-                        x_pos=player_center_x,
-                        y_pos=player_center_y,
-                        screen=self.screen,
-                        dx=dx * 8,  # Geschwindigkeit
-                        dy=dy * 8,
-                        player_x_pos = self.x_pos_player,
-                        player_y_pos = self.y_pos_player
-                    )
-                    self.rockets.add_rocket(rocket)
+                    self.axt_attack()
 
 
         if self.actual_weapon == 2:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
 
-                    # KI Ende
                     mouse_x, mouse_y = pygame.mouse.get_pos()
                     player_center_x = self.x_pos_player + GV.SQUARE_SIZE / 2
                     player_center_y = self.y_pos_player + GV.SQUARE_SIZE / 2
@@ -214,8 +244,14 @@ class Player:
                     self.rockets.add_rocket(rocket)
 
         if self.actual_weapon == 3:
+            self.shoot_cooldown = self.shoot_cooldown - inhalt[3]['Armbrust']['upgrade'] *10
+            print(self.shoot_cooldown)
             pressed_key = pygame.mouse.get_pressed()
-            if pressed_key[0]:
+            current_time = pygame.time.get_ticks()
+
+            if pressed_key[0] and current_time - self.last_shot >= self.shoot_cooldown:
+
+                self.last_shot = current_time
                 mouse_x, mouse_y = pygame.mouse.get_pos()
                 player_center_x = self.x_pos_player + GV.SQUARE_SIZE / 2
                 player_center_y = self.y_pos_player + GV.SQUARE_SIZE / 2
@@ -240,6 +276,8 @@ class Player:
                     player_y_pos=self.y_pos_player
                 )
                 self.rockets.add_rocket(rocket)
+
+            self.shoot_cooldown = 100
 
     def sword_attack(self):
         mouse_x, mouse_y = pygame.mouse.get_pos()
@@ -333,14 +371,14 @@ class Player:
         attack_angle = math.atan2(mouse_y - py, mouse_x - px)
         # KI: ende
 
-        radius = 200
+        radius = 170
 
         # Angriffswinkel (180 Grad)
         # KI: Anfang
         # KI: Chat gpt
         # prompt: Helfe mir die Attacke von einem schwert in einem bestimmten radius
         # und winkel in richtung zur maus zu berechnen
-        arc = math.pi
+        arc = math.pi*2
         # KI: ende
 
 

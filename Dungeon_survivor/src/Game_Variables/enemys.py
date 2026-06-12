@@ -1,5 +1,6 @@
 import pygame
 import random
+import json
 
 from .Variables import GameVariables as GV, GameScreens
 from .Variables import GameScreens as GM
@@ -143,6 +144,8 @@ class Enemy:
                 self.player_death = 1
 
     def death(self, player_x_pos, player_y_pos):
+        with open("speichern_spielstand.json", "r") as fp:
+            inhalt = json.load(fp)
         rockets_list = self.rocket_list.get_rockets()
 
         for enemy in self.enemy_list[:]:
@@ -167,7 +170,9 @@ class Enemy:
 
                     self.coin_list.append([enemy[0], enemy[1]])
 
-                    if GV.actual_WAEPON == 2:
+                    if GV.actual_WAEPON == 2 and inhalt[2]['Bogen']['upgrade'] == 2:
+                        pass
+                    if GV.actual_WAEPON == 3 and inhalt[3]['Armbrust']['upgrade'] == 6:
                         pass
                     elif missile in rockets_list:
                         rockets_list.remove(missile)
