@@ -7,6 +7,7 @@ import json
 from .Variables import GameVariables as GV
 from .schuss_elemente_player import Rocket
 from .enemys import Enemy as en
+from .attack_sprite import Sprite as sp
 
 class Player:
     def __init__(self, screen, rockets, enemies, coin_list):
@@ -26,6 +27,10 @@ class Player:
         self.last_shot = 0
         self.shoot_cooldown = 100
         self.frame_counter = 0
+        self.Sprite_attack = sp(filepath="assets/Ninja Adventure - Asset Pack/FX/Attack/CircularSlash/SpriteSheet.png",
+            animation_speed=5,
+            image_rect=pygame.Rect(0, 0, 32, 32),
+            image_count=4)
         self.sword = pygame.image.load("assets/Ninja Adventure - Asset Pack/Items/Weapons/Sword2/Sprite.png")
         self.axt = pygame.image.load("assets/Ninja Adventure - Asset Pack/Items/Weapons/Axe/Sprite.png")
         self.bogen = pygame.image.load("assets/Ninja Adventure - Asset Pack/Items/Weapons/Bow/Sprite.png")
@@ -38,6 +43,8 @@ class Player:
         self.enemys_list = None
         self.facing = "down"
         self.coin_list = coin_list
+        self.attacking = False
+        self.attack_frame = 0
         self.sprite_left = Sprite(
             filepath="assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png",
             animation_speed=10,
@@ -93,15 +100,23 @@ class Player:
         self.sprite_up_stand.load_spritesheet()
         self.sprite_down_stand.load_spritesheet()
 
+        self.Sprite_attack.load_spritesheet()
 
 
-    def draw(self):
+
+    def draw_character(self):
         self.sprite.draw(
             self.screen,
             self.x_pos_player,
             self.y_pos_player,
             self.frame_counter)
 
+    def draw_attack(self):
+        self.Sprite_attack.draw(
+            self.screen,
+            self.x_pos_player,
+            self.y_pos_player,
+            self.frame_counter)
     def move(self):
 
         pressed_keys = pygame.key.get_pressed()
@@ -211,6 +226,8 @@ class Player:
                 if event.button == 1:
                     # KI Ende
 
+                    self.attacking = True
+                    self.attack_frame = 0
                     self.axt_attack()
 
 
@@ -294,7 +311,7 @@ class Player:
         attack_angle = math.atan2(mouse_y - py, mouse_x - px)
         # KI: ende
 
-        radius = 200
+        radius = 150
 
         # Angriffswinkel (180 Grad)
         # KI: Anfang
@@ -439,8 +456,21 @@ class Player:
 
     def update_and_draw(self):
         self.move()
-        self.draw()
+        self.draw_character()
         self.frame_counter +=1
+        if self.attacking:
+            self.Sprite_attack.draw(
+                self.screen,
+                self.x_pos_player,
+                self.y_pos_player,
+                self.attack_frame
+            )
+
+            self.attack_frame += 1
+
+        if self.attack_frame >= self.Sprite_attack.image_count * self.Sprite_attack.animation_speed:
+            self.attacking = False
+            self.attack_frame = 0
 
 
     def update_and_shoot(self, event):

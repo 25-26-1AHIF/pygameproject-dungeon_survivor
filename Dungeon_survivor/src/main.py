@@ -483,19 +483,27 @@ def inventar_screen(screen, clock):
                         inhalt[0]['Schwert']['ausgewaehlt'] = "Nein"
                         inhalt[1]['Axt']['ausgewaehlt'] = "Nein"
                         inhalt[2]['Bogen']['ausgewaehlt'] = "Nein"
-
-                if bogen_upgrade_text_rect.collidepoint(event.pos):
-                    if inhalt[2]['Bogen']['Verfuegbarkeit'] == "False":
+                if inhalt[2]['Bogen']['Verfuegbarkeit'] == "False":
+                    if bogen_upgrade_text_rect.collidepoint(event.pos):
                         if inhalt[2]['Bogen']['upgrade'] >= 3:
                             pass
                         else:
                             inhalt[2]['Bogen']['upgrade'] += 1
-                if armbrust_upgrade_text_rect.collidepoint(event.pos):
-                    if inhalt[3]['Armbrust']['Verfuegbarkeit'] == "False":
+                            coin_score -= inhalt[2]['Bogen']['upgrade_kosten']
+
+                    with open("Coin_speicher.txt", "w") as fp:
+                        fp.write(f"{coin_score}")
+                if inhalt[3]['Armbrust']['Verfuegbarkeit'] == "False":
+                    if armbrust_upgrade_text_rect.collidepoint(event.pos):
                         if inhalt[3]['Armbrust']['upgrade'] >= 6:
                             pass
                         else:
                             inhalt[3]['Armbrust']['upgrade'] += 1
+                            coin_score -= inhalt[3]['Armbrust']['upgrade_kosten']
+
+                    with open("Coin_speicher.txt", "w") as fp:
+                        fp.write(f"{coin_score}")
+
 
 
 
@@ -651,6 +659,7 @@ def inventar_screen(screen, clock):
 
         with open("speichern_spielstand.json", "w") as fp:
             json.dump(inhalt, fp, indent=4)
+
 
         pygame.display.flip()
         clock.tick(GV.FPS)

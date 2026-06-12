@@ -19,6 +19,8 @@ class Rocket:
         self.screen = screen
         self.width = gv.MISSILE_SIZE
         self.height = gv.MISSILE_SIZE
+        self.projektil = pygame.image.load("assets/Ninja Adventure - Asset Pack/Items/Projectile/Bomb.png")
+
 
 
 
@@ -28,31 +30,26 @@ class Rocket:
             with open("speichern_spielstand.json", "r") as fp:
                 inhalt = json.load(fp)
             if inhalt[2]['Bogen']['upgrade'] >= 2:
-                radius = 5 * inhalt[2]['Bogen']['upgrade'] / 2
+                self.projektil = pygame.transform.scale(self.projektil, (30, 30))
             else:
-                radius = 5
+                self.projektil = pygame.transform.scale(self.projektil, (25, 25))
+
             self.x_pos += self.dx
             self.y_pos += self.dy
-            pygame.draw.circle(surface=self.screen,
-                             center=(self.x_pos, self.y_pos),
-                             color="blue",
-                             width=0, radius=radius)
+            self.screen.blit(self.projektil, (self.x_pos, self.y_pos))
         elif gv.actual_WAEPON == 3:
             with open("speichern_spielstand.json", "r") as fp:
                 inhalt = json.load(fp)
             if inhalt[3]['Armbrust']['upgrade'] == 6:
-                radius = 12.5
+                self.projektil = pygame.transform.scale(self.projektil, (40, 40))
             elif inhalt[3]['Armbrust']['upgrade'] >= 3:
-                radius = 5 * inhalt[3]['Armbrust']['upgrade'] / 2
+                self.projektil = pygame.transform.scale(self.projektil, (30, 30))
             elif inhalt[3]['Armbrust']['upgrade'] <=2:
-                radius = 5
+                self.projektil = pygame.transform.scale(self.projektil, (25, 25))
 
             self.x_pos += self.dx
             self.y_pos += self.dy
-            pygame.draw.circle(surface=self.screen,
-                               center=(self.x_pos, self.y_pos),
-                               color="blue",
-                               width=0, radius=radius)
+            self.screen.blit(self.projektil, (self.x_pos, self.y_pos))
 
 
 
