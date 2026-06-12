@@ -9,6 +9,8 @@ from Game_Variables.player import Player as pl
 from Game_Variables.schuss_elemente_player import Rockets
 
 from Game_Variables.shop_screen import SkinShop, WaffenShop
+from Game_Variables.Highscore_speichern import  Highscores
+from Game_Variables.highscore_screen import HighscoreScreen
 
 def main_screen(screen, clock):
     coin_score = 0
@@ -135,6 +137,11 @@ def play_screen(screen, clock):
                 if event.key == pygame.K_SPACE:
                     return GameScreens.PAUSE
                 elif player_death == 1:
+                    with open("last_coins.txt", "w") as fp:
+                        json.dump({
+                            "Coins": coin_gesammelt,
+                            "Welle": welle
+                        }, fp, indent=4)
                     return GameScreens.GAMEOVER
 
             player.update_and_shoot(event)
@@ -287,30 +294,8 @@ def shop_screen(screen, clock):
 
 
 def highscore_screen(screen, clock):
-    pygame.display.set_caption("Dungeon Survivor - Highscores")
-    background = pygame.image.load("assets/HR_CastleOnTheMountains-Valrok.png")
-    background = pygame.transform.scale(background, (GV.SCREEN_WIDTH, GV.SCREEN_HEIGHT))
-
-    Highscore_text = GV.FONT_BIG.render("Highscores:", False, "gray")
-    Highscore_text_rect = Highscore_text.get_rect(center=(GV.SCREEN_WIDTH / 4, 50 ))
-
-    while True:
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                return GameScreens.Exit
-
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    return GameScreens.MAIN
-
-        screen.blit(background, (0, 0))
-
-        pygame.draw.rect(surface=screen, rect=Highscore_text_rect, color="black")
-        screen.blit(source=Highscore_text, dest=Highscore_text_rect)
-
-        pygame.display.flip()
-        clock.tick(GV.FPS)
+    highscore = HighscoreScreen(screen, clock)
+    return highscore.run()
 
 def inventar_screen(screen, clock):
     pygame.display.set_caption("Dungeon Survivor - Inventar")
@@ -594,28 +579,60 @@ def inventar_screen(screen, clock):
         clock.tick(GV.FPS)
 
 
-def Gameover(screen, clock):
-    pygame.display.set_caption("Dungeon Survivor - RIP")
-    background = pygame.image.load("assets/Background 300x128.png")
-    resized_background = pygame.transform.scale(background, (GV.SCREEN_WIDTH, GV.SCREEN_HEIGHT))
+def name_eingeben(screen, clock):
 
-    Gameover_text = GV.FONT_BIG.render("GameOver", False, "darkred")
-    Gameover_text_rect = Gameover_text.get_rect(center=(GV.SCREEN_WIDTH / 2 - 30, GV.SCREEN_HEIGHT/3))
+    name = ""
 
     while True:
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                return GameScreens.Exit
+        pygame.display.set_caption("Dungeon Survivor - RIP")
+        background = pygame.image.load("assets/Background 300x128.png")
+        resized_background = pygame.transform.scale(background, (GV.SCREEN_WIDTH, GV.SCREEN_HEIGHT))
 
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    return GameScreens.MAIN
+        titel = GV.FONT_BIG.render("GAME OVER", False, "red")
+        eingabe = GV.FONT_MIDDLE.render("Name eingeben:", False, "white")
+        name_text = GV.FONT_BIG.render(name, False, "yellow")
+
 
         screen.blit(resized_background, (0, 0))
-        screen.blit(source=Gameover_text, dest=Gameover_text_rect)
+        screen.blit(titel, (350, 150))
+        screen.blit(eingabe, (350, 280))
+        screen.blit(name_text, (350, 350))
+
         pygame.display.flip()
+
+        for event in pygame.event.get():
+
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            # KI-Anfang
+            # KI: ChatGPT
+            #prompt: Wie kann ich jetzt die Eingabe im screen machen
+            if event.type == pygame.KEYDOWN:
+
+                if event.key == pygame.K_RETURN and name != "":
+                    return name
+
+                elif event.key == pygame.K_BACKSPACE:
+                    name = name[:-1]
+
+                else:
+                    if len(name) < 12:
+                        name += event.unicode
+            # KI-Ende
+
         clock.tick(GV.FPS)
+
+def Gameover(screen, clock):
+    name = name_eingeben(screen, clock)
+    with open("last_coins.txt", "r") as fp:
+        stats = json.load(fp)
+    coins = stats["Coins"]
+    welle = stats["Welle"]
+    highscore = Highscores()
+    highscore.speichern(name, coins, welle)
+
+    return GameScreens.MAIN
 
 
 def main():

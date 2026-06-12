@@ -1,20 +1,26 @@
-from email.utils import specialsre
+import json
 
 
-class highscores:
+class Highscores:
 
     def __init__(self):
-        self.highscore_list = []
+        self.datei = "highscores.json"
 
-    def speichern(self, leben, welle, coins):
-        with open("Highscores.txx", "r") as fp:
-            highscore_inhalt = fp.read()
+    def laden(self):
+        try:
+            with open(self.datei, "r") as fp:
+                return json.load(fp)
+        except:
+            return []
 
-        print(highscore_inhalt)
+    def speichern(self, name, coins, welle):
+        highscores = self.laden()
 
+        highscores.append({
+            "Name": name,
+            "Coins": coins,
+            "Welle": welle
+        })
 
-        with open("Highscores.txx", "a") as fp:
-            fp.write(f"{leben, welle, coins}")
-
-    def update_and_save(self, leben, welle, coins):
-        self.speichern(leben, welle, coins)
+        with open(self.datei, "w") as fp:
+            json.dump(highscores, fp, indent=4)

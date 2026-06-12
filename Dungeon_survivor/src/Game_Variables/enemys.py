@@ -226,3 +226,5 @@ class Enemy:
             self.coin_gesammelt,
             self.player_death
         )
+    def get_coins(self):
+        return self.coin_gesammelt
