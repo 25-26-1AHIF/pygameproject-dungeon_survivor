@@ -13,6 +13,9 @@ from Game_Variables.Highscore_speichern import  Highscores
 from Game_Variables.highscore_screen import HighscoreScreen
 
 def main_screen(screen, clock):
+    pygame.mixer.music.load("assets/Ninja Adventure - Asset Pack/Audio/Musics/1 - Adventure Begin.ogg")
+    pygame.mixer.music.play(-1)
+    pygame.mixer.music.set_volume(0.025)
     coin_score = 0
     font = pygame.font.SysFont(None, 45)
     rocket_list = Rockets(screen=screen)
@@ -97,6 +100,9 @@ def main_screen(screen, clock):
         clock.tick(GV.FPS)
 
 def play_screen(screen, clock):
+    pygame.mixer.music.load("assets/Ninja Adventure - Asset Pack/Audio/Musics/24 - Final Area.ogg")
+    pygame.mixer.music.play(-1)
+    pygame.mixer.music.set_volume(0.025)
     pygame.display.set_caption("Dungeon Survivor - Game")
     coin_score = 0
     rocket_list = Rockets(screen=screen)
@@ -236,6 +242,9 @@ def pause_screen(screen, clock):
 
 
 def shop_screen(screen, clock):
+    pygame.mixer.music.load("assets/Ninja Adventure - Asset Pack/Audio/Musics/5 - Peaceful.ogg")
+    pygame.mixer.music.play(-1)
+    pygame.mixer.music.set_volume(0.025)
     pygame.display.set_caption("Dungeon Survivor - Shop")
     background = pygame.image.load("assets/StockCake-Gemütliche_Pixel-Taverne-3432555-medium.png")
     resized_background = pygame.transform.scale(background, (GV.SCREEN_WIDTH, GV.SCREEN_HEIGHT))
@@ -298,10 +307,16 @@ def shop_screen(screen, clock):
 
 
 def highscore_screen(screen, clock):
+    pygame.mixer.music.load("assets/Ninja Adventure - Asset Pack/Audio/Musics/20 - Good Time.ogg")
+    pygame.mixer.music.play(-1)
+    pygame.mixer.music.set_volume(0.025)
     highscore = HighscoreScreen(screen, clock)
     return highscore.run()
 
 def inventar_screen(screen, clock):
+    pygame.mixer.music.load("assets/Ninja Adventure - Asset Pack/Audio/Musics/16 - Melancholia.ogg")
+    pygame.mixer.music.play(-1)
+    pygame.mixer.music.set_volume(0.025)
     pygame.display.set_caption("Dungeon Survivor - Inventar")
     with open("speichern_spielstand.json", "r") as fp:
         inhalt = json.load(fp)
@@ -710,6 +725,9 @@ def name_eingeben(screen, clock):
         clock.tick(GV.FPS)
 
 def Gameover(screen, clock):
+    pygame.mixer.music.load("assets/Ninja Adventure - Asset Pack/Audio/Jingles/GameOver4.wav")
+    pygame.mixer.music.set_volume(0.045)
+    pygame.mixer.music.play()
     name = name_eingeben(screen, clock)
     with open("last_coins.txt", "r") as fp:
         stats = json.load(fp)

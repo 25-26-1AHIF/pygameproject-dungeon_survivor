@@ -235,6 +235,10 @@ class Player:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
 
+                    attack_sound = pygame.mixer.Sound("assets/Ninja Adventure - Asset Pack/Audio/Sounds/Whoosh & Slash/Launch.wav")
+                    attack_sound.set_volume(0.03)
+                    attack_sound.play()
+
                     mouse_x, mouse_y = pygame.mouse.get_pos()
                     player_center_x = self.x_pos_player + GV.SQUARE_SIZE / 2
                     player_center_y = self.y_pos_player + GV.SQUARE_SIZE / 2
@@ -268,6 +272,9 @@ class Player:
 
             if pressed_key[0] and current_time - self.last_shot >= self.shoot_cooldown:
 
+                attack_sound = pygame.mixer.Sound("assets/Ninja Adventure - Asset Pack/Audio/Sounds/Whoosh & Slash/Launch.wav")
+                attack_sound.set_volume(0.03)
+                attack_sound.play()
                 self.last_shot = current_time
                 mouse_x, mouse_y = pygame.mouse.get_pos()
                 player_center_x = self.x_pos_player + GV.SQUARE_SIZE / 2
@@ -297,6 +304,9 @@ class Player:
             self.shoot_cooldown = 100
 
     def sword_attack(self):
+        attack_sound = pygame.mixer.Sound("assets/Ninja Adventure - Asset Pack/Audio/Sounds/Whoosh & Slash/Sword2.wav")
+        attack_sound.set_volume(0.03)
+        attack_sound.play()
         mouse_x, mouse_y = pygame.mouse.get_pos()
 
         px = self.x_pos_player + GV.SQUARE_SIZE / 2
@@ -374,6 +384,9 @@ class Player:
             # KI: ende
 
     def axt_attack(self):
+        attack_sound = pygame.mixer.Sound("assets/Ninja Adventure - Asset Pack/Audio/Sounds/Whoosh & Slash/Slash.wav")
+        attack_sound.set_volume(0.03)
+        attack_sound.play()
         mouse_x, mouse_y = pygame.mouse.get_pos()
 
         px = self.x_pos_player + GV.SQUARE_SIZE / 2
