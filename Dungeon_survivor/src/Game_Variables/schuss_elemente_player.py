@@ -1,6 +1,7 @@
 import pygame
 from .Variables import GameVariables as gv
 import json
+import math
 
 class Rocket:
     dx: float    # x_geschwindigkeit
@@ -19,8 +20,13 @@ class Rocket:
         self.screen = screen
         self.width = gv.MISSILE_SIZE
         self.height = gv.MISSILE_SIZE
-        self.projektil = pygame.image.load("assets/Ninja Adventure - Asset Pack/Items/Projectile/Bomb.png")
+        self.projektil = pygame.image.load("assets/Ninja Adventure - Asset Pack/Items/Projectile/Arrow.png")
 
+        #KI-Anfang
+        #KI:ChatGPT
+        #prompt: Wie kann ich das Projektil immer richtig drehen
+        self.winkel = -math.degrees(math.atan2(self.dy, self.dx)) - 45
+        #KI-Ende
 
 
 
@@ -34,9 +40,28 @@ class Rocket:
             else:
                 self.projektil = pygame.transform.scale(self.projektil, (25, 25))
 
+
+            # KI-Anfang
+            # KI:ChatGPT
+            # prompt: Wie kann ich das Projektil immer richtig drehen
+            gedrehtes_projektil = pygame.transform.rotate(
+                self.projektil,
+                self.winkel
+            )
+            # KI-Ende
+
             self.x_pos += self.dx
             self.y_pos += self.dy
-            self.screen.blit(self.projektil, (self.x_pos, self.y_pos))
+
+            # KI-Anfang
+            # KI:ChatGPT
+            # prompt: Wie kann ich das Projektil immer richtig drehen
+            rect = gedrehtes_projektil.get_rect(
+                center=(self.x_pos, self.y_pos)
+            )
+            # KI-Ende
+
+            self.screen.blit(gedrehtes_projektil, rect)
         elif gv.actual_WAEPON == 3:
             with open("speichern_spielstand.json", "r") as fp:
                 inhalt = json.load(fp)
@@ -47,9 +72,27 @@ class Rocket:
             elif inhalt[3]['Armbrust']['upgrade'] <=2:
                 self.projektil = pygame.transform.scale(self.projektil, (25, 25))
 
+            # KI-Anfang
+            # KI:ChatGPT
+            # prompt: Wie kann ich das Projektil immer richtig drehen
+            gedrehtes_projektil = pygame.transform.rotate(
+                self.projektil,
+                self.winkel
+            )
+            # KI-Ende
+
             self.x_pos += self.dx
             self.y_pos += self.dy
-            self.screen.blit(self.projektil, (self.x_pos, self.y_pos))
+
+            # KI-Anfang
+            # KI:ChatGPT
+            # prompt: Wie kann ich das Projektil immer richtig drehen
+            rect = gedrehtes_projektil.get_rect(
+                center=(self.x_pos, self.y_pos)
+            )
+            # KI-Ende
+
+            self.screen.blit(gedrehtes_projektil, rect)
 
 
 
