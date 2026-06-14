@@ -32,7 +32,7 @@ class Player:
             image_rect=pygame.Rect(0, 0, 32, 32),
             image_count=4)
         self.sword = pygame.image.load("assets/Ninja Adventure - Asset Pack/Items/Weapons/Sword2/Sprite.png")
-        self.axt = pygame.image.load("assets/Ninja Adventure - Asset Pack/Items/Weapons/Axe/Sprite.png")
+        self.axt = pygame.image.load("assets/Ninja Adventure - Asset Pack/Items/Weapons/AxeTool/Sprite.png")
         self.bogen = pygame.image.load("assets/Ninja Adventure - Asset Pack/Items/Weapons/Bow/Sprite.png")
         self.armbrust = pygame.image.load("assets/Ninja Adventure - Asset Pack/Items/Weapons/Crossbow/Sprite.png")
         self.x_pos = 0
@@ -182,21 +182,105 @@ class Player:
             elif self.facing == "down":
                 self.sprite = self.sprite_down_stand
 
+    def draw_weapon(self):
         weapon = None
 
         if GV.actual_WAEPON == 0:
-            weapon = self.sword
+            weapon = pygame.transform.scale(self.sword, (22, 34))
+
+            if self.facing == "right":
+                weapon = pygame.transform.rotate(weapon, -90)
+                x = self.x_pos_player + 40
+                y = self.y_pos_player + 57
+
+            elif self.facing == "left":
+                weapon = pygame.transform.rotate(weapon, -90)
+                weapon = pygame.transform.flip(weapon, True, False)
+                x = self.x_pos_player + 20
+                y = self.y_pos_player + 57
+
+            elif self.facing == "up":
+                x = self.x_pos_player + 20
+                y = self.y_pos_player + 45
+
+            else:
+                weapon = pygame.transform.rotate(weapon, 180)
+                x = self.x_pos_player + 25
+                y = self.y_pos_player + 60
+
         elif GV.actual_WAEPON == 1:
-            weapon = self.axt
+            weapon = pygame.transform.scale(self.axt, (25, 34))
+
+            if self.facing == "right":
+                weapon = pygame.transform.rotate(weapon, -90)
+                weapon = pygame.transform.flip(weapon, False, True)
+                x = self.x_pos_player + 40
+                y = self.y_pos_player + 65
+
+            elif self.facing == "left":
+                weapon = pygame.transform.rotate(weapon, 90)
+                #weapon = pygame.transform.flip(weapon, False, True)
+                x = self.x_pos_player + 25
+                y = self.y_pos_player + 65
+
+            elif self.facing == "up":
+                x = self.x_pos_player + 16
+                y = self.y_pos_player + 40
+
+            else:
+                weapon = pygame.transform.flip(weapon, False, True)
+                x = self.x_pos_player + 16
+                y = self.y_pos_player + 65
+
         elif GV.actual_WAEPON == 2:
-            weapon = self.bogen
+            weapon = pygame.transform.scale(self.bogen, (28, 28))
+            weapon = pygame.transform.rotate(weapon, 90)
+
+            if self.facing == "right":
+                x = self.x_pos_player + 32
+                y = self.y_pos_player + 55
+
+            elif self.facing == "left":
+                weapon = pygame.transform.flip(weapon, True, False)
+                x = self.x_pos_player + 40
+                y = self.y_pos_player + 55
+
+            elif self.facing == "up":
+                weapon = pygame.transform.rotate(weapon, 90)
+                x = self.x_pos_player + 24
+                y = self.y_pos_player + 55
+
+            else:
+                weapon = pygame.transform.rotate(weapon, -90)
+                x = self.x_pos_player + 24
+                y = self.y_pos_player + 55
+
         elif GV.actual_WAEPON == 3:
-            weapon = self.armbrust
+            weapon = pygame.transform.scale(self.armbrust, (30, 30))
 
-        if weapon:
-            weapon = pygame.transform.scale(weapon, (20, 20))
-            self.screen.blit(weapon, (self.x_pos, self.y_pos))
+            if self.facing == "right":
+                x = self.x_pos_player + 45
+                y = self.y_pos_player + 50
 
+            elif self.facing == "left":
+                weapon = pygame.transform.flip(weapon, True, False)
+                x = self.x_pos_player + 28
+                y = self.y_pos_player + 50
+
+            elif self.facing == "up":
+                weapon = pygame.transform.rotate(weapon, 90)
+                x = self.x_pos_player + 16
+                y = self.y_pos_player + 44
+
+            else:
+                weapon = pygame.transform.rotate(weapon, -90)
+                x = self.x_pos_player + 28
+                y = self.y_pos_player + 64
+
+        else:
+            return
+
+        self.screen.blit(weapon, (x, y))
 
 
 
@@ -266,7 +350,6 @@ class Player:
 
         if self.actual_weapon == 3:
             self.shoot_cooldown = self.shoot_cooldown - inhalt[3]['Armbrust']['upgrade'] *10
-            print(self.shoot_cooldown)
             pressed_key = pygame.mouse.get_pressed()
             current_time = pygame.time.get_ticks()
 
@@ -470,6 +553,7 @@ class Player:
     def update_and_draw(self):
         self.move()
         self.draw_character()
+        self.draw_weapon()
         self.frame_counter +=1
         if self.attacking:
             self.Sprite_attack.draw(

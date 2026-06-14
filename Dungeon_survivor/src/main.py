@@ -115,6 +115,20 @@ def play_screen(screen, clock):
     enemy = en(screen, rocket_list, coin_score)
     leben, welle, score_coin, coin_gesammelt, player_death = enemy.get_informationen()
     coin_list = enemy.get_coin_list()
+    with open("speichern_spielstand.json", "r") as fp:
+        spielstand = json.load(fp)
+
+    if spielstand[0]["Schwert"]["ausgewaehlt"] == "Ja":
+        GV.actual_WAEPON = 0
+
+    elif spielstand[1]["Axt"]["ausgewaehlt"] == "Ja":
+        GV.actual_WAEPON = 1
+
+    elif spielstand[2]["Bogen"]["ausgewaehlt"] == "Ja":
+        GV.actual_WAEPON = 2
+
+    elif spielstand[3]["Armbrust"]["ausgewaehlt"] == "Ja":
+        GV.actual_WAEPON = 3
     player = pl(screen, rocket_list, enemy, coin_list)
     #KI-anfang
     #KI: ChatGPT
