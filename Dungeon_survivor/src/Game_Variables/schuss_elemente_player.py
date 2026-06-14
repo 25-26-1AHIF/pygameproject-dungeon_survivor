@@ -11,8 +11,8 @@ class Rocket:
 
 
     def __init__(self, screen, x_pos, y_pos, dx, dy, player_x_pos, player_y_pos):
-        self.x_pos = x_pos
-        self.y_pos = y_pos
+        self.x_pos = x_pos - 8
+        self.y_pos = y_pos + 28
         self.dx = dx
         self.dy = dy
         self.player_x_pos = player_x_pos
