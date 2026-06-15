@@ -216,6 +216,8 @@ class WaffenShop:
                     topleft=(self.x + 260 + self.hoehe_bild, self.y_start + 90 + 3 * (self.hoehe + self.abstand)))
 
     def draw_coin_score(self, screen, coins):
+        with open("Coin_speicher.txt", "r") as fp:
+            coins = int(fp.read())
         self.coins_text = GV.FONT_MIDDLE.render(f"Coins: {coins}", False, "yellow")
         self.coin_int_rect = self.coins_text.get_rect(center=(GV.SCREEN_WIDTH - 150, 30))
         pygame.draw.rect(surface=screen, rect=self.coin_int_rect, color="black")

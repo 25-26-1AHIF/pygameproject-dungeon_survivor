@@ -8,6 +8,7 @@ from .schuss_elemente_player import Rocket
 from .schuss_elemente_player import Rockets
 from .Coin_spawner import Coin
 from .enemy_sprite import Sprite
+from .player import Player as pl
 
 
 class Enemy:
@@ -15,6 +16,8 @@ class Enemy:
         self.screen = screen
         self.x_pos_enemy = 0
         self.y_pos_enemy = 0
+        self.welle_timer = pygame.time.get_ticks()
+        self.welle_interval = 15000  # 15 Sekunden
         self.dx_enemy = 0
         self.dy_enemy = 0
         self.speed = 0.5
@@ -30,6 +33,7 @@ class Enemy:
         self.coin_gesammelt = 0
         self.player_death = 0
 
+
         #self.raccon_image = pygame.image.load(
             #"assets/Ninja Adventure - Asset Pack/Actor/Monster/Racoon/Faceset.png"
         #).convert()
@@ -44,20 +48,71 @@ class Enemy:
             image_rect=pygame.Rect(0, 0, 20, 20),
             image_count=8)
 
+
         self.sprite = Sprite(
             filepath="assets/Ninja Adventure - Asset Pack/Actor/Monster/Racoon/SpriteSheet.png",
             animation_speed=10,
             image_rect=pygame.Rect(0, 0, 16, 16),
             image_count=4)
 
+        self.Reptile = Sprite(
+            filepath="assets/Ninja Adventure - Asset Pack/Actor/Monster/Reptile/Reptile.png",
+            animation_speed=10,
+            image_rect=pygame.Rect(0, 0, 16, 16),
+            image_count=4
+        )
+        self.Bat = Sprite(
+            filepath="assets/Ninja Adventure - Asset Pack/Actor/Monster/YellowsBat/SpriteSheet.png",
+            animation_speed=10,
+            image_rect=pygame.Rect(0, 0, 16, 16),
+            image_count=4
+        )
+        self.Beast = Sprite(
+            filepath="assets/Ninja Adventure - Asset Pack/Actor/Monster/Beast2/Beast2.png",
+            animation_speed=10,
+            image_rect=pygame.Rect(0, 0, 16, 16),
+            image_count=4
+        )
+        self.Axolot = Sprite(
+            filepath="assets/Ninja Adventure - Asset Pack/Actor/Monster/Axolot/SpriteSheet.png",
+            animation_speed=10,
+            image_rect=pygame.Rect(0, 0, 16, 16),
+            image_count=4
+        )
+        self.cyclope = Sprite(
+            filepath="assets/Ninja Adventure - Asset Pack/Actor/Monster/Cyclope/SpriteSheet.png",
+            animation_speed=10,
+            image_rect=pygame.Rect(0, 0, 16, 16),
+            image_count=4
+        )
+
         self.sprite.load_spritesheet()
+        self.Reptile.load_spritesheet()
+        self.cyclope.load_spritesheet()
+        self.Axolot.load_spritesheet()
+        self.Beast.load_spritesheet()
+        self.Bat.load_spritesheet()
         self.Coin_sprite.load_spritesheet()
 
         self.frame_counter = 0
 
+    def get_sprite_for_wave(self):
+        if self.welle >= 11:
+            return self.cyclope
+        elif self.welle >= 9:
+            return self.Axolot
+        elif self.welle >= 7:
+            return self.Beast
+        elif self.welle >= 5:
+            return self.Bat
+        elif self.welle >= 3:
+            return self.Reptile
+        else:
+            return self.sprite
+
     def move_and_spawn(self, player_x_pos, player_y_pos):
 
-        if len(self.enemy_list) < self.max_enemy * self.welle:
+        if len(self.enemy_list) < self.max_enemy + (self.max_enemy * self.welle/10):
 
             side = random.choice(["left", "right", "top", "bottom"])
 
@@ -77,13 +132,9 @@ class Enemy:
                 x = random.randint(0, GV.SCREEN_WIDTH)
                 y = GV.SCREEN_HEIGHT
 
-            self.enemy_list.append([x, y, 0, 0])
+            sprite = self.get_sprite_for_wave()
+            self.enemy_list.append([x, y, 0, 0, sprite])
 
-        if self.welle >= 5:
-            self.speed = 0.75
-
-        elif self.welle >= 10:
-            self.speed = 1
 
         player_center_x = player_x_pos + GV.SQUARE_SIZE / 2
         player_center_y = player_y_pos + GV.SQUARE_SIZE / 2
@@ -118,7 +169,7 @@ class Enemy:
             missile[0] += missile[2]
             missile[1] += missile[3]
 
-            self.sprite.draw(
+            missile[4].draw(
                 self.screen,
                 missile[0],
                 missile[1],
@@ -137,8 +188,9 @@ class Enemy:
 
             if missile_rect.colliderect(Player_rect):
                 self.enemy_list.remove(missile)
-                self.Leben -= int(10 * self.welle / 8)
-                self.welle += 0.001
+                self.Leben -= int(10 * self.welle / 15)
+
+
             if self.Leben <= 0:
                 GameScreens.actual = GameScreens.GAMEOVER
                 self.player_death = 1
@@ -187,10 +239,7 @@ class Enemy:
                     if enemy in self.enemy_list:
                         self.enemy_list.remove(enemy)
 
-                    if GV.actual_WAEPON == 0 or GV.actual_WAEPON == 1:
-                        self.welle += 0.005
-                    else:
-                        self.welle += 0.005
+
 
 
     def coin_spawn(self, player_x_pos, player_y_pos):
@@ -232,6 +281,7 @@ class Enemy:
 
         self.coin_spawn(player_x_pos, player_y_pos)
 
+        self.update_welle_timer()
         self.frame_counter += 1
 
     def get_informationen(self):
@@ -243,6 +293,14 @@ class Enemy:
             self.player_death
 
         )
+
+    def update_welle_timer(self):
+        current_time = pygame.time.get_ticks()
+
+        if current_time - self.welle_timer >= self.welle_interval:
+            self.welle += 1
+            self.welle_timer = current_time
+
     def get_coins(self):
         return self.coin_gesammelt
 
@@ -251,3 +309,6 @@ class Enemy:
 
     def get_coin_list(self):
         return self.coin_list
+
+    def get_welle(self):
+        return self.welle

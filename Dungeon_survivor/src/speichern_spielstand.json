@@ -21,7 +21,7 @@
         "Bogen": {
             "Verfuegbarkeit": "False",
             "Coins": 700,
-            "upgrade": 3,
+            "upgrade": 1,
             "upgrade_kosten": 500,
             "ausgewaehlt": "Nein"
         }
@@ -46,7 +46,7 @@
     },
     {
         "Monk": {
-            "Verfuegbarkeit": "False",
+            "Verfuegbarkeit": "True",
             "Coins": 2500,
             "upgrade": 1,
             "upgrade_kosten": 500,

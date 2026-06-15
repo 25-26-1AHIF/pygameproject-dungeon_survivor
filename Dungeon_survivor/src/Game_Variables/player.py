@@ -6,7 +6,7 @@ import json
 
 from .Variables import GameVariables as GV
 from .schuss_elemente_player import Rocket
-from .enemys import Enemy as en
+
 from .attack_sprite import Sprite as sp
 
 class Player:
@@ -506,6 +506,7 @@ class Player:
                 # Gegner wird aus der Liste entfernt
                 # (= Gegner stirbt)
                 self.enemys_list.remove(enemy)
+                welle = self.enemies.get_welle()
                 self.coin_list.append([enemy[0], enemy[1]])
             # KI: ende
 
@@ -627,3 +628,6 @@ class Player:
 
     def update_and_shoot(self, event):
         self.shoot(event)
+
+    def get_welle(self):
+        return self.welle

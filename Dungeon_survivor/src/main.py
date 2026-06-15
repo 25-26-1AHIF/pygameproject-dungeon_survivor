@@ -19,7 +19,6 @@ def main_screen(screen, clock):
     pygame.mixer.music.set_volume(0.6)
 
     coin_score = 0
-    font = pygame.font.SysFont(None, 45)
     rocket_list = Rockets(screen=screen)
     with open("Coin_speicher.txt", "r") as fp:
         inhalt = fp.read()
@@ -47,15 +46,10 @@ def main_screen(screen, clock):
     highscore_text_rect = highscore_text.get_rect(center=(GV.SCREEN_WIDTH / 2, 100 + 3*80))
     beenden_text_rect = beenden_text.get_rect(center=(GV.SCREEN_WIDTH / 2, 100 + 5*80))
     coins_text_rect = coins_text.get_rect(center=(GV.SCREEN_WIDTH-150, 35))
-    coin_int_rect = coins_text.get_rect(center=(GV.SCREEN_WIDTH - 20, 47))
     shop_text_rect = shop_text.get_rect(center=(GV.SCREEN_WIDTH / 2, 100 + 4 * 80))
 
     image = pygame.image.load("assets/Ninja Adventure - Asset Pack/Ui/Theme/Wip/ThemeDark/nine_path_panel.png").convert_alpha()
-    # KI-Anfang
-    # KI: ChatGPT
-    # prompt: Wie kann ich von diesem rechteck     starten_text_rect = starten_text.get_rect(center=(GV.SCREEN_WIDTH / 2, 100 + 80)) den länge und die breite bekommen
-    res_image = pygame.transform.scale(image, (starten_text_rect.width, starten_text_rect.height))
-    # KI-Ende
+
     Sprite_flag = sp(
         filepath="assets/Ninja Adventure - Asset Pack/Backgrounds/Animated/Flag/FlagGray16x16.png",
         animation_speed=8,
@@ -160,16 +154,19 @@ def play_screen(screen, clock):
     #KI-Ende
     background_play = pygame.transform.scale(background_play, (GV.SCREEN_WIDTH, GV.SCREEN_HEIGHT))
 
-    font = pygame.font.SysFont(None, 45)
 
     Leben = GV.FONT_MIDDLE.render(f"Leben: {leben:.0f}", True, "red3")
     Welle = GV.FONT_MIDDLE.render(f"Welle: {welle:.0f}", True, "white")
     Coin = GV.FONT_MIDDLE.render(f"Coins: {coin_gesammelt}", True, "gold1")
+
     Leben_rect = Leben.get_rect(topleft=(10, 10))
     Welle_rect = Welle.get_rect(topright=(GV.SCREEN_WIDTH - 70, 10))
     Coin_rect = Coin.get_rect(topright=(GV.SCREEN_WIDTH - 70, 50))
-    welle_int_rect = Leben.get_rect(center=(GV.SCREEN_WIDTH-20, 35))
-    coin_int_rect = Leben.get_rect(center=(GV.SCREEN_WIDTH-20, 65))
+
+    last_leben = None
+    last_welle = None
+    last_coin = None
+
 
     while True:
 
@@ -202,17 +199,22 @@ def play_screen(screen, clock):
 
         rocket_list.update_and_draw()
 
-        Leben = GV.FONT_MIDDLE.render(f"Leben: {leben:.0f}", True, "red3")
-        Welle = GV.FONT_MIDDLE.render(f"Welle: {welle:.0f}", True, "white")
-        Coin = GV.FONT_MIDDLE.render(f"Coins: {coin_gesammelt}", True, "gold1")
+        if leben != last_leben:
+            Leben = GV.FONT_MIDDLE.render(f"Leben: {leben:.0f}", True, "red3")
+            last_leben = leben
+
+        if welle != last_welle:
+            Welle = GV.FONT_MIDDLE.render(f"Welle: {welle:.0f}", True, "white")
+            last_welle = welle
+
+        if coin_gesammelt != last_coin:
+            Coin = GV.FONT_MIDDLE.render(f"Coins: {coin_gesammelt}", True, "gold1")
+            last_coin = coin_gesammelt
 
         screen.blit(source=Leben, dest=Leben_rect)
         screen.blit(source=Welle, dest=Welle_rect)
         screen.blit(source=Coin, dest=Coin_rect)
 
-        #screen.blit(font.render(f"{leben:.0f}", True, (255, 255, 255)), Level_rect)
-        #screen.blit(font.render(f"{welle:.0f}", True, (255, 255, 255)), welle_int_rect)
-        #screen.blit(font.render(f"{coin_gesammelt}", True, (255, 255, 255)), coin_int_rect)
 
         leben, welle, score_coin, coin_gesammelt, player_death = enemy.get_informationen()
         pygame.display.flip()
@@ -231,11 +233,9 @@ def muenzen_speichern(filepath: str, source: int) -> None:
     with open(filepath, "w") as fp:
         fp.write(f"{source}")
 
-def schwert_information_screen(sreen, clock):
-    pygame.init()
+def schwert_information_screen(screen, clock):
     pygame.display.set_caption("Hello pygame")
-    screen = pygame.display.set_mode((GV.SCREEN_WIDTH, GV.SCREEN_HEIGHT))
-    clock = pygame.time.Clock()
+
 
     ninja_charakter = pygame.image.load("assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png")
 
@@ -278,10 +278,8 @@ def schwert_information_screen(sreen, clock):
         clock.tick(GV.FPS)
 
 def axt_information_screen(screen, clock) :
-    pygame.init()
     pygame.display.set_caption("Hello pygame")
-    screen = pygame.display.set_mode((GV.SCREEN_WIDTH, GV.SCREEN_HEIGHT))
-    clock = pygame.time.Clock()
+
 
     ninja_charakter = pygame.image.load(
         "assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png")
@@ -325,10 +323,8 @@ def axt_information_screen(screen, clock) :
         clock.tick(GV.FPS)
 
 def Bogen_information_screen(screen, clock):
-    pygame.init()
     pygame.display.set_caption("Hello pygame")
-    screen = pygame.display.set_mode((GV.SCREEN_WIDTH, GV.SCREEN_HEIGHT))
-    clock = pygame.time.Clock()
+
 
     ninja_charakter = pygame.image.load(
         "assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png")
@@ -377,10 +373,8 @@ def Bogen_information_screen(screen, clock):
         clock.tick(GV.FPS)
 
 def Armbrust_information_screen(screen, clock):
-    pygame.init()
     pygame.display.set_caption("Hello pygame")
-    screen = pygame.display.set_mode((GV.SCREEN_WIDTH, GV.SCREEN_HEIGHT))
-    clock = pygame.time.Clock()
+
 
     ninja_charakter = pygame.image.load(
         "assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png")
@@ -540,8 +534,7 @@ def shop_screen(screen, clock):
                     tab = neuer_tab
         screen.blit(resized_background, (0, 0))
 
-        with open("Coin_speicher.txt", "r") as fp:
-            coins = int(fp.read())
+
         waffenshop.draw_coin_score(screen, coins)
 
         if tab == "waffen":
@@ -568,6 +561,8 @@ def inventar_screen(screen, clock):
     pygame.display.set_caption("Dungeon Survivor - Inventar")
     with open("speichern_spielstand.json", "r") as fp:
         inhalt = json.load(fp)
+
+    save_needed = False
 
     background = pygame.image.load("assets/ChatGPT Image 14. Juni 2026, 10_12_35.png")
     Skin_text = GV.FONT_BIG.render("Waffe", False, "yellow")
@@ -737,6 +732,7 @@ def inventar_screen(screen, clock):
                         inhalt[1]['Axt']['ausgewaehlt'] = "Nein"
                         inhalt[2]['Bogen']['ausgewaehlt'] = "Nein"
                         inhalt[3]['Armbrust']['ausgewaehlt'] = "Nein"
+                        save_needed = True
 
                 if axt_ausrüsten_text_rect.collidepoint(event.pos):
                     if inhalt[1]['Axt']['Verfuegbarkeit'] == "False":
@@ -745,6 +741,7 @@ def inventar_screen(screen, clock):
                         inhalt[0]['Schwert']['ausgewaehlt'] = "Nein"
                         inhalt[2]['Bogen']['ausgewaehlt'] = "Nein"
                         inhalt[3]['Armbrust']['ausgewaehlt'] = "Nein"
+                        save_needed = True
 
                 if Bogen_ausrüsten_text_rect.collidepoint(event.pos):
                     if inhalt[2]['Bogen']['Verfuegbarkeit'] == "False":
@@ -753,6 +750,7 @@ def inventar_screen(screen, clock):
                         inhalt[0]['Schwert']['ausgewaehlt'] = "Nein"
                         inhalt[1]['Axt']['ausgewaehlt'] = "Nein"
                         inhalt[3]['Armbrust']['ausgewaehlt'] = "Nein"
+                        save_needed = True
 
                 if Armbrust_ausrüsten_text_rect.collidepoint(event.pos):
                     if inhalt[3]['Armbrust']['Verfuegbarkeit'] == "False":
@@ -761,6 +759,7 @@ def inventar_screen(screen, clock):
                         inhalt[0]['Schwert']['ausgewaehlt'] = "Nein"
                         inhalt[1]['Axt']['ausgewaehlt'] = "Nein"
                         inhalt[2]['Bogen']['ausgewaehlt'] = "Nein"
+                        save_needed = True
                 if inhalt[2]['Bogen']['Verfuegbarkeit'] == "False":
                     if bogen_upgrade_text_rect.collidepoint(event.pos):
                         if inhalt[2]['Bogen']['upgrade'] >= 3 or coin_score <= inhalt[2]['Bogen']['upgrade_kosten']:
@@ -768,9 +767,8 @@ def inventar_screen(screen, clock):
                         else:
                             inhalt[2]['Bogen']['upgrade'] += 1
                             coin_score -= inhalt[2]['Bogen']['upgrade_kosten']
+                        save_needed = True
 
-                    with open("Coin_speicher.txt", "w") as fp:
-                        fp.write(f"{coin_score}")
                 if inhalt[3]['Armbrust']['Verfuegbarkeit'] == "False":
                     if armbrust_upgrade_text_rect.collidepoint(event.pos):
                         if inhalt[3]['Armbrust']['upgrade'] >= 6 or coin_score < inhalt[3]['Armbrust']['upgrade_kosten']:
@@ -778,9 +776,9 @@ def inventar_screen(screen, clock):
                         else:
                             inhalt[3]['Armbrust']['upgrade'] += 1
                             coin_score -= inhalt[3]['Armbrust']['upgrade_kosten']
+                        save_needed = True
 
-                    with open("Coin_speicher.txt", "w") as fp:
-                        fp.write(f"{coin_score}")
+
 
 
                 if schwert_information_text_circle.collidepoint(event.pos):
@@ -947,10 +945,10 @@ def inventar_screen(screen, clock):
                 screen.blit(source=upgrade_text_Armbrust_blau, dest=upgrade_text_rect_Armbrust)
                 screen.blit(source=upgrade_text_Armbrust, dest=Lvl_text_rect_Armbrust)
 
-
-
-        with open("speichern_spielstand.json", "w") as fp:
-            json.dump(inhalt, fp, indent=4)
+        if save_needed:
+            with open("speichern_spielstand.json", "w") as fp:
+                json.dump(inhalt, fp, indent=4)
+            save_needed = False
 
         pygame.draw.circle(screen, "yellow", (GV.SCREEN_WIDTH - GV.SCREEN_WIDTH / 3 + 258, 195), 15)
         screen.blit(source=schwert_information_text, dest=schwert_information_text_circle)
