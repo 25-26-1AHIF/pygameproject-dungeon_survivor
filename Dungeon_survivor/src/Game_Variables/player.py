@@ -50,50 +50,70 @@ class Player:
         self.coin_list = coin_list
         self.attacking = False
         self.attack_frame = 0
-        self.sprite_left = Sprite(
-            filepath="assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png",
-            animation_speed=10,
-            image_rect=pygame.Rect(32 * 2, 32 * 4, 32, 32),
-            image_count=4)
-        self.sprite_right = Sprite(
-            filepath="assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png",
-            animation_speed=10,
-            image_rect=pygame.Rect(32 * 3, 32 * 4, 32, 32),
-            image_count=4)
-        self.sprite_up = Sprite(
-            filepath="assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png",
-            animation_speed=10,
-            image_rect=pygame.Rect(32, 32 * 4, 32, 32),
-            image_count=4)
-        self.sprite_down = Sprite(
-            filepath="assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png",
-            animation_speed=10,
-            image_rect=pygame.Rect(0, 32 * 4, 32, 32),
-            image_count=4)
+        if GV.actual_CHARACTER == 0:
+            self.sprite_left = Sprite(
+                filepath="assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png",
+                animation_speed=10,
+                image_rect=pygame.Rect(32 * 2, 32 * 4, 32, 32),
+                image_count=4)
+            self.sprite_right = Sprite(
+                filepath="assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png",
+                animation_speed=10,
+                image_rect=pygame.Rect(32 * 3, 32 * 4, 32, 32),
+                image_count=4)
+            self.sprite_up = Sprite(
+                filepath="assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png",
+                animation_speed=10,
+                image_rect=pygame.Rect(32, 32 * 4, 32, 32),
+                image_count=4)
+            self.sprite_down = Sprite(
+                filepath="assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png",
+                animation_speed=10,
+                image_rect=pygame.Rect(0, 32 * 4, 32, 32),
+                image_count=4)
 
+            self.sprite_left_stand = Sprite(
+                filepath="assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png",
+                animation_speed=10,
+                image_rect=pygame.Rect(32 * 2, 0, 32, 32),
+                image_count=4)
 
-        self.sprite_left_stand = Sprite(
-            filepath="assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png",
-            animation_speed=10,
-            image_rect=pygame.Rect(32 * 2, 0, 32, 32),
-            image_count=4)
+            self.sprite_right_stand = Sprite(
+                filepath="assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png",
+                animation_speed=10,
+                image_rect=pygame.Rect(32 * 3, 0, 32, 32),
+                image_count=4)
 
-        self.sprite_right_stand = Sprite(
-            filepath="assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png",
-            animation_speed=10,
-            image_rect=pygame.Rect(32 * 3, 0, 32, 32),
-            image_count=4)
+            self.sprite_up_stand = Sprite(
+                filepath="assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png",
+                animation_speed=10,
+                image_rect=pygame.Rect(32, 0, 32, 32),
+                image_count=4)
+            self.sprite_down_stand = Sprite(
+                filepath="assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png",
+                animation_speed=10,
+                image_rect=pygame.Rect(0, 0, 32, 32),
+                image_count=4)
 
-        self.sprite_up_stand = Sprite(
-            filepath="assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png",
-            animation_speed=10,
-            image_rect=pygame.Rect(32, 0, 32, 32),
-            image_count=4)
-        self.sprite_down_stand = Sprite(
-            filepath="assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png",
-            animation_speed=10,
-            image_rect=pygame.Rect(0, 0, 32, 32),
-            image_count=4)
+        else:
+            if GV.actual_CHARACTER == 1:
+                self.character = "Monk2"
+            elif GV.actual_CHARACTER == 2:
+                self.character = "Lion"
+            else:
+                self.character = "Vampire"
+
+            walk_path = f"assets/Ninja Adventure - Asset Pack/Actor/Character/{self.character}/SeparateAnim/Walk.png"
+
+            self.sprite_down = Sprite(walk_path, 4, pygame.Rect(0, 0, 16, 16), 10)
+            self.sprite_up = Sprite(walk_path, 4, pygame.Rect(16, 0, 16, 16), 10)
+            self.sprite_left = Sprite(walk_path, 4, pygame.Rect(16 * 2, 0, 16, 16), 10)
+            self.sprite_right = Sprite(walk_path, 4, pygame.Rect(16 * 3, 0, 16, 16), 10)
+
+            self.sprite_down_stand = Sprite(walk_path, 1, pygame.Rect(0, 0, 16, 16), 10)
+            self.sprite_up_stand = Sprite(walk_path, 1, pygame.Rect(16, 0, 16, 16), 10)
+            self.sprite_left_stand = Sprite(walk_path, 1, pygame.Rect(16 * 2, 0, 16, 16), 10)
+            self.sprite_right_stand = Sprite(walk_path, 1, pygame.Rect(16 * 3, 0, 16, 16), 10)
 
         self.sprite_left.load_spritesheet()
         self.sprite_right.load_spritesheet()
@@ -111,11 +131,19 @@ class Player:
 
 
     def draw_character(self):
-        self.sprite.draw(
-            self.screen,
-            self.x_pos_player,
-            self.y_pos_player,
-            self.frame_counter)
+        if GV.actual_CHARACTER == 0:
+            self.sprite.draw(
+                self.screen,
+                self.x_pos_player,
+                self.y_pos_player,
+                self.frame_counter)
+        else:
+            pass
+            self.sprite.draw(
+                self.screen,
+                self.x_pos_player + 20,
+                self.y_pos_player + 30,
+                self.frame_counter)
 
     def draw_attack(self):
         if GV.actual_WAEPON == 1:
@@ -166,7 +194,7 @@ class Player:
 
 
 
-        self.sprite.draw(self.screen, self.x_pos_player, self.y_pos_player, self.frame_counter)
+        #self.sprite.draw(self.screen, self.x_pos_player, self.y_pos_player, self.frame_counter)
 
         if self.facing == "right":
             self.x_pos = self.x_pos_player + 60

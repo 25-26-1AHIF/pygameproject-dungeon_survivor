@@ -1,5 +1,5 @@
 import pygame
-
+from .Variables import GameVariables as GV
 
 
 class Sprite:
@@ -9,6 +9,7 @@ class Sprite:
         self.image_count = image_count
         self.image_rect = image_rect
         self.animation_speed = animation_speed
+        self.actual_Character = GV.actual_CHARACTER
 
 
         self.images: list[pygame.Surface] = []
@@ -33,8 +34,10 @@ class Sprite:
                     self.image_rect.height
                 )
             )
-
-            image_surface = pygame.transform.scale(image_surface, (100, 100))
+            if self.actual_Character == 0:
+                image_surface = pygame.transform.scale(image_surface, (GV.SQUARE_SIZE, GV.SQUARE_SIZE))
+            else:
+                image_surface = pygame.transform.scale(image_surface, (GV.SQUARE_SIZE // 2, GV.SQUARE_SIZE // 2))
             self.images.append(image_surface)
 
     def draw(self, screen: pygame.Surface, xpos: float, ypos: float, frame_counter: int):
