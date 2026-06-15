@@ -11,11 +11,13 @@ from Game_Variables.schuss_elemente_player import Rockets
 from Game_Variables.shop_screen import SkinShop, WaffenShop
 from Game_Variables.Highscore_speichern import  Highscores
 from Game_Variables.highscore_screen import HighscoreScreen
+from Game_Variables.attack_sprite import Sprite as sp
 
 def main_screen(screen, clock):
     pygame.mixer.music.load("assets/Ninja Adventure - Asset Pack/Audio/Musics/1 - Adventure Begin.ogg")
     pygame.mixer.music.play(-1)
-    pygame.mixer.music.set_volume(0.025)
+    pygame.mixer.music.set_volume(0.6)
+
     coin_score = 0
     font = pygame.font.SysFont(None, 45)
     rocket_list = Rockets(screen=screen)
@@ -54,7 +56,14 @@ def main_screen(screen, clock):
     # prompt: Wie kann ich von diesem rechteck     starten_text_rect = starten_text.get_rect(center=(GV.SCREEN_WIDTH / 2, 100 + 80)) den länge und die breite bekommen
     res_image = pygame.transform.scale(image, (starten_text_rect.width, starten_text_rect.height))
     # KI-Ende
+    Sprite_flag = sp(
+        filepath="assets/Ninja Adventure - Asset Pack/Backgrounds/Animated/Flag/FlagGray16x16.png",
+        animation_speed=8,
+        image_rect=pygame.Rect(0, 0, 16, 16),
+        image_count=4)
+    Sprite_flag.load_spritesheet()
 
+    flag_frame_counter = 0
 
     while True:
 
@@ -94,6 +103,20 @@ def main_screen(screen, clock):
         screen.blit(source=beenden_text, dest=beenden_text_rect)
         screen.blit(source=coins_text, dest=coins_text_rect)
         screen.blit(source=shop_text, dest=shop_text_rect)
+        flag_frame_counter += 1
+
+        Sprite_flag.draw(
+            screen,
+            300,
+            150,
+            flag_frame_counter)
+
+        Sprite_flag.draw(
+            screen,
+            700,
+            150,
+            flag_frame_counter)
+
         #screen.blit(font.render(f"{score_coin}", True, (0, 0, 0)), coin_int_rect)
         leben, welle, score_coin, coin_gesammelt, player_death = enemy.get_informationen()
         pygame.display.flip()
@@ -102,7 +125,7 @@ def main_screen(screen, clock):
 def play_screen(screen, clock):
     pygame.mixer.music.load("assets/Ninja Adventure - Asset Pack/Audio/Musics/24 - Final Area.ogg")
     pygame.mixer.music.play(-1)
-    pygame.mixer.music.set_volume(0.025)
+    pygame.mixer.music.set_volume(0.6)
     pygame.display.set_caption("Dungeon Survivor - Game")
     coin_score = 0
     rocket_list = Rockets(screen=screen)
@@ -133,7 +156,7 @@ def play_screen(screen, clock):
     #KI-anfang
     #KI: ChatGPT
     #prompt: Wie bekomme ich den hintergrund in ein laufendes bild hinein
-    background_play = pygame.image.load("assets/twosoulsnomark.png").convert()
+    background_play = pygame.image.load("assets/awesomeCavePixelArt.png").convert()
     #KI-Ende
     background_play = pygame.transform.scale(background_play, (GV.SCREEN_WIDTH, GV.SCREEN_HEIGHT))
 
@@ -208,6 +231,214 @@ def muenzen_speichern(filepath: str, source: int) -> None:
     with open(filepath, "w") as fp:
         fp.write(f"{source}")
 
+def schwert_information_screen(sreen, clock):
+    pygame.init()
+    pygame.display.set_caption("Hello pygame")
+    screen = pygame.display.set_mode((GV.SCREEN_WIDTH, GV.SCREEN_HEIGHT))
+    clock = pygame.time.Clock()
+
+    ninja_charakter = pygame.image.load("assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png")
+
+    image = pygame.Surface((32, 32), pygame.SRCALPHA)
+    image.blit(
+        ninja_charakter,
+        (0, 0),
+        pygame.Rect(0, 0, 32, 32)
+    )
+    ninja_image = pygame.transform.scale(image, (100, 100))
+
+    erklärung_text = GV.FONT_BIG.render("Information:", True, "black")
+    attacke_text = GV.FONT_MIDDLE.render("Attacke: ", True, "gold1")
+    mausrichtung_text = GV.FONT_MIDDLE.render("-> Mauszeiger", True, "blue")
+    name_text = GV.FONT_MIDDLE.render("Name: ", True, "gold1")
+    name_des_objekts = GV.FONT_MIDDLE.render("Schwert", True, "blue")
+    upgrades = GV.FONT_MIDDLE.render("derzeit kein upgrade verfügbar", True, "red")
+
+    while True:
+        for event in pygame.event.get():
+
+            if event.type == pygame.QUIT:
+                return GameScreens.Exit
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    return GameScreens.INVENTAR
+
+        screen.blit(erklärung_text, (20, 10))
+        screen.blit(attacke_text, (20, 350))
+        screen.blit(mausrichtung_text, (700 ,350))
+        screen.blit(ninja_image, (280,320))
+        screen.blit(name_text, (20, 150))
+        screen.blit(name_des_objekts, (200,150))
+        screen.blit(upgrades, (20,600))
+
+        pygame.draw.polygon(screen, "blue", ((350, 375), (550, 475), (550, 275)), 5)
+
+        pygame.display.flip()
+        screen.fill("white")
+        clock.tick(GV.FPS)
+
+def axt_information_screen(screen, clock) :
+    pygame.init()
+    pygame.display.set_caption("Hello pygame")
+    screen = pygame.display.set_mode((GV.SCREEN_WIDTH, GV.SCREEN_HEIGHT))
+    clock = pygame.time.Clock()
+
+    ninja_charakter = pygame.image.load(
+        "assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png")
+
+    image = pygame.Surface((32, 32), pygame.SRCALPHA)
+    image.blit(
+        ninja_charakter,
+        (0, 0),
+        pygame.Rect(0, 0, 32, 32)
+    )
+    ninja_image = pygame.transform.scale(image, (100, 100))
+
+    erklärung_text = GV.FONT_BIG.render("Information:", True, "black")
+    attacke_text = GV.FONT_MIDDLE.render("Attacke: ", True, "gold1")
+    mausrichtung_text = GV.FONT_MIDDLE.render("bei Mausklick", True, "blue")
+    name_text = GV.FONT_MIDDLE.render("Name: ", True, "gold1")
+    name_des_objekts = GV.FONT_MIDDLE.render("Axt", True, "blue")
+    upgrades = GV.FONT_MIDDLE.render("derzeit kein upgrade verfügbar", True, "red")
+
+    while True:
+        for event in pygame.event.get():
+
+            if event.type == pygame.QUIT:
+                return GameScreens.Exit
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    return GameScreens.INVENTAR
+
+        screen.blit(erklärung_text, (20, 10))
+        screen.blit(attacke_text, (20, 350))
+        screen.blit(mausrichtung_text, (700, 350))
+        screen.blit(ninja_image, (350, 320))
+        screen.blit(name_text, (20, 150))
+        screen.blit(name_des_objekts, (200, 150))
+        screen.blit(upgrades, (20, 600))
+
+        pygame.draw.circle(screen, "blue", (400, 370), 110, 5)
+
+        pygame.display.flip()
+        screen.fill("white")
+        clock.tick(GV.FPS)
+
+def Bogen_information_screen(screen, clock):
+    pygame.init()
+    pygame.display.set_caption("Hello pygame")
+    screen = pygame.display.set_mode((GV.SCREEN_WIDTH, GV.SCREEN_HEIGHT))
+    clock = pygame.time.Clock()
+
+    ninja_charakter = pygame.image.load(
+        "assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png")
+
+    image = pygame.Surface((32, 32), pygame.SRCALPHA)
+    image.blit(
+        ninja_charakter,
+        (0, 0),
+        pygame.Rect(0, 0, 32, 32)
+    )
+    ninja_image = pygame.transform.scale(image, (100, 100))
+
+    erklärung_text = GV.FONT_BIG.render("Information:", True, "black")
+    attacke_text = GV.FONT_MIDDLE.render("Attacke: ", True, "gold1")
+    mausrichtung_text = GV.FONT_MIDDLE.render("-> Pfeil  pro  Mausklick", True, "blue")
+    name_text = GV.FONT_MIDDLE.render("Name: ", True, "gold1")
+    name_des_objekts = GV.FONT_MIDDLE.render("Bogen", True, "blue")
+    upgrade2 = GV.FONT_MIDDLE.render("upgrade 2:  ", True, "gold1")
+    upgrade3 = GV.FONT_MIDDLE.render("upgrade 3: ", True, "gold1")
+    upgrade2_text = GV.FONT_MIDDLE.render("Pfeile  werden  grösser", True, "blue")
+    upgrade3_text = GV.FONT_MIDDLE.render("Pfeile  werden  grösser  und durchdringen Gegner", True, "blue")
+
+
+    while True:
+        for event in pygame.event.get():
+
+            if event.type == pygame.QUIT:
+                return GameScreens.Exit
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    return GameScreens.INVENTAR
+
+        screen.blit(erklärung_text, (20, 10))
+        screen.blit(attacke_text, (20, 350))
+        screen.blit(mausrichtung_text, (400, 350))
+        screen.blit(ninja_image, (280, 320))
+        screen.blit(name_text, (20, 150))
+        screen.blit(name_des_objekts, (200, 150))
+        screen.blit(upgrade2, (20, 500))
+        screen.blit(upgrade3, (20, 550))
+        screen.blit(upgrade2_text, (250, 500))
+        screen.blit(upgrade3_text, (250, 550))
+
+        pygame.display.flip()
+        screen.fill("white")
+        clock.tick(GV.FPS)
+
+def Armbrust_information_screen(screen, clock):
+    pygame.init()
+    pygame.display.set_caption("Hello pygame")
+    screen = pygame.display.set_mode((GV.SCREEN_WIDTH, GV.SCREEN_HEIGHT))
+    clock = pygame.time.Clock()
+
+    ninja_charakter = pygame.image.load(
+        "assets/Ninja Adventure - Asset Pack/Actor/CharacterAnimated/NinjaGreen/SpriteSheet.png")
+
+    image = pygame.Surface((32, 32), pygame.SRCALPHA)
+    image.blit(
+        ninja_charakter,
+        (0, 0),
+        pygame.Rect(0, 0, 32, 32)
+    )
+    ninja_image = pygame.transform.scale(image, (100, 100))
+
+    erklärung_text = GV.FONT_BIG.render("Information:", True, "black")
+    attacke_text = GV.FONT_MIDDLE.render("Attacke: ", True, "gold1")
+    mausrichtung_text = GV.FONT_MIDDLE.render("-> Pfeil  auf  dauerschuss", True, "blue")
+    name_text = GV.FONT_MIDDLE.render("Name: ", True, "gold1")
+    name_des_objekts = GV.FONT_MIDDLE.render("Armbrust", True, "blue")
+    upgrade2_text = GV.FONT_MIDDLE.render("Pfeile  werden  grösser  und  schiessen schneller", True, "blue")
+    upgrade3_text = GV.FONT_MIDDLE.render("Pfeile  werden  grösser  und  schiessen schneller", True, "blue")
+    upgrade4_text = GV.FONT_MIDDLE.render("Pfeile  werden  grösser  und  schiessen schneller", True, "blue")
+    upgrade5_text = GV.FONT_MIDDLE.render("Pfeile  werden  grösser  und  schiessen schneller", True, "blue")
+    upgrade6_text = GV.FONT_MIDDLE.render("Pfeile  werden  grösser  und  durchdringen  Gegner", True, "blue")
+    upgrade2 = GV.FONT_MIDDLE.render("upgrade 2:  ", True, "gold1")
+    upgrade3 = GV.FONT_MIDDLE.render("upgrade 3: ", True, "gold1")
+    upgrade4 = GV.FONT_MIDDLE.render("upgrade 4:  ", True, "gold1")
+    upgrade5 = GV.FONT_MIDDLE.render("upgrade 5: ", True, "gold1")
+    upgrade6 = GV.FONT_MIDDLE.render("upgrade 6:  ", True, "gold1")
+
+    while True:
+        for event in pygame.event.get():
+
+            if event.type == pygame.QUIT:
+                return GameScreens.Exit
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    return GameScreens.INVENTAR
+
+        screen.blit(erklärung_text, (20, 10))
+        screen.blit(attacke_text, (20, 350))
+        screen.blit(mausrichtung_text, (400, 350))
+        screen.blit(ninja_image, (280, 320))
+        screen.blit(name_text, (20, 150))
+        screen.blit(name_des_objekts, (200, 150))
+        screen.blit(upgrade2_text, (250, 450))
+        screen.blit(upgrade3_text, (250, 500))
+        screen.blit(upgrade4_text, (250, 550))
+        screen.blit(upgrade5_text, (250, 600))
+        screen.blit(upgrade6_text, (250, 650))
+        screen.blit(upgrade2, (20, 450))
+        screen.blit(upgrade3, (20, 500))
+        screen.blit(upgrade4, (20, 550))
+        screen.blit(upgrade5, (20, 600))
+        screen.blit(upgrade6, (20, 650))
+
+        pygame.display.flip()
+        screen.fill("white")
+        clock.tick(GV.FPS)
+
 def pause_screen(screen, clock):
     pygame.display.set_caption("Dungeon Survivor - Pausiert")
     # 1. Fortsetzen
@@ -258,7 +489,7 @@ def pause_screen(screen, clock):
 def shop_screen(screen, clock):
     pygame.mixer.music.load("assets/Ninja Adventure - Asset Pack/Audio/Musics/5 - Peaceful.ogg")
     pygame.mixer.music.play(-1)
-    pygame.mixer.music.set_volume(0.025)
+    pygame.mixer.music.set_volume(0.6)
     pygame.display.set_caption("Dungeon Survivor - Shop")
     background = pygame.image.load("assets/StockCake-Gemütliche_Pixel-Taverne-3432555-medium.png")
     resized_background = pygame.transform.scale(background, (GV.SCREEN_WIDTH, GV.SCREEN_HEIGHT))
@@ -309,6 +540,9 @@ def shop_screen(screen, clock):
                     tab = neuer_tab
         screen.blit(resized_background, (0, 0))
 
+        with open("Coin_speicher.txt", "r") as fp:
+            coins = int(fp.read())
+        waffenshop.draw_coin_score(screen, coins)
 
         if tab == "waffen":
             waffenshop.draw(screen)
@@ -323,19 +557,19 @@ def shop_screen(screen, clock):
 def highscore_screen(screen, clock):
     pygame.mixer.music.load("assets/Ninja Adventure - Asset Pack/Audio/Musics/20 - Good Time.ogg")
     pygame.mixer.music.play(-1)
-    pygame.mixer.music.set_volume(0.025)
+    pygame.mixer.music.set_volume(0.6)
     highscore = HighscoreScreen(screen, clock)
     return highscore.run()
 
 def inventar_screen(screen, clock):
     pygame.mixer.music.load("assets/Ninja Adventure - Asset Pack/Audio/Musics/16 - Melancholia.ogg")
     pygame.mixer.music.play(-1)
-    pygame.mixer.music.set_volume(0.025)
+    pygame.mixer.music.set_volume(0.6)
     pygame.display.set_caption("Dungeon Survivor - Inventar")
     with open("speichern_spielstand.json", "r") as fp:
         inhalt = json.load(fp)
 
-    background = pygame.image.load("assets/redcometnomark.png")
+    background = pygame.image.load("assets/ChatGPT Image 14. Juni 2026, 10_12_35.png")
     Skin_text = GV.FONT_BIG.render("Waffe", False, "yellow")
     Waffe_text = GV.FONT_BIG.render("Skin ", False, "yellow")
 
@@ -422,6 +656,21 @@ def inventar_screen(screen, clock):
 
     bogen_upgrade_text_rect = None
     armbrust_upgrade_text_rect = None
+
+    schwert_information_text = GV.FONT_MIDDLE.render("i", True, "black")
+    schwert_information_text_circle = schwert_information_text.get_rect(topleft=(GV.SCREEN_WIDTH-GV.SCREEN_WIDTH/3+250, 170))
+
+    axt_information_text = GV.FONT_MIDDLE.render("i", True, "black")
+    axt_information_text_circle = axt_information_text.get_rect(
+        topleft=(GV.SCREEN_WIDTH - GV.SCREEN_WIDTH / 3 + 250, 280))
+
+    Bogen_information_text = GV.FONT_MIDDLE.render("i", True, "black")
+    Bogen_information_text_circle = Bogen_information_text.get_rect(
+        topleft=(GV.SCREEN_WIDTH - GV.SCREEN_WIDTH / 3 + 250, 390))
+
+    Armbrust_information_text = GV.FONT_MIDDLE.render("i", True, "black")
+    Armbrust_information_text_circle = Armbrust_information_text.get_rect(
+        topleft=(GV.SCREEN_WIDTH - GV.SCREEN_WIDTH / 3 + 250, 500))
 
     coin_text = GV.FONT_MIDDLE.render(f"Coin: {coin_score}", True, "gold1")
 
@@ -514,7 +763,7 @@ def inventar_screen(screen, clock):
                         inhalt[2]['Bogen']['ausgewaehlt'] = "Nein"
                 if inhalt[2]['Bogen']['Verfuegbarkeit'] == "False":
                     if bogen_upgrade_text_rect.collidepoint(event.pos):
-                        if inhalt[2]['Bogen']['upgrade'] >= 3:
+                        if inhalt[2]['Bogen']['upgrade'] >= 3 or coin_score <= inhalt[2]['Bogen']['upgrade_kosten']:
                             pass
                         else:
                             inhalt[2]['Bogen']['upgrade'] += 1
@@ -524,7 +773,7 @@ def inventar_screen(screen, clock):
                         fp.write(f"{coin_score}")
                 if inhalt[3]['Armbrust']['Verfuegbarkeit'] == "False":
                     if armbrust_upgrade_text_rect.collidepoint(event.pos):
-                        if inhalt[3]['Armbrust']['upgrade'] >= 6:
+                        if inhalt[3]['Armbrust']['upgrade'] >= 6 or coin_score < inhalt[3]['Armbrust']['upgrade_kosten']:
                             pass
                         else:
                             inhalt[3]['Armbrust']['upgrade'] += 1
@@ -532,6 +781,21 @@ def inventar_screen(screen, clock):
 
                     with open("Coin_speicher.txt", "w") as fp:
                         fp.write(f"{coin_score}")
+
+
+                if schwert_information_text_circle.collidepoint(event.pos):
+                     return GameScreens.SCHWERT
+
+                if axt_information_text_circle.collidepoint(event.pos):
+                     return GameScreens.AXT
+
+                if Bogen_information_text_circle.collidepoint(event.pos):
+                     return GameScreens.BOGEN
+
+                if Armbrust_information_text_circle.collidepoint(event.pos):
+                     return GameScreens.ARMBRUST
+
+
 
 
 
@@ -547,7 +811,6 @@ def inventar_screen(screen, clock):
         screen.blit(source=Skin_text, dest=skins_text_rect)
         pygame.draw.rect(surface=screen, rect=coin_text_rect, color="black")
         screen.blit(source=coin_text, dest=coin_text_rect)
-
 
 
 
@@ -689,6 +952,17 @@ def inventar_screen(screen, clock):
         with open("speichern_spielstand.json", "w") as fp:
             json.dump(inhalt, fp, indent=4)
 
+        pygame.draw.circle(screen, "yellow", (GV.SCREEN_WIDTH - GV.SCREEN_WIDTH / 3 + 258, 195), 15)
+        screen.blit(source=schwert_information_text, dest=schwert_information_text_circle)
+
+        pygame.draw.circle(screen, "yellow", (GV.SCREEN_WIDTH - GV.SCREEN_WIDTH / 3 + 258, 305), 15)
+        screen.blit(source=axt_information_text, dest=axt_information_text_circle)
+
+        pygame.draw.circle(screen, "yellow", (GV.SCREEN_WIDTH - GV.SCREEN_WIDTH / 3 + 258, 415), 15)
+        screen.blit(source=Bogen_information_text, dest=Bogen_information_text_circle)
+
+        pygame.draw.circle(screen, "yellow", (GV.SCREEN_WIDTH - GV.SCREEN_WIDTH / 3 + 258, 525), 15)
+        screen.blit(source=Armbrust_information_text, dest=Armbrust_information_text_circle)
 
         pygame.display.flip()
         clock.tick(GV.FPS)
@@ -786,6 +1060,18 @@ def main():
 
         elif GameScreens.actual == GameScreens.PAUSE:
             GameScreens.actual = pause_screen(screen, clock)
+
+        elif GameScreens.actual == GameScreens.SCHWERT:
+            GameScreens.actual = schwert_information_screen(screen, clock)
+
+        elif GameScreens.actual == GameScreens.AXT:
+            GameScreens.actual = axt_information_screen(screen, clock)
+
+        elif GameScreens.actual == GameScreens.BOGEN:
+            GameScreens.actual = Bogen_information_screen(screen, clock)
+
+        elif GameScreens.actual == GameScreens.ARMBRUST:
+            GameScreens.actual = Armbrust_information_screen(screen, clock)
 
     pygame.quit()
 

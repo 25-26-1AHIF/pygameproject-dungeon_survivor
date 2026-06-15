@@ -57,7 +57,7 @@ class Enemy:
 
     def move_and_spawn(self, player_x_pos, player_y_pos):
 
-        if len(self.enemy_list) < self.max_enemy * self.welle / 5:
+        if len(self.enemy_list) < self.max_enemy * self.welle:
 
             side = random.choice(["left", "right", "top", "bottom"])
 
@@ -138,7 +138,7 @@ class Enemy:
             if missile_rect.colliderect(Player_rect):
                 self.enemy_list.remove(missile)
                 self.Leben -= int(10 * self.welle / 8)
-
+                self.welle += 0.001
             if self.Leben <= 0:
                 GameScreens.actual = GameScreens.GAMEOVER
                 self.player_death = 1
@@ -170,17 +170,28 @@ class Enemy:
 
                     self.coin_list.append([enemy[0], enemy[1]])
 
-                    if GV.actual_WAEPON == 2 and inhalt[2]['Bogen']['upgrade'] == 2:
-                        pass
-                    if GV.actual_WAEPON == 3 and inhalt[3]['Armbrust']['upgrade'] == 6:
-                        pass
-                    elif missile in rockets_list:
-                        rockets_list.remove(missile)
+                    remove_missile = True
+
+                    if GV.actual_WAEPON == 2:
+                        if inhalt[2]['Bogen']['upgrade'] == 3:
+                            remove_missile = False
+
+                    elif GV.actual_WAEPON == 3:
+                        if inhalt[3]['Armbrust']['upgrade'] == 6:
+                            remove_missile = False
+
+                    if remove_missile:
+                        if missile in rockets_list:
+                            rockets_list.remove(missile)
 
                     if enemy in self.enemy_list:
                         self.enemy_list.remove(enemy)
 
-                    self.welle += 0.005
+                    if GV.actual_WAEPON == 0 or GV.actual_WAEPON == 1:
+                        self.welle += 0.005
+                    else:
+                        self.welle += 0.005
+
 
     def coin_spawn(self, player_x_pos, player_y_pos):
 

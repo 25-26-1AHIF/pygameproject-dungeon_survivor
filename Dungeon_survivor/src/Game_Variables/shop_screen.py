@@ -47,7 +47,7 @@ class WaffenShop:
         self.schwert_text = GV.FONT_SMALL.render("Der Klassiker", False, "black")
         self.axt_text = GV.FONT_SMALL.render("Zwar langsam, zerhäckselt aber Gegner", False, "black")
         self.bogen_text = GV.FONT_SMALL.render("Ausgewogene Fernkampfwaffe", False, "black")
-        self.armbrust_text = GV.FONT_SMALL.render("Töte Mehrere mit einem Schuss", False, "black")
+        self.armbrust_text = GV.FONT_SMALL.render("Durchdring Gegner", False, "black")
 
         self.schwert_preis = GV.FONT_SMALL.render(f"Preis: {spielstand[0]['Schwert']['Coins']}", False, "gold3")
         self.axt_preis = GV.FONT_SMALL.render(f"Preis: {spielstand[1]['Axt']['Coins']}", False, "gold3")
@@ -83,8 +83,7 @@ class WaffenShop:
             self.armbrust_kaufen_rect = self.armbrust_kaufen.get_rect(topleft=(self.x + 260 + self.hoehe_bild, self.y_start + 90 + 3 * (self.hoehe + self.abstand)))
 
 
-        self.coins_text = GV.FONT_MIDDLE.render(f"Coins: {coins}", False, "yellow")
-        self.coin_int_rect = self.coins_text.get_rect(center=(GV.SCREEN_WIDTH - 150, 30))
+
 
         # KI-Anfang
         # KI: ChatGPT
@@ -142,8 +141,7 @@ class WaffenShop:
         screen.blit(source=self.bogen_text, dest=(self.x + 20 + self.hoehe_bild, self.y_start + 50 + 2 * (self.hoehe + self.abstand)))
         screen.blit(source=self.armbrust_text, dest=(self.x + 20 + self.hoehe_bild, self.y_start + 50 + 3 * (self.hoehe + self.abstand)))
 
-        pygame.draw.rect(surface=screen, rect=self.coin_int_rect, color="black")
-        screen.blit(source=self.coins_text, dest=self.coin_int_rect)
+
 
         screen.blit(source=self.schwert_preis, dest=(self.x + 20 + self.hoehe_bild, self.y_start + 90))
         screen.blit(source=self.axt_preis, dest=(self.x + 20 + self.hoehe_bild, self.y_start + 90 + 1 * (self.hoehe + self.abstand)))
@@ -216,6 +214,12 @@ class WaffenShop:
                 self.armbrust_kaufen = GV.FONT_MIDDLE.render("Im Besitz", False, "red2")
                 self.armbrust_kaufen_rect = self.armbrust_kaufen.get_rect(
                     topleft=(self.x + 260 + self.hoehe_bild, self.y_start + 90 + 3 * (self.hoehe + self.abstand)))
+
+    def draw_coin_score(self, screen, coins):
+        self.coins_text = GV.FONT_MIDDLE.render(f"Coins: {coins}", False, "yellow")
+        self.coin_int_rect = self.coins_text.get_rect(center=(GV.SCREEN_WIDTH - 150, 30))
+        pygame.draw.rect(surface=screen, rect=self.coin_int_rect, color="black")
+        screen.blit(source=self.coins_text, dest=self.coin_int_rect)
 
 class SkinShop:
 

@@ -33,6 +33,10 @@ class GameScreens:
     HIGHSCORE = "highscorescreen"
     SHOP = "shop"
     PAUSE = "pausescreen"
+    SCHWERT = "information_schwert"
+    AXT = "information_axt"
+    BOGEN = "information_bogen"
+    ARMBRUST = "information_armbrsut"
 
     Exit = "exit"
     GAMEOVER = "Gameover"

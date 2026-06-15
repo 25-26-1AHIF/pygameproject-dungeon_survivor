@@ -27,10 +27,14 @@ class Player:
         self.last_shot = 0
         self.shoot_cooldown = 100
         self.frame_counter = 0
-        self.Sprite_attack = sp(filepath="assets/Ninja Adventure - Asset Pack/FX/Attack/CircularSlash/SpriteSheet.png",
+        self.Sprite_attack_axt = sp(filepath="assets/Ninja Adventure - Asset Pack/FX/Attack/CircularSlash/SpriteSheet.png",
             animation_speed=5,
             image_rect=pygame.Rect(0, 0, 32, 32),
             image_count=4)
+        self.Sprite_attack_sword = sp(filepath="assets/Ninja Adventure - Asset Pack/FX/Attack/Claw/SpriteSheet.png",
+                                      animation_speed=5,
+                                      image_rect=pygame.Rect(0, 0, 32, 32),
+                                      image_count=4)
         self.sword = pygame.image.load("assets/Ninja Adventure - Asset Pack/Items/Weapons/Sword2/Sprite.png")
         self.axt = pygame.image.load("assets/Ninja Adventure - Asset Pack/Items/Weapons/AxeTool/Sprite.png")
         self.bogen = pygame.image.load("assets/Ninja Adventure - Asset Pack/Items/Weapons/Bow/Sprite.png")
@@ -39,6 +43,7 @@ class Player:
         self.y_pos = 0
         self.dx = 0
         self.dy = 0
+        self.attack_angle = 0
         self.enemies = enemies
         self.enemys_list = None
         self.facing = "down"
@@ -100,7 +105,8 @@ class Player:
         self.sprite_up_stand.load_spritesheet()
         self.sprite_down_stand.load_spritesheet()
 
-        self.Sprite_attack.load_spritesheet()
+        self.Sprite_attack_axt.load_spritesheet()
+        self.Sprite_attack_sword.load_spritesheet()
 
 
 
@@ -112,11 +118,18 @@ class Player:
             self.frame_counter)
 
     def draw_attack(self):
-        self.Sprite_attack.draw(
-            self.screen,
-            self.x_pos_player,
-            self.y_pos_player,
-            self.frame_counter)
+        if GV.actual_WAEPON == 1:
+            self.Sprite_attack_axt.draw(
+                self.screen,
+                self.x_pos_player,
+                self.y_pos_player,
+                self.frame_counter)
+        elif GV.actual_WAEPON == 0:
+            self.Sprite_attack_sword.draw(
+                self.screen,
+                self.x_pos_player,
+                self.y_pos_player,
+                self.frame_counter)
     def move(self):
 
         pressed_keys = pygame.key.get_pressed()
@@ -298,7 +311,8 @@ class Player:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     #KI Ende
-
+                    self.attacking = True
+                    self.attack_frame = 0
                     self.sword_attack()
 
         if self.actual_weapon == 1:
@@ -315,12 +329,13 @@ class Player:
                     self.axt_attack()
 
 
+
         if self.actual_weapon == 2:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
 
                     attack_sound = pygame.mixer.Sound("assets/Ninja Adventure - Asset Pack/Audio/Sounds/Whoosh & Slash/Launch.wav")
-                    attack_sound.set_volume(0.03)
+                    attack_sound.set_volume(0.7)
                     attack_sound.play()
 
                     mouse_x, mouse_y = pygame.mouse.get_pos()
@@ -356,7 +371,7 @@ class Player:
             if pressed_key[0] and current_time - self.last_shot >= self.shoot_cooldown:
 
                 attack_sound = pygame.mixer.Sound("assets/Ninja Adventure - Asset Pack/Audio/Sounds/Whoosh & Slash/Launch.wav")
-                attack_sound.set_volume(0.03)
+                attack_sound.set_volume(0.7)
                 attack_sound.play()
                 self.last_shot = current_time
                 mouse_x, mouse_y = pygame.mouse.get_pos()
@@ -388,7 +403,7 @@ class Player:
 
     def sword_attack(self):
         attack_sound = pygame.mixer.Sound("assets/Ninja Adventure - Asset Pack/Audio/Sounds/Whoosh & Slash/Sword2.wav")
-        attack_sound.set_volume(0.03)
+        attack_sound.set_volume(0.7)
         attack_sound.play()
         mouse_x, mouse_y = pygame.mouse.get_pos()
 
@@ -468,7 +483,7 @@ class Player:
 
     def axt_attack(self):
         attack_sound = pygame.mixer.Sound("assets/Ninja Adventure - Asset Pack/Audio/Sounds/Whoosh & Slash/Slash.wav")
-        attack_sound.set_volume(0.03)
+        attack_sound.set_volume(0.7)
         attack_sound.play()
         mouse_x, mouse_y = pygame.mouse.get_pos()
 
@@ -556,18 +571,30 @@ class Player:
         self.draw_weapon()
         self.frame_counter +=1
         if self.attacking:
-            self.Sprite_attack.draw(
-                self.screen,
-                self.x_pos_player,
-                self.y_pos_player,
-                self.attack_frame
-            )
+            if GV.actual_WAEPON == 1:
+                self.Sprite_attack_axt.draw(
+                    self.screen,
+                    self.x_pos_player,
+                    self.y_pos_player,
+                    self.attack_frame
+                )
+            elif GV.actual_WAEPON == 0:
+                self.Sprite_attack_sword.draw(
+                    self.screen,
+                    self.x_pos_player,
+                    self.y_pos_player,
+                    self.attack_frame
+                )
 
             self.attack_frame += 1
 
-        if self.attack_frame >= self.Sprite_attack.image_count * self.Sprite_attack.animation_speed:
+        if self.attack_frame >= self.Sprite_attack_axt.image_count * self.Sprite_attack_axt.animation_speed:
             self.attacking = False
             self.attack_frame = 0
+        if self.attack_frame >= self.Sprite_attack_sword.image_count * self.Sprite_attack_sword.animation_speed:
+            self.attacking = False
+            self.attack_frame = 0
+
 
 
     def update_and_shoot(self, event):
