@@ -2,6 +2,9 @@ from xml.etree.ElementTree import indent
 
 import pygame
 import json
+
+from matplotlib.pyplot import title
+
 from Game_Variables.Variables import GameVariables as GV
 from Game_Variables.Variables import GameScreens
 from Game_Variables.enemys import Enemy as en
@@ -12,6 +15,7 @@ from Game_Variables.shop_screen import SkinShop, WaffenShop
 from Game_Variables.Highscore_speichern import  Highscores
 from Game_Variables.highscore_screen import HighscoreScreen
 from Game_Variables.attack_sprite import Sprite as sp
+from Game_Variables.inventar_screen import Inventar
 from Game_Variables.Inventar_system import Inventar
 
 def main_screen(screen, clock):
@@ -169,6 +173,7 @@ def play_screen(screen, clock):
     Leben_rect = Leben.get_rect(topleft=(10, 10))
     Welle_rect = Welle.get_rect(topright=(GV.SCREEN_WIDTH - 70, 10))
     Coin_rect = Coin.get_rect(topright=(GV.SCREEN_WIDTH - 70, 50))
+
     welle_int_rect = Leben.get_rect(center=(GV.SCREEN_WIDTH-20, 35))
     coin_int_rect = Leben.get_rect(center=(GV.SCREEN_WIDTH-20, 65))
 
@@ -184,17 +189,18 @@ def play_screen(screen, clock):
 
                     if next == "beenden":
                         return GameScreens.MAIN
-                elif player_death == 1:
-                    with open("last_coins.txt", "w") as fp:
-                        json.dump({
-                            "Coins": coin_gesammelt,
-                            "Welle": welle
-                        }, fp, indent=4)
-                    return GameScreens.GAMEOVER
-
+                    if next == "Speichern":
+                        Gameover(screen, clock)
+                        return GameScreens.MAIN
             player.update_and_shoot(event)
 
-
+        if player_death == True:
+            with open("last_coins.txt", "w") as fp:
+                json.dump({
+                    "Coins": coin_gesammelt,
+                    "Welle": welle
+                }, fp, indent=4)
+            return GameScreens.GAMEOVER
         screen.blit(background_play,(0, 0))
         player.update_and_draw()
         x_pos, y_pos = player.get_pos()
@@ -456,7 +462,10 @@ def pause_screen(screen, clock):
     leertaste_text_rect = leertaste_text.get_rect(center=(GV.SCREEN_WIDTH / 2, 70))
     esc_text = GV.FONT_SMALL.render("ESC", False, "white")
     esc_text_rect = esc_text.get_rect(center=(GV.SCREEN_WIDTH / 2, GV.SCREEN_HEIGHT- 130))
-
+    speichern_text = GV.FONT_MIDDLE.render("Speichern", False, "yellow")
+    speichern_text_rect = speichern_text.get_rect(center=(GV.SCREEN_WIDTH / 2, GV.SCREEN_HEIGHT/2))
+    r_text = GV.FONT_SMALL.render("e", False, "white")
+    r_text_rect = r_text.get_rect(center=(GV.SCREEN_WIDTH / 2, GV.SCREEN_HEIGHT/2-30))
 
     while True:
 
@@ -469,6 +478,8 @@ def pause_screen(screen, clock):
                     return GameScreens.PLAY
                 elif event.key == pygame.K_ESCAPE:
                     return "beenden"
+                elif event.key == pygame.K_e:
+                    return "Speichern"
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if fortsetzen_text_rect.collidepoint(event.pos):
@@ -480,12 +491,18 @@ def pause_screen(screen, clock):
         pygame.draw.rect(surface=screen, rect=beenden_text_rect, color="black")
         pygame.draw.rect(surface=screen, rect=leertaste_text_rect, color="black")
         pygame.draw.rect(surface=screen, rect=esc_text_rect, color="black")
+        pygame.draw.rect(surface=screen, rect=speichern_text_rect, color="black")
+        pygame.draw.rect(surface=screen, rect=r_text_rect, color="black")
+
 
 
         screen.blit(source=fortsetzen_text, dest=fortsetzen_text_rect)
         screen.blit(source=beenden_text, dest=beenden_text_rect)
         screen.blit(source=leertaste_text, dest=leertaste_text_rect)
         screen.blit(source=esc_text, dest=esc_text_rect)
+        screen.blit(source=speichern_text, dest=speichern_text_rect)
+        screen.blit(source=r_text, dest=r_text_rect)
+
 
         pygame.display.flip()
         clock.tick(GV.FPS)
@@ -569,6 +586,18 @@ def highscore_screen(screen, clock):
 
 
 def name_eingeben(screen, clock):
+    coin_score = 0
+    rocket_list = Rockets(screen=screen)
+    with open("Coin_speicher.txt", "r") as fp:
+        inhalt = fp.read()
+    if len(inhalt) == 0:
+        pass
+    else:
+        coin_score = int(inhalt)
+    enemy = en(screen, rocket_list, coin_score)
+
+
+def name_eingeben(screen, clock):
 
     name = ""
 
@@ -578,13 +607,17 @@ def name_eingeben(screen, clock):
         background = pygame.image.load("assets/Background 300x128.png")
         resized_background = pygame.transform.scale(background, (GV.SCREEN_WIDTH, GV.SCREEN_HEIGHT))
 
-        titel = GV.FONT_BIG.render("GAME OVER", False, "red")
+        leben, welle, score_coin, coin_gesammelt, player_death = enemy.get_informationen()
+        #print(player_death)
+        if player_death == True:
+            titel = GV.FONT_BIG.render("GAME OVER", False, "red")
+        else:
+            titel = GV.FONT_BIG.render("Speichern", False, "red")
         eingabe = GV.FONT_MIDDLE.render("Name eingeben:", False, "white")
         name_text = GV.FONT_BIG.render(name, False, "yellow")
 
-
-        screen.blit(resized_background, (0, 0))
         screen.blit(titel, (350, 150))
+        screen.blit(resized_background, (0, 0))
         screen.blit(eingabe, (350, 280))
         screen.blit(name_text, (350, 350))
 

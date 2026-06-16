@@ -5,13 +5,13 @@
             "Coins": 0,
             "upgrade": 1,
             "upgrade_kosten": 500,
-            "ausgewaehlt": "Nein"
+            "ausgewaehlt": "Ja"
         }
     },
     {
         "Axt": {
-            "Verfuegbarkeit": "False",
-            "Coins": 1000,
+            "Verfuegbarkeit": "True",
+            "Coins": 2500,
             "upgrade": 1,
             "upgrade_kosten": 500,
             "ausgewaehlt": "Nein"
@@ -20,7 +20,7 @@
     {
         "Bogen": {
             "Verfuegbarkeit": "False",
-            "Coins": 700,
+            "Coins": 1000,
             "upgrade": 1,
             "upgrade_kosten": 500,
             "ausgewaehlt": "Nein"
@@ -28,11 +28,11 @@
     },
     {
         "Armbrust": {
-            "Verfuegbarkeit": "False",
+            "Verfuegbarkeit": "True",
             "Coins": 5000,
-            "upgrade": 6,
+            "upgrade": 1,
             "upgrade_kosten": 500,
-            "ausgewaehlt": "Ja"
+            "ausgewaehlt": "Nein"
         }
     },
     {
@@ -46,8 +46,8 @@
     },
     {
         "Monk": {
-            "Verfuegbarkeit": "True",
-            "Coins": 2500,
+            "Verfuegbarkeit": "False",
+            "Coins": 1250,
             "upgrade": 1,
             "upgrade_kosten": 500,
             "ausgewaehlt": "Nein"
@@ -56,7 +56,7 @@
     {
         "Lion": {
             "Verfuegbarkeit": "True",
-            "Coins": 1250,
+            "Coins": 2000,
             "upgrade": 1,
             "upgrade_kosten": 500,
             "ausgewaehlt": "Nein"

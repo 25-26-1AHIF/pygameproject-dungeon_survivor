@@ -24,14 +24,22 @@ class Enemy:
         self.welle = 1
         self.max_enemy = 100
         self.enemy_list = []
-        self.Leben = 200
+        self.Leben = None
+        if GV.actual_CHARACTER == 0:
+            self.Leben = 200
+        elif GV.actual_CHARACTER == 1:
+            self.Leben = 250
+        elif GV.actual_CHARACTER == 2:
+            self.Leben = 300
+        else:
+            self.Leben = 2
         self.rocket_list = rocket_list
         self.coin_list = []
         self.radius = 5
         self.score_coin = coin_score
         self.image = None
         self.coin_gesammelt = 0
-        self.player_death = 0
+        self.player_death = False
 
 
         #self.raccon_image = pygame.image.load(
@@ -190,12 +198,11 @@ class Enemy:
 
             if missile_rect.colliderect(Player_rect):
                 self.enemy_list.remove(missile)
-                self.Leben -= int(10 * self.welle / 15)
+                self.Leben -= 1
 
 
             if self.Leben <= 0:
-                GameScreens.actual = GameScreens.GAMEOVER
-                self.player_death = 1
+                self.player_death = True
 
     def death(self, player_x_pos, player_y_pos):
         with open("speichern_spielstand.json", "r") as fp:
@@ -316,6 +323,8 @@ class Enemy:
         self.frame_counter += 1
 
     def get_informationen(self):
+        if self.Leben < 0:
+            self.Leben = 0
         return (
             self.Leben,
             self.welle,
