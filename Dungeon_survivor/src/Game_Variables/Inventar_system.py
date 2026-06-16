@@ -139,7 +139,10 @@ class Inventar:
         return None
 
     def upgrade_waffe(self, index, name):
-        max_level = 3 if name == "Bogen" else 6
+        if name == "Bogen":
+            max_level = 3
+        else:
+            max_level = 6
 
         if self.inhalt[index][name]["Verfuegbarkeit"] == "False":
             if self.inhalt[index][name]["upgrade"] < max_level:
@@ -168,7 +171,10 @@ class Inventar:
             y = waffe[2]
 
             besitzt = self.inhalt[index][name]["Verfuegbarkeit"] == "False"
-            farbe = "green" if besitzt else "red"
+            if besitzt == True:
+                farbe = "green"
+            else:
+                farbe = "red"
 
             pygame.draw.rect(self.screen, farbe, (GV.SCREEN_WIDTH - GV.SCREEN_WIDTH / 2.5 - 10, y - 10, 110, 100))
 
@@ -194,10 +200,10 @@ class Inventar:
 
     def draw_upgrade(self, index, name, y):
         if index != 2 and index != 3:
-            return
+            return None
 
         if self.inhalt[index][name]["Verfuegbarkeit"] != "False":
-            return
+            return None
 
         if name == "Bogen":
             max_level = 3
@@ -218,16 +224,9 @@ class Inventar:
     def draw_information(self, index):
         information_text = GV.FONT_MIDDLE.render("i", True, "black")
 
-        pygame.draw.circle(
-            self.screen,
-            "yellow",
-            self.information_text_circles[index].center,
-            15
-        )
+        pygame.draw.circle(self.screen,"yellow", self.information_text_circles[index].center,15)
 
-        information_rect = information_text.get_rect(
-            center=self.information_text_circles[index].center
-        )
+        information_rect = information_text.get_rect(center=self.information_text_circles[index].center)
 
         self.screen.blit(information_text, information_rect)
 
@@ -237,9 +236,12 @@ class Inventar:
             index = skin[1]
             y = skin[2]
 
-            besitzt = self.inhalt[index][name]["Verfuegbarkeit"] == "False"
+            if self.inhalt[index][name]["Verfuegbarkeit"] == "False":
+                besitzt = False
+            else:
+                besitzt = True
 
-            if besitzt:
+            if besitzt == True:
                 farbe = "green"
             else:
                 farbe = "red"
@@ -250,7 +252,7 @@ class Inventar:
             skin_pos = self.skin_bilder[index - 4].get_rect(center=skin_image_rect.center)
             self.screen.blit(self.skin_bilder[index - 4], skin_pos)
 
-            if besitzt:
+            if besitzt == True:
                 if self.inhalt[index][name]["ausgewaehlt"] == "Ja":
                     text = GV.FONT_MIDDLE.render("Ausgerüstet", False, "green")
                 else:
