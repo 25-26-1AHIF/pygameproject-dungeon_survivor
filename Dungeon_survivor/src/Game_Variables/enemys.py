@@ -104,8 +104,10 @@ class Enemy:
         elif self.welle >= 7:
             return self.Beast
         elif self.welle >= 5:
+            self.speed = 1.5
             return self.Bat
         elif self.welle >= 3:
+            self.speed = 1
             return self.Reptile
         else:
             return self.sprite
@@ -244,10 +246,34 @@ class Enemy:
 
     def coin_spawn(self, player_x_pos, player_y_pos):
         zeit = pygame.time.get_ticks()
-
+        player_y_mid = player_y_pos + GV.SQUARE_SIZE // 2
+        player_x_mid = player_x_pos + GV.SQUARE_SIZE // 2
         for coins in self.coin_list[:]:
 
-            if zeit - coins[2] > 15000:
+            entfernung_x = player_x_mid - coins[0]
+            entfernung_y = player_y_mid - coins[1]
+
+            #KI-Anfang
+            #KI:ChatGPT
+            #prompt: Wie kann ich vom abstand so ifs machen damit die coins herkommen
+            entfernung = (entfernung_x * entfernung_x + entfernung_y * entfernung_y) ** 0.5
+
+
+            if entfernung <= 100:
+
+                entfernung_x /= entfernung
+                entfernung_y /= entfernung
+
+                coins[0] += entfernung_x * 3
+                coins[1] += entfernung_y * 3
+            # KI-Ende
+            #KI-Anfang
+            #KI:ChatGPT
+            #prompt: Warum stürzt es ingame da ab
+            if len(coins) < 3:
+                coins.append(zeit)
+            #KI-Ende
+            if zeit - coins[2] >= 15000:
                 self.coin_list.remove(coins)
 
 
