@@ -586,18 +586,6 @@ def highscore_screen(screen, clock):
 
 
 def name_eingeben(screen, clock):
-    coin_score = 0
-    rocket_list = Rockets(screen=screen)
-    with open("Coin_speicher.txt", "r") as fp:
-        inhalt = fp.read()
-    if len(inhalt) == 0:
-        pass
-    else:
-        coin_score = int(inhalt)
-    enemy = en(screen, rocket_list, coin_score)
-
-
-def name_eingeben(screen, clock):
 
     name = ""
 
@@ -607,17 +595,13 @@ def name_eingeben(screen, clock):
         background = pygame.image.load("assets/Background 300x128.png")
         resized_background = pygame.transform.scale(background, (GV.SCREEN_WIDTH, GV.SCREEN_HEIGHT))
 
-        leben, welle, score_coin, coin_gesammelt, player_death = enemy.get_informationen()
-        #print(player_death)
-        if player_death == True:
-            titel = GV.FONT_BIG.render("GAME OVER", False, "red")
-        else:
-            titel = GV.FONT_BIG.render("Speichern", False, "red")
+        titel = GV.FONT_BIG.render("GAME OVER", False, "red")
         eingabe = GV.FONT_MIDDLE.render("Name eingeben:", False, "white")
         name_text = GV.FONT_BIG.render(name, False, "yellow")
 
-        screen.blit(titel, (350, 150))
+
         screen.blit(resized_background, (0, 0))
+        screen.blit(titel, (350, 150))
         screen.blit(eingabe, (350, 280))
         screen.blit(name_text, (350, 350))
 
