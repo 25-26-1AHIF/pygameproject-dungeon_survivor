@@ -220,7 +220,7 @@ class Enemy:
 
                 if missile_rect.colliderect(enemy_rect):
 
-                    self.coin_list.append([enemy[0], enemy[1]])
+                    self.coin_list.append([enemy[0], enemy[1], pygame.time.get_ticks()])
 
                     remove_missile = True
 
@@ -243,8 +243,13 @@ class Enemy:
 
 
     def coin_spawn(self, player_x_pos, player_y_pos):
+        zeit = pygame.time.get_ticks()
 
         for coins in self.coin_list[:]:
+
+            if zeit - coins[2] > 15000:
+                self.coin_list.remove(coins)
+
 
             self.Coin_sprite.draw(
                 self.screen,
