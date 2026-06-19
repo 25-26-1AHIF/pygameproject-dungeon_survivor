@@ -179,8 +179,8 @@ class WaffenShop:
             if coins >= spielstand[0]['Schwert']['Coins']:
                 coins -= spielstand[0]['Schwert']['Coins']
                 spielstand[0]['Schwert']['Verfuegbarkeit'] = "False"
-                muenzen_speichern("Coin_speicher.txt", coins)
-                spielstand_speichern("speichern_spielstand.json", spielstand)
+                muenzen_speichern("save/Coin_speicher.txt", coins)
+                spielstand_speichern("save/speichern_spielstand.json", spielstand)
                 self.schwert_kaufen = GV.FONT_MIDDLE.render("Im Besitz", False, "red2")
                 self.schwert_kaufen_rect = self.schwert_kaufen.get_rect(topleft=(self.x + 260 + self.hoehe_bild, self.y_start + 90))
 
@@ -188,8 +188,8 @@ class WaffenShop:
             if coins >= spielstand[1]['Axt']['Coins']:
                 coins -= spielstand[1]['Axt']['Coins']
                 spielstand[1]['Axt']['Verfuegbarkeit'] = "False"
-                muenzen_speichern("Coin_speicher.txt", coins)
-                spielstand_speichern("speichern_spielstand.json", spielstand)
+                muenzen_speichern("save/Coin_speicher.txt", coins)
+                spielstand_speichern("save/speichern_spielstand.json", spielstand)
                 self.axt_kaufen = GV.FONT_MIDDLE.render("Im Besitz", False, "red2")
                 self.axt_kaufen_rect = self.axt_kaufen.get_rect(
                     topleft=(self.x + 260 + self.hoehe_bild, self.y_start + 90 + 1 * (self.hoehe + self.abstand)))
@@ -198,8 +198,8 @@ class WaffenShop:
             if coins >= spielstand[2]['Bogen']['Coins']:
                 coins -= spielstand[2]['Bogen']['Coins']
                 spielstand[2]['Bogen']['Verfuegbarkeit'] = "False"
-                muenzen_speichern("Coin_speicher.txt", coins)
-                spielstand_speichern("speichern_spielstand.json", spielstand)
+                muenzen_speichern("save/Coin_speicher.txt", coins)
+                spielstand_speichern("save/speichern_spielstand.json", spielstand)
                 self.bogen_kaufen = GV.FONT_MIDDLE.render("Im Besitz", False, "red2")
                 self.bogen_kaufen_rect = self.bogen_kaufen.get_rect(
                     topleft=(self.x + 260 + self.hoehe_bild, self.y_start + 90 + 2 * (self.hoehe + self.abstand)))
@@ -209,14 +209,14 @@ class WaffenShop:
             if coins >= spielstand[3]['Armbrust']['Coins']:
                 coins -= spielstand[3]['Armbrust']['Coins']
                 spielstand[3]['Armbrust']['Verfuegbarkeit'] = "False"
-                muenzen_speichern("Coin_speicher.txt", coins)
-                spielstand_speichern("speichern_spielstand.json", spielstand)
+                muenzen_speichern("save/Coin_speicher.txt", coins)
+                spielstand_speichern("save/speichern_spielstand.json", spielstand)
                 self.armbrust_kaufen = GV.FONT_MIDDLE.render("Im Besitz", False, "red2")
                 self.armbrust_kaufen_rect = self.armbrust_kaufen.get_rect(
                     topleft=(self.x + 260 + self.hoehe_bild, self.y_start + 90 + 3 * (self.hoehe + self.abstand)))
 
     def draw_coin_score(self, screen, coins):
-        with open("Coin_speicher.txt", "r") as fp:
+        with open("save/Coin_speicher.txt", "r") as fp:
             coins = int(fp.read())
         self.coins_text = GV.FONT_MIDDLE.render(f"Coins: {coins}", False, "yellow")
         self.coin_int_rect = self.coins_text.get_rect(center=(GV.SCREEN_WIDTH - 150, 30))

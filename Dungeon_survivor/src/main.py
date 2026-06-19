@@ -25,7 +25,7 @@ def main_screen(screen, clock):
     coin_score = 0
     font = pygame.font.SysFont(None, 45)
     rocket_list = Rockets(screen=screen)
-    with open("Coin_speicher.txt", "r") as fp:
+    with open("save/Coin_speicher.txt", "r") as fp:
         inhalt = fp.read()
     if len(inhalt) == 0:
         pass
@@ -133,7 +133,7 @@ def play_screen(screen, clock):
     pygame.display.set_caption("Dungeon Survivor - Game")
     coin_score = 0
     rocket_list = Rockets(screen=screen)
-    with open("Coin_speicher.txt", "r") as fp:
+    with open("save/Coin_speicher.txt", "r") as fp:
         inhalt = fp.read()
     if len(inhalt) == 0:
         pass
@@ -142,7 +142,7 @@ def play_screen(screen, clock):
     enemy = en(screen, rocket_list, coin_score)
     leben, welle, score_coin, coin_gesammelt, player_death = enemy.get_informationen()
     coin_list = enemy.get_coin_list()
-    with open("speichern_spielstand.json", "r") as fp:
+    with open("save/speichern_spielstand.json", "r") as fp:
         spielstand = json.load(fp)
 
     if spielstand[0]["Schwert"]["ausgewaehlt"] == "Ja":
@@ -513,8 +513,8 @@ def shop_screen(screen, clock):
     background = pygame.image.load("assets/StockCake-Gemütliche_Pixel-Taverne-3432555-medium.png")
     resized_background = pygame.transform.scale(background, (GV.SCREEN_WIDTH, GV.SCREEN_HEIGHT))
 
-    spielstand = spielstand_auslesen("speichern_spielstand.json")
-    with open("Coin_speicher.txt", "r") as fp:
+    spielstand = spielstand_auslesen("save/speichern_spielstand.json")
+    with open("save/Coin_speicher.txt", "r") as fp:
         coins = int(fp.read())
 
 
@@ -559,7 +559,7 @@ def shop_screen(screen, clock):
                     tab = neuer_tab
         screen.blit(resized_background, (0, 0))
 
-        with open("Coin_speicher.txt", "r") as fp:
+        with open("save/Coin_speicher.txt", "r") as fp:
             coins = int(fp.read())
         waffenshop.draw_coin_score(screen, coins)
 
