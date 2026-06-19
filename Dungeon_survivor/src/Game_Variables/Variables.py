@@ -10,6 +10,9 @@ class GameVariables:
     actual_WAEPON = 0
     actual_CHARACTER = 3
 
+    LAST_COINS = 0
+    LAST_WELLE = 0
+
     FONT_BIG: pygame.font.Font = None
     FONT_MIDDLE: pygame.font.Font= None
     FONT_SMALL: pygame.font.Font = None

@@ -189,16 +189,14 @@ def play_screen(screen, clock):
                     if next == "beenden":
                         return GameScreens.MAIN
                     if next == "Speichern":
-                        Gameover(screen, clock)
-                        return GameScreens.MAIN
+                        GV.LAST_COINS = coin_gesammelt
+                        GV.LAST_WELLE = welle
+                        return GameScreens.GAMEOVER
             player.update_and_shoot(event)
 
         if player_death == True:
-            with open("last_coins.txt", "w") as fp:
-                json.dump({
-                    "Coins": coin_gesammelt,
-                    "Welle": welle
-                }, fp, indent=4)
+            GV.LAST_COINS = coin_gesammelt
+            GV.LAST_WELLE = welle
             return GameScreens.GAMEOVER
         screen.blit(background_play,(0, 0))
         player.update_and_draw()
@@ -633,10 +631,8 @@ def Gameover(screen, clock):
     pygame.mixer.music.set_volume(0.045)
     pygame.mixer.music.play()
     name = name_eingeben(screen, clock)
-    with open("last_coins.txt", "r") as fp:
-        stats = json.load(fp)
-    coins = stats["Coins"]
-    welle = stats["Welle"]
+    coins = GV.LAST_COINS
+    welle = GV.LAST_WELLE
     highscore = Highscores()
     highscore.speichern(name, coins, welle)
 

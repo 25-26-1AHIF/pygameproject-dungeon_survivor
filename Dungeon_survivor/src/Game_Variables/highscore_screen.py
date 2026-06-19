@@ -124,7 +124,6 @@ class HighscoreScreen:
         self.draw_background()
         pygame.draw.rect(self.screen,"gray20",(250, 120, 650, 420))
         self.draw_highscores()
-
         pygame.display.flip()
 
     def run(self):

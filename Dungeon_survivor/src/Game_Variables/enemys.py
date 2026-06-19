@@ -32,7 +32,7 @@ class Enemy:
         elif GV.actual_CHARACTER == 2:
             self.Leben = 300
         else:
-            self.Leben = 2
+            self.Leben = 500
         self.rocket_list = rocket_list
         self.coin_list = []
         self.radius = 5
