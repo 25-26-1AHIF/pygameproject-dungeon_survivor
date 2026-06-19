@@ -16,7 +16,6 @@ from Game_Variables.Highscore_speichern import  Highscores
 from Game_Variables.highscore_screen import HighscoreScreen
 from Game_Variables.attack_sprite import Sprite as sp
 from Game_Variables.inventar_screen import Inventar
-from Game_Variables.Inventar_system import Inventar
 
 def main_screen(screen, clock):
     pygame.mixer.music.load("assets/Ninja Adventure - Asset Pack/Audio/Musics/1 - Adventure Begin.ogg")

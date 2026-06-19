@@ -128,6 +128,8 @@ class HighscoreScreen:
         pygame.display.flip()
 
     def run(self):
+        self.highscores = self.load_highscores()
+
         while True:
             neuer_screen = self.handle_events()
 
