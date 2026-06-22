@@ -33,7 +33,7 @@ class Rocket:
 
     def update_and_draw(self):
         if gv.actual_WAEPON == 2:
-            with open("speichern_spielstand.json", "r") as fp:
+            with open("save/speichern_spielstand.json", "r") as fp:
                 inhalt = json.load(fp)
             if inhalt[2]['Bogen']['upgrade'] >= 2:
                 self.projektil = pygame.transform.scale(self.projektil, (30, 30))

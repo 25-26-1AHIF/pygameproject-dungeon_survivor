@@ -42,15 +42,15 @@ class Inventar:
             self.skin_bilder.append(bild)
 
     def lade_spielstand(self):
-        with open("speichern_spielstand.json", "r") as fp:
+        with open("save/speichern_spielstand.json", "r") as fp:
             return json.load(fp)
 
     def speichere_spielstand(self):
-        with open("speichern_spielstand.json", "w") as fp:
+        with open("save/speichern_spielstand.json", "w") as fp:
             json.dump(self.inhalt, fp, indent=4)
 
     def lade_coins(self):
-        with open("Coin_speicher.txt", "r") as fp:
+        with open("save/Coin_speicher.txt", "r") as fp:
             inhalt_coin = fp.read()
 
         if len(inhalt_coin) > 0:

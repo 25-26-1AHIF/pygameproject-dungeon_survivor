@@ -329,7 +329,7 @@ class Player:
 
 
     def shoot(self, event):
-        with open("speichern_spielstand.json", "r") as fp:
+        with open("save/speichern_spielstand.json", "r") as fp:
             inhalt = json.load(fp)
         if self.actual_weapon == 0:
             self.enemys_list = self.enemies.get_enemy_list()

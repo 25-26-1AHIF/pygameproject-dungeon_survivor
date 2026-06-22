@@ -205,7 +205,7 @@ class Enemy:
                 self.player_death = True
 
     def death(self, player_x_pos, player_y_pos):
-        with open("speichern_spielstand.json", "r") as fp:
+        with open("save/speichern_spielstand.json", "r") as fp:
             inhalt = json.load(fp)
         rockets_list = self.rocket_list.get_rockets()
 
